@@ -50,15 +50,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		<div id="left">
 			<h3>Payment Request System</h3>
 			<hr class="carved"/>
-				<div>
-					Goods purchase - 6/12/2016<br/><br/>
-					<a href="<?=base_url()?>index.php/view/1wdwedewd">View</a>
-				</div>
-				<hr class="carved"/>
-				<div>
-					Laptops - 6/13/2016<br/><br/>
-					<a href="<?=base_url()?>index.php/home/view_adminsechead/weded">View</a>
-				</div>
+			<?php
+				$prList = $this->crud_model->getPrList();
+				if($prList != null){
+					foreach($prList as $list){
+						echo '<b>Details:</b> '.$list['details'].'<br><br>';
+						echo '<b>Payee:</b> '.$list['payee'].'<br><br>';
+						echo '<b>Modified:</b> <i>'.$list['changed_on'].'</i><br><br/>';
+						echo anchor_popup('home/view/'.$list['pr_id'], 'View PR');
+						echo '<br><hr class="carved"/>';
+					}
+				}
+			?>			
+				
 		</div>
 	</td>
 	

@@ -5,7 +5,7 @@ class api extends CI_Controller {
 
 	 public function __construct(){
 		parent::__construct();
-		$this->load->model('crud_model');
+		
 	 }
 	 
 	 function index(){
@@ -21,6 +21,7 @@ class api extends CI_Controller {
 			//what to do with catch based on returned result after insert
 		 }
 	}
+	 
 	 
 	
 }

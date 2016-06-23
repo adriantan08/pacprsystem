@@ -25,6 +25,7 @@ class home extends CI_Controller {
 		$this->load->view('template_view', $data);
 	}
 	
+	//This view is the main handler on how to decide to view the PR based on user role
 	public function view($id){
 		$data = $this->WorkingFundCustodianContent($id);
 		$this->load->view('template_view', $data);
@@ -38,7 +39,8 @@ class home extends CI_Controller {
 	
 	public function WorkingFundCustodianContent($id){
 		$data['title'] = 'View';
-		$data['content'] = $this->load->view('WorkingFundCustodian/read_view', '', true);
+		$data['prDetails'] = $this->crud_model->getPrById($id);
+		$data['content'] = $this->load->view('WorkingFundCustodian/read_view', $data, true);
 		return $data;
 	}
 	
@@ -46,7 +48,7 @@ class home extends CI_Controller {
 	
 	public function AdminSecHeadContent($id){
 		$data['title'] = 'Approve - Admin Sec. Head';
-		$data['prContent'] = $this->load->view('WorkingFundCustodian/read_view', '', true);
+		$data['prContent'] = $this->WorkingFundCustodianContent();
 		$data['content'] = $this->load->view('AdminSecHead/approve_view', $data, true);
 		return $data;
 	}

@@ -18,14 +18,39 @@
 	textarea{
 		
 	}
+	
+.myTable{
+	background-color:white; 
+	border-collapse: collapse; 
+	width:100%;
+}
+.myTable tbody tr td{
+	font:inherit;
+	border-bottom: 0.1em solid #BDBDBD;
+	padding:10px;
+}
+
+.myTable tr:last-child td{
+	border-bottom:0;
+}
+
 </style>
 
-<div style="position:relative; top:5%; left:5%; width:40%;">
-<h3>Create a Payment Record</h3>
-<table  style="width:100%;" cellspacing=20px >
+<div style="position:relative; top:5%; left:5%; ">
+<h3>View Payment Record</h3>
+<i>Last Modified: <?=$prDetails['changed_on']?></i><br><br>
+<table class="myTable">
 	<tr >
 		<td colspan=2 align=right>
-			<font class="label">Date:</font> 6/12/2016
+			<font class="label">Date:</font><input type=text disabled id="prDate" value="<?=$prDetails['pr_date']?>" /> 
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<font class="label">PR#: </font>
+		</td>
+		<td>
+			<input type=number id="prNum" disabled value="<?=$prDetails['pr_id']?>" />
 		</td>
 	</tr>
 	<tr>
@@ -33,7 +58,8 @@
 			<font class="label">Payee: </font>
 		</td>
 		<td>
-			John Smith
+			<input type=text id="prPayee" disabled value="<?=$prDetails['payee']?>"/>
+			
 		</td>
 	</tr>
 	<tr>
@@ -41,7 +67,7 @@
 			<font class="label">Amount: </font>
 		</td>
 		<td>
-			P100.50
+			P<?=number_format($prDetails['amount'])?>
 		</td>
 	</tr>
 	<tr>
@@ -50,9 +76,14 @@
 		</td>
 		<td>
 			<span>
-			<input type="radio" name="prForm" value="cash" checked/> Cash
-			<input type="radio" name="prForm" value="check"/> Check
-			<input type="radio" name="prForm" value="none"/> None
+			<input type="radio" name="prForm" value="cash" disabled
+			<?php if($prDetails['payment_form']=='cash') echo 'checked';?>/> Cash
+			
+			<input type="radio" name="prForm" value="check" disabled
+			<?php if($prDetails['payment_form']=='check') echo 'checked';?>/> Check
+			
+			<input type="radio" name="prForm" value="none" disabled
+			<?php if($prDetails['payment_form']=='none') echo 'checked';?>/> None
 			</span>
 		</td>
 	</tr>
@@ -62,9 +93,12 @@
 		</td>
 		<td>
 			<span>
-			<input type="radio" name="prPurpose" value="disbursement" /> Disbursement
-			<input type="radio" name="prPurpose" value="liquidation" checked/> Liquidation
-			<input type="radio" name="prPurpose" value="recordonly"/> Record Only
+			<input type="radio" name="prPurpose" value="disbursement" disabled
+			<?php if($prDetails['purpose']=='disbursement') echo 'checked';?>/> Disbursement
+			<input type="radio" name="prPurpose" value="liquidation" disabled
+			<?php if($prDetails['purpose']=='liquidation') echo 'checked';?>/> Liquidation
+			<input type="radio" name="prPurpose" value="recordonly" disabled
+			<?php if($prDetails['purpose']=='recordonly') echo 'checked';?>/> Record Only
 			</span>
 		</td>
 	</tr>
@@ -74,8 +108,10 @@
 		</td>
 		<td>
 			<span>
-			<input type="radio" name="prDisbClass" value="spent" checked/> Spent
-			<input type="radio" name="prDisbClass" value="unspent"/> Unspent
+			<input type="radio" name="prDisbClass" value="spent" disabled
+			<?php if($prDetails['dist_class']=='spent') echo 'checked';?>/> Spent
+			<input type="radio" name="prDisbClass" value="unspent" disabled
+			<?php if($prDetails['dist_class']=='unspent') echo 'checked';?>/> Unspent
 			</span>
 		</td>
 	</tr>
@@ -85,36 +121,38 @@
 		</td>
 		<td>
 			<span>
-			<input type="radio" name="prDisbYield" value="consumable" checked/> Consumable
-			<input type="radio" name="prDisbYield" value="asset"/> Asset
+			<input type="radio" name="prDisbYield" value="consumable" disabled
+			<?php if($prDetails['dist_yield']=='consumable') echo 'checked';?>/> Consumable
+			<input type="radio" name="prDisbYield" value="asset" disabled
+			<?php if($prDetails['dist_yield']=='asset') echo 'checked';?>/> Asset
 			</span>
 		</td>
 	</tr>
-	<tr><td colspan=2><b>Supporting Documents:</b></td></tr>
-	<!--
+	<tr><td colspan=2><b>Supporting Documents</b></td></tr>
+	
 	<tr>
 		<td>
-			P.O./J.O. No.:
+			<font class="label">P.O./J.O. No.: </font>
 		</td>
 		<td>
-			<input type=text id="prPoJoNo"/>
+			<?=$prDetails['po_jo_no']?>
 		</td>
 	</tr>
 	<tr>
 		<td>
-			Receiving Report No.:
+			<font class="label">Receiving Report No.: </font>
 		</td>
 		<td>
-			<input type=text id="prRcvReportNo"/>
+			<?=$prDetails['rr_no']?>
 		</td>
-	</tr>-->
+	</tr>
 	<tr class="supportingDocumentSection">
 		<td>
 			<font class="label">Invoice No.:</font>
 		</td>
 		<td>
 			<span>
-				1023
+				<?=$prDetails['inv_no']?>
 				<!--&nbsp&nbsp WFR No.
 				<input type=text id="prWfrNo"/>-->
 			</span>
@@ -125,7 +163,7 @@
 			<font class="label">Others:</font>
 		</td>
 		<td>
-			Some remarks would be seen here.
+			<?=$prDetails['others']?>
 		</td>
 	</tr>
 	<tr>
@@ -133,14 +171,14 @@
 			<font class="label">Details:</font>
 		</td>
 		<td>
-			<textarea disabled style="text-align:left;" id="prDetails" rows=10 cols=40>there was a problem</textarea>
+			<textarea disabled style="text-align:left;" id="prDetails" rows=10 cols=40><?=$prDetails['details']?></textarea>
 		</td>
 	</tr>
 	
-	<tr>
-		<td colspan=2 align=center>
-			<button style="width:100px;" class="flatbutton">Submit</button>
-		</td>
-	</tr>
+
 </table>
 </div><br/><br/>
+
+<script>
+	$( "#prDate").datepicker("setDate", new Date());
+</script>
