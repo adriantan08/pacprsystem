@@ -1,4 +1,4 @@
-function publishPr(base_url){
+function publishPr(base_url, action, intent){
 	
 	var prNum = sanitize(document.getElementById('prNum').value);
 	var prDate = sanitize(document.getElementById('prDate').value);
@@ -32,12 +32,12 @@ function publishPr(base_url){
 			prRcvReportNo:prRcvReportNo,
 			prInvoiceNo:prInvoiceNo,
 			prOthers:prOthers,
-			prDetails:prDetails
-			
+			prDetails:prDetails,
+			prStatus:action
 	});
 	
 	$.ajax({
-		url:base_url+"api/create",
+		url:base_url+"api/create/"+intent,
 		method:"POST",
 		async: true,
 		data:{
@@ -46,6 +46,23 @@ function publishPr(base_url){
 		success: function(data){}
 	})
 	.done(function(data){
-		swal("Success!","","success");
+		
+		
+		if(intent == 'create')
+			var msg = 'You have successfully created a record.';
+		else if(intent == 'update')
+			var msg = 'You have updated your record.';
+		swal({   
+			title: "Success!",   
+			text: msg,   
+			type: "success",  
+			showCancelButton: false,   
+			confirmButtonColor: "#33b5e5",   
+			confirmButtonText: "Return to Home",   
+			closeOnConfirm: false }, 
+			function(){
+				
+				window.location.href=base_url+'home';
+			});
 	});
 }

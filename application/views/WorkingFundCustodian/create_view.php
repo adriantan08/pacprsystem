@@ -46,10 +46,10 @@
 	</tr>
 	<tr>
 		<td>
-			<font class="label">Amount (PHP): </font>
+			<font class="label">Amount: </font>
 		</td>
 		<td>
-			<input type=number id="prAmount"/>
+			P<input type=number id="prAmount"/>
 		</td>
 	</tr>
 	<tr>
@@ -147,7 +147,9 @@
 	
 	<tr>
 		<td colspan=2 align=center>
-			<button style="width:100px;" class="flatbutton" id="submitButton">Submit</button>
+			<button style="background-color:green" class="flatbutton" name="submitButtom" id="draft">Draft</button>
+			<button style="background-color:green" class="flatbutton" name="submitButtom" id="submit">Submit for Approval</button>
+			<button style="width:100px;" class="flatbutton" id="cancel">Cancel</button>
 		</td>
 	</tr>
 </table>
@@ -159,9 +161,15 @@
 	$( "#prDate").datepicker("setDate", new Date());
 	$( "#prDate").datepicker({ dateFormat: 'yy/mm/dd'});
 	
-	$("#submitButton").click(function(){
+	$("button[name='submitButtom']").click(function(){
+		var action = null;
+		if($(this).attr('id') == 'draft')
+			action = 0;
+		else if($(this).attr('id') == 'submit')
+			action = 1;
+			
 		var check = runValidation();
-		publishPr("<?=base_url()?>");
+		publishPr("<?=base_url()?>", action,'create');
 		/* temporarily TURNED  OFF validation
 		if(!check){
 			publishPr("<?=base_url()?>");

@@ -5,12 +5,16 @@
 	.label{
 		font-weight:600;
 	}
-	input{
+	.input-edit{
 		border: 0;
 		outline: 0;
 		background: transparent;
 		border-bottom: 1px solid #a9a9a9;
-		
+	}
+	.input-read{
+		border: 0;
+		outline: 0;
+		background: transparent;
 	}
 	input:focus{
 		outline:none;
@@ -36,13 +40,32 @@
 
 </style>
 
-<div style="position:relative; top:5%; left:5%; ">
-<h3>View Payment Record</h3>
-<i>Last Modified: <?=$prDetails['changed_on']?></i><br><br>
+<div style="position:relative; top:5%; left:5%; "><br>
+<table>
+<tr>
+<td>
+	<font style="font-size:15px;"><b>View Payment Record</b></font><br>
+	<br><i>Last Modified: <?=$prDetails['changed_on']?></i><br><br>
+</td>
+
+<td>
+	<span>
+		<button style="position:relative; left:10px;" class="flatbutton" id="editButton">Edit</button>
+		<span id="finishEditDiv" style="visibility:hidden;">
+		<button style="position:relative; left:20px; background-color:green;" class="flatbutton" id="draft" name="submitButton">Draft</button>
+		<button style="position:relative; left:20px; background-color:green;" class="flatbutton" id="submit" name="submitButton">Submit for Approval</button>
+		</span>
+	</span>
+	
+</td>
+</tr>
+</table><br>
+
 <table class="myTable">
 	<tr >
 		<td colspan=2 align=right>
-			<font class="label">Date:</font><input type=text disabled id="prDate" value="<?=$prDetails['pr_date']?>" /> 
+			<font class="label">Date:</font>
+			<input class="input-read" name="editable" type=text disabled id="prDate" value="<?=$prDetails['pr_date']?>" /> 
 		</td>
 	</tr>
 	<tr>
@@ -50,7 +73,7 @@
 			<font class="label">PR#: </font>
 		</td>
 		<td>
-			<input type=number id="prNum" disabled value="<?=$prDetails['pr_id']?>" />
+			<input type=number id="prNum" name="editable" class="input-read" disabled value="<?=$prDetails['pr_id']?>" />
 		</td>
 	</tr>
 	<tr>
@@ -58,7 +81,7 @@
 			<font class="label">Payee: </font>
 		</td>
 		<td>
-			<input type=text id="prPayee" disabled value="<?=$prDetails['payee']?>"/>
+			<input type=text id="prPayee" name="editable" class="input-read" disabled value="<?=$prDetails['payee']?>"/>
 			
 		</td>
 	</tr>
@@ -67,7 +90,8 @@
 			<font class="label">Amount: </font>
 		</td>
 		<td>
-			P<?=number_format($prDetails['amount'])?>
+			<div id="amountPlaceholderRead">P <?=number_format($prDetails['amount'])?></div>
+			<div id="amountPlaceholderEdit" style="display:none;" >P <input type=number id="prAmount"  name="editable" class="input-read" disabled value="<?=$prDetails['amount']?>"/></div>
 		</td>
 	</tr>
 	<tr>
@@ -135,7 +159,8 @@
 			<font class="label">P.O./J.O. No.: </font>
 		</td>
 		<td>
-			<?=$prDetails['po_jo_no']?>
+			<input type=text id="prPoJoNo" name="editable" class="input-read" disabled value ="<?=$prDetails['po_jo_no']?>"/>
+			
 		</td>
 	</tr>
 	<tr>
@@ -143,7 +168,8 @@
 			<font class="label">Receiving Report No.: </font>
 		</td>
 		<td>
-			<?=$prDetails['rr_no']?>
+			<input type=text id="prRcvReportNo" name="editable" class="input-read" disabled value="<?=$prDetails['rr_no']?>"/>
+			
 		</td>
 	</tr>
 	<tr class="supportingDocumentSection">
@@ -152,7 +178,8 @@
 		</td>
 		<td>
 			<span>
-				<?=$prDetails['inv_no']?>
+				<input type=text id="prInvoiceNo" name="editable" class="input-read" disabled value="<?=$prDetails['inv_no']?>"/>
+				
 				<!--&nbsp&nbsp WFR No.
 				<input type=text id="prWfrNo"/>-->
 			</span>
@@ -163,7 +190,7 @@
 			<font class="label">Others:</font>
 		</td>
 		<td>
-			<?=$prDetails['others']?>
+			<input type=text id="prOthers" name="editable" class="input-read" disabled value="<?=$prDetails['others']?>"/>
 		</td>
 	</tr>
 	<tr>
@@ -178,7 +205,66 @@
 
 </table>
 </div><br/><br/>
-
+<script src="<?=base_url()?>js/create_pr.js"></script>
+<script src="<?=base_url()?>js/form_validator.js"></script>
 <script>
 	$( "#prDate").datepicker("setDate", new Date());
+	
+	//Once edit has been clicked, we make the fields editable
+	$("#editButton").click(function(){
+		var nodes = document.getElementsByName("editable");
+		
+		for(var i=0; i<nodes.length; i++){
+			/*	a WORKAROUND to enable support for comma's in amount. 1 div to show text, and 1 div to show 
+				input element with number format already
+			*/
+			if(nodes[i].id =='prAmount'){
+				document.getElementById('amountPlaceholderRead').style.display = 'none';
+				document.getElementById('amountPlaceholderEdit').style.display = 'block';
+			}
+			nodes[i].className = "input-edit";
+			nodes[i].disabled = false;
+		}
+		var nodes = document.getElementsByName("prForm");
+		for(var i=0; i < nodes.length; i++)
+			nodes[i].disabled=false;
+		
+		var nodes = document.getElementsByName("prPurpose");
+		for(var i=0; i < nodes.length; i++)
+			nodes[i].disabled=false;
+		
+		var nodes = document.getElementsByName("prDisbClass");
+		for(var i=0; i < nodes.length; i++)
+			nodes[i].disabled=false;
+		
+		var nodes = document.getElementsByName("prDisbYield");
+		for(var i=0; i < nodes.length; i++)
+			nodes[i].disabled=false;
+		
+		document.getElementById('prDetails').disabled = false;
+		document.getElementById('finishEditDiv').style.visibility = 'visible';
+		swal("You may now start editing!","","info");
+	});
+	
+	
+	$("button[name='submitButton']").click(function(){
+		var action = null;
+		if($(this).attr('id') == 'draft')
+			action = 0;
+		else if($(this).attr('id') == 'submit')
+			action = 1;
+			
+		var check = runValidation();
+		publishPr("<?=base_url()?>", action, 'update');
+		/* temporarily TURNED  OFF validation
+		if(!check){
+			publishPr("<?=base_url()?>");
+		}
+		
+		else{
+			swal("Data Validation Failed!","Please review the fields highlighted in red.", "error");
+		}
+		*/
+	});
+	
 </script>
