@@ -85,7 +85,7 @@ select{
 }
 </style>
 
-<<<<<<< HEAD
+<!--<<<<<<< HEAD
 <div style="position:relative; top:5%; left:5%; width:40%;">
 <h3>Create a Payment Record</h3>
 <table  style="width:100%;" cellspacing=20px >
@@ -189,8 +189,7 @@ select{
 		<td>
 			<span>
 				<input type=text id="prInvoiceNo"/>
-				<!--&nbsp&nbsp WFR No.
-				<input type=text id="prWfrNo"/>-->
+				
 			</span>
 		</td>
 	</tr>
@@ -220,7 +219,7 @@ select{
 	</tr>
 </table>
 </div><br/><br/>
-=======
+=======-->
 <div class="align:left">
 <ul class="form-style-1">
     <li><label>PR Date <span class="required">*</span></label>
@@ -295,7 +294,7 @@ select{
 </ul>
 </div>
 
->>>>>>> b5dc6a407d8451d589741171a8b693f970d2454c
+
 <script src="<?=base_url()?>js/create_pr.js"></script>
 <script src="<?=base_url()?>js/form_validator.js"></script>
 <script>
@@ -308,28 +307,12 @@ select{
 		if($(this).attr('id') == 'draft')
 			action = <?=DRAFT_STATUS?>;
 		else if($(this).attr('id') == 'submit')
-<<<<<<< HEAD
 			action = <?=SUBMITTED_STATUS?>;
 			
-		
 		var check = runValidation();
 		publishPr("<?=base_url()?>", action,'create');
 		
-=======
-			action = 1;
 
-		var check = runValidation();
-		publishPr("<?=base_url()?>", action,'create');
-		/* temporarily TURNED  OFF validation
-		if(!check){
-			publishPr("<?=base_url()?>");
-		}
-
-		else{
-			swal("Data Validation Failed!","Please review the fields highlighted in red.", "error");
-		}
-		*/
->>>>>>> b5dc6a407d8451d589741171a8b693f970d2454c
 	});
 
 </script>

@@ -139,15 +139,11 @@ class crud_model extends CI_Model {
 				a.approver3_id AS `approver3_id`
 			FROM pac_pr_header a, pac_pr_details b, pac_employees c
 			WHERE a.pr_id = b.pr_id
-<<<<<<< HEAD
-			AND a.pr_status = ".VERIFIED_STATUS."
-			ORDER BY changed_on desc;
-=======
 			AND a.pr_status = ?
 			AND a.requestor_id = c.emp_id
 			AND c.emp_id = ?
 			ORDER BY a.pr_date desc;
->>>>>>> b5dc6a407d8451d589741171a8b693f970d2454c
+
 		";
 		$uid = $this->getCurrentRequestor();
 		$q = $this->getdb()->query($sql, array($status,$uid));

@@ -30,30 +30,21 @@ class home extends CI_Controller {
 
 	public function welcome(){
 		$data['title'] = 'Home';
-<<<<<<< HEAD
-		$data['content'] = '';
 		
-		if($this->session->userdata('userRole') == "ASH"){
-			$this->load->view('template_view_ash', $data);
-		}
-		else if($this->session->userdata('userRole') == "VERIFIER"){
-			
-			$this->load->view('template_view_ash', $data);
-		}
-		else if($this->session->userdata('userRole') == "APPROVER"){
-			
-			$this->load->view('template_view_ash', $data);
-		}
-		else
-=======
-
 		if($this->session->userdata('userRole') == "ASH"){
 			$data['content'] = $this->load->view('AdminSecHead/home_view',null,true);
 			$this->load->view('template_view_ash', $data);
 		}
+		else if($this->session->userdata('userRole') == "VERIFIER"){
+			//include verifier home page here
+			$this->load->view('template_view_ash', $data);
+		}
+		else if($this->session->userdata('userRole') == "APPROVER"){
+			//include verifier home page here
+			$this->load->view('template_view_ash', $data);
+		}
 		else{
 			$data['content'] = $this->load->view('WorkingFundCustodian/home_view',null,true);
->>>>>>> b5dc6a407d8451d589741171a8b693f970d2454c
 			$this->load->view('template_view', $data);
 		}
 	}
@@ -91,10 +82,6 @@ class home extends CI_Controller {
 		return $data;
 	}
 
-
-
-
-
 	/**
 		ASH Views
 	***/
@@ -108,9 +95,7 @@ class home extends CI_Controller {
 		$data['content'] = $this->load->view('AdminSecHead/approve_view', $data, true);
 		$this->load->view('template_view_ash', $data);
 	}
-<<<<<<< HEAD
-	
-	
+
 	/**
 		VERIFIER Views
 	*****/
@@ -138,8 +123,5 @@ class home extends CI_Controller {
 		$data['content'] = $this->load->view('ApprovingAuth/approve_view', $data, true);
 		$this->load->view('template_view_ash', $data);
 	}
-=======
 
-
->>>>>>> b5dc6a407d8451d589741171a8b693f970d2454c
 }
