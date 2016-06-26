@@ -7,28 +7,30 @@ class home extends CI_Controller {
 		parent::__construct();
 		$this->checkSession();
 	 }
-	 
+
 	 function checkSession(){
 		
+
 		if($this->session->userdata('userId')== null && $this->session->userdata('userId')== ''){
 			$this->logout();
 		}
-		
+
 	}
-	
+
 	function logout(){
 		$this->session->sess_destroy();
 		redirect('/login/', 'refresh');
 	}
-	 
+
 	 function index(){
-		 $this->checkSession();	
+		 $this->checkSession();
 		 $this->welcome();
 	 }
-	 
-	
+
+
 	public function welcome(){
 		$data['title'] = 'Home';
+<<<<<<< HEAD
 		$data['content'] = '';
 		
 		if($this->session->userdata('userRole') == "ASH"){
@@ -43,7 +45,17 @@ class home extends CI_Controller {
 			$this->load->view('template_view_ash', $data);
 		}
 		else
+=======
+
+		if($this->session->userdata('userRole') == "ASH"){
+			$data['content'] = $this->load->view('AdminSecHead/home_view',null,true);
+			$this->load->view('template_view_ash', $data);
+		}
+		else{
+			$data['content'] = $this->load->view('WorkingFundCustodian/home_view',null,true);
+>>>>>>> b5dc6a407d8451d589741171a8b693f970d2454c
 			$this->load->view('template_view', $data);
+		}
 	}
 
 	public function create(){
@@ -55,8 +67,8 @@ class home extends CI_Controller {
 		$data['content'] = $this->load->view('WorkingFundCustodian/create_view', '', true);
 		$this->load->view('template_view', $data);
 	}
-	
-	
+
+
 	//This view is the main handler on how to decide to view the PR based on user role
 	public function view($id){
 		//Initial role check authorization
@@ -66,8 +78,8 @@ class home extends CI_Controller {
 		$data = $this->WorkingFundCustodianContent($id);
 		$this->load->view('template_view', $data);
 	}
-	
-	
+
+
 	public function WorkingFundCustodianContent($id){
 		//Initial role check authorization
 		if(!$this->user_model->isWcf())
@@ -78,11 +90,11 @@ class home extends CI_Controller {
 		$data['content'] = $this->load->view('WorkingFundCustodian/read_view', $data, true);
 		return $data;
 	}
-	
-	
-	
-	
-		
+
+
+
+
+
 	/**
 		ASH Views
 	***/
@@ -96,6 +108,7 @@ class home extends CI_Controller {
 		$data['content'] = $this->load->view('AdminSecHead/approve_view', $data, true);
 		$this->load->view('template_view_ash', $data);
 	}
+<<<<<<< HEAD
 	
 	
 	/**
@@ -125,4 +138,8 @@ class home extends CI_Controller {
 		$data['content'] = $this->load->view('ApprovingAuth/approve_view', $data, true);
 		$this->load->view('template_view_ash', $data);
 	}
+=======
+
+
+>>>>>>> b5dc6a407d8451d589741171a8b693f970d2454c
 }

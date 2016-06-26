@@ -1,33 +1,33 @@
 <?php
 class crud_model extends CI_Model {
-	
+
 	function getdb(){
 		return $this->load->database('default',true);
 	}
-	
+
 /*******************************************************************
 *
 *	INSERTS
 *
 ********************************************************************/
-	
-	
+
+
 	function addPaymentRecord($json){
 		$arr = json_decode($json, true)[0];
 		$requestor_id = $this->getCurrentRequestor();
-		
+
 		date_default_timezone_set(DEFAULT_TIMEZONE);
 		$serverDate = date('Y-m-d H:i:s');
-		
-		
+
+
 		//INSERT TO pac_pr_header
 		$sql = "
 			INSERT INTO pac_pr_header(pr_id, pr_status, pr_date, requestor_id, changed_on)
 			VALUES(?,?,?,?,?);
 		";
-		
-		
-		
+
+
+
 		$this->getdb()->query($sql, array(
 								$arr['prNum'],
 								$arr['prStatus'],
@@ -35,7 +35,7 @@ class crud_model extends CI_Model {
 								$requestor_id,
 								$serverDate
 							));
-		
+
 		//INSERT TO pac_pr_details
 		$sql = "
 			INSERT INTO pac_pr_details(pr_id, payee, amount, payment_form, purpose, dist_class, dist_yield, po_jo_no, rr_no, inv_no, others, details, changed_on)
@@ -45,24 +45,24 @@ class crud_model extends CI_Model {
 								$arr['prNum'],
 								$arr['prPayee'],
 								$arr['prAmount'],
-								
+
 								$arr['prForm'],
 								$arr['prPurpose'],
 								$arr['prDisbClass'],
 								$arr['prDisbYield'],
-									
+
 								$arr['prPoJoNo'],
 								$arr['prRcvReportNo'],
 								$arr['prInvoiceNo'],
 								$arr['prOthers'],
 								$arr['prDetails'],
-								
+
 								$serverDate
 							));
 		$this->logHistory($json,"CREATE");
-	
+
 	}
-	
+
 /*******************************************************************
 *
 *	INSERTS
@@ -75,10 +75,10 @@ class crud_model extends CI_Model {
 *	SELECT
 *
 ********************************************************************/
-	
+
 	function getPrList(){
 		$sql = "
-			SELECT 
+			SELECT
 				a.pr_id AS `pr_id`,
 				a.pr_status AS `pr_status`,
 				a.changed_on AS `changed_on`,
@@ -97,30 +97,66 @@ class crud_model extends CI_Model {
 		}
 		return null;
 	}
-	
-	function getPrListForAsh(){
+
+	function getPrListForAsh($status){
 		$sql = "
-			SELECT 
+			SELECT
 				a.pr_id AS `pr_id`,
 				a.pr_status AS `pr_status`,
-				a.changed_on AS `changed_on`,
+				a.pr_date AS `pr_date`,
+				c.emp_firstname AS `emp_firstname`,
+				c.emp_lastname AS `emp_lastname`,
+				b.payee AS `payee`,
+				b.amount AS `amount`,
 				a.approver1_id AS `approver1_id`,
 				a.approver2_id AS `approver2_id`,
-				a.approver3_id AS `approver3_id`,
-				b.payee AS `payee`,
-				b.details AS `details`
-			FROM pac_pr_header a, pac_pr_details b
+				a.approver3_id AS `approver3_id`
+			FROM pac_pr_header a, pac_pr_details b, pac_employees c
 			WHERE a.pr_id = b.pr_id
+			AND a.pr_status = ?
+			AND a.requestor_id = c.emp_id
+			ORDER BY a.pr_date desc;
+		";
+		$q = $this->getdb()->query($sql, array($status));
+		if($q->num_rows()>0){
+			return $q->result_array();
+		}
+		return null;
+	}
+
+	function getPrListForWfc($status){
+		$sql = "
+			SELECT
+				a.pr_id AS `pr_id`,
+				a.pr_status AS `pr_status`,
+				a.pr_date AS `pr_date`,
+				c.emp_firstname AS `emp_firstname`,
+				c.emp_lastname AS `emp_lastname`,
+				b.payee AS `payee`,
+				b.amount AS `amount`,
+				a.approver1_id AS `approver1_id`,
+				a.approver2_id AS `approver2_id`,
+				a.approver3_id AS `approver3_id`
+			FROM pac_pr_header a, pac_pr_details b, pac_employees c
+			WHERE a.pr_id = b.pr_id
+<<<<<<< HEAD
 			AND a.pr_status = ".VERIFIED_STATUS."
 			ORDER BY changed_on desc;
+=======
+			AND a.pr_status = ?
+			AND a.requestor_id = c.emp_id
+			AND c.emp_id = ?
+			ORDER BY a.pr_date desc;
+>>>>>>> b5dc6a407d8451d589741171a8b693f970d2454c
 		";
-		$q = $this->getdb()->query($sql);
+		$uid = $this->getCurrentRequestor();
+		$q = $this->getdb()->query($sql, array($status,$uid));
 		if($q->num_rows()>0){
 			return $q->result_array();
 		}
 		return null;
 	}
-	
+
 	function getPrById($id){
 		$sql = "
 			SELECT
@@ -148,15 +184,15 @@ class crud_model extends CI_Model {
 			AND a.pr_id = ?
 			LIMIT 1;
 		";
-		
+
 		$q = $this->getdb()->query($sql, array($id));
 		if($q->num_rows()>0){
 			return $q->first_row('array');
 		}
 		return null;
 	}
-	
-	
+
+
 /*******************************************************************
 *
 *	SELECT
@@ -172,24 +208,24 @@ class crud_model extends CI_Model {
 	function updatePaymentRecord($json){
 		$arr = json_decode($json, true)[0];
 		$requestor_id = $this->getCurrentRequestor();
-		
+
 		date_default_timezone_set(DEFAULT_TIMEZONE);
 		$serverDate = date('Y-m-d H:i:s');
-		
-		
+
+
 		//UPDATE TO pac_pr_header
 		$sql = "
 			UPDATE pac_pr_header
-			SET 
+			SET
 				pr_status = ?,
 				pr_date = ?,
 				requestor_id = ?,
 				changed_on = ?
 			WHERE pr_id = ?;
 		";
-		
-		
-		
+
+
+
 		$this->getdb()->query($sql, array(
 								$arr['prStatus'],
 								$arr['prDate'],
@@ -197,7 +233,7 @@ class crud_model extends CI_Model {
 								$serverDate,
 								$arr['prNum']
 							));
-		
+
 		//UPDATE TO pac_pr_details
 		$sql = "
 			UPDATE pac_pr_details
@@ -220,28 +256,28 @@ class crud_model extends CI_Model {
 		$this->getdb()->query($sql, array(
 								$arr['prPayee'],
 								$arr['prAmount'],
-								
+
 								$arr['prForm'],
 								$arr['prPurpose'],
 								$arr['prDisbClass'],
 								$arr['prDisbYield'],
-									
+
 								$arr['prPoJoNo'],
 								$arr['prRcvReportNo'],
 								$arr['prInvoiceNo'],
 								$arr['prOthers'],
 								$arr['prDetails'],
 								$serverDate,
-								
+
 								$arr['prNum']
 							));
-		
-		
+
+
 		$this->logHistory($json, "UPDATE");
 		//ADRIAN: SEND EMAIL IF $arr['prStatus'] == 1; send to Admin Sec Head
-		
+
 	}
-	
+
 	function updatePrStatus($prNum, $prStatus, $approvalType){
 		$userId = $this->getCurrentRequestor();
 		$userRole = $this->getCurrentUserRole();
@@ -271,7 +307,7 @@ class crud_model extends CI_Model {
 								$userId,
 								$prNum
 							));
-	
+
 		$this->logHistoryApproval($prNum, $prStatus, $approvalType);
 	}
 
@@ -289,17 +325,17 @@ class crud_model extends CI_Model {
 *
 ********************************************************************/
 	/*
-	*	This is the default history tracking for WCF users that creates and updates their PR form 
+	*	This is the default history tracking for WCF users that creates and updates their PR form
 	*	INSERT TO pac_pr_history + the json_encoded value of the pr_details for logging purposes
 	*/
 	function logHistory($json, $msg){
 		$arr = json_decode($json, true)[0];
 		$requestor_id = $this->getCurrentRequestor();
-		
+
 		$sql  = "
 			INSERT INTO pac_pr_history(pr_id, status, remarks, user_id, pr_data)
 			VALUES(?,?,?,?,?);
-		
+
 		";
 		$this->getdb()->query($sql, array(
 								$arr['prNum'],
@@ -309,21 +345,21 @@ class crud_model extends CI_Model {
 								$json
 		));
 	}
-	
-	
+
+
 	/*
 	*	This is another version/function to track PR history.
 	*	This is catered for simple tracking of a PR's approval status so no JSON data are needed
-	*	
+	*
 	*/
 	function logHistoryApproval($prNum, $prStatus,$approvalType){
-		
+
 		$requestor_id = $this->getCurrentRequestor();
-		
+
 		$sql  = "
 			INSERT INTO pac_pr_history(pr_id, status, remarks, user_id)
 			VALUES(?,?,?,?);
-		
+
 		";
 		$this->getdb()->query($sql, array(
 								$prNum,
