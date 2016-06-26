@@ -28,7 +28,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <body>
 
 
-	<div id = "navigation" style="background: #33b5e5; position:absolute; top:0px; width:80%; left:0px;">
+	<div id = "navigation" style="background: #33b5e5; position:absolute; top:0px; width:90%; left:0px;">
 		<ul id="trans-nav">
 			<li><?php echo anchor('/home', 'Home');?></li>
 			
@@ -38,7 +38,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	</div>
 
 
-	<div style="background: #33b5e5; width:20%; position:absolute; top:0; right:0px;">
+	<div style="background: #33b5e5; width:10%; position:absolute; top:0; right:0px;">
 
 		<ul id="trans-nav">
 			<li><a href="#">My Account
@@ -52,7 +52,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <br/><br/><br/>
 
 <div style="align=center;">
-
+		<h2>Welcome <?=$this->session->userdata('empFirstName').' '.$this->session->userdata('empLastName').'('.strtoupper($this->session->userdata('userRole')).')'?></h2>
 		<?= $content?>
 </div>
 </body>

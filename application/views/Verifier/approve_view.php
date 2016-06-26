@@ -49,7 +49,7 @@
 
 </style>
 
-<div style="position:relative; top:5%; left:5%; "><br>
+<div style="position:relative; top:5%; left:25%; width:40%; "><br>
 <table>
 <tr>
 <td>

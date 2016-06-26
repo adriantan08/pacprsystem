@@ -38,7 +38,8 @@ class login extends CI_Controller {
 					
 					$this->session->set_userdata('userId',$result['emp_id']);
 					$this->session->set_userdata('userRole',$result['role_name']);
-					
+					$this->session->set_userdata('empFirstName',$result['emp_firstname']);
+					$this->session->set_userdata('empLastName',$result['emp_lastname']);
 					echo 'success';
 					
 				}
@@ -53,3 +54,4 @@ class login extends CI_Controller {
 	}
 	
 }
+
