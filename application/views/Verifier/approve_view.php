@@ -59,8 +59,8 @@
 
 <td>
 	<span>
-		<button style="position:relative; left:20px;" class="flatbutton approveButton" id="post" name="submitButton">Post</button>
-		<button style="position:relative; left:20px;" class="flatbutton rejectButton" id="review" name="submitButton">For Review</button>
+		<button style="position:relative; left:20px;" class="flatbutton approveButton" id="verify" name="submitButton">VERIFY</button>
+		<button style="position:relative; left:20px;" class="flatbutton rejectButton" id="return" name="submitButton">Return PR</button>
 		
 	</span>
 	
@@ -218,13 +218,13 @@
 	$("button[name='submitButton']").click(function(){
 		var status = null;
 		var prNum = document.getElementById('prNum').value;
-		if($(this).attr('id') == 'review')
-			status = <?=FORREVIEW_STATUS?>;
-		else if($(this).attr('id') == 'post')
-			status = <?=POSTED_STATUS?>;
+		if($(this).attr('id') == 'return')
+			status = <?=UNVERIFIED_STATUS?>;
+		else if($(this).attr('id') == 'verify')
+			status = <?=VERIFIED_STATUS?>;
 		
-		approvePr("<?=base_url()?>", 'ASH', status, prNum);
-	
+		approvePr("<?=base_url()?>", 'VERIFIER', status, prNum);
+		
 	});
 	
 </script>

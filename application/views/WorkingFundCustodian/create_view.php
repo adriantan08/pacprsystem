@@ -33,7 +33,7 @@
 			<font class="label">PR#: </font>
 		</td>
 		<td>
-			<input type=number id="prNum"/>
+			<input type=number id="prNum" min="0"/>
 		</td>
 	</tr>
 	<tr>
@@ -49,7 +49,7 @@
 			<font class="label">Amount: </font>
 		</td>
 		<td>
-			P<input type=number id="prAmount"/>
+			P<input type=number id="prAmount" min="0"/>
 		</td>
 	</tr>
 	<tr>
@@ -164,21 +164,14 @@
 	$("button[name='submitButtom']").click(function(){
 		var action = null;
 		if($(this).attr('id') == 'draft')
-			action = 0;
+			action = <?=DRAFT_STATUS?>;
 		else if($(this).attr('id') == 'submit')
-			action = 1;
+			action = <?=SUBMITTED_STATUS?>;
 			
+		
 		var check = runValidation();
 		publishPr("<?=base_url()?>", action,'create');
-		/* temporarily TURNED  OFF validation
-		if(!check){
-			publishPr("<?=base_url()?>");
-		}
 		
-		else{
-			swal("Data Validation Failed!","Please review the fields highlighted in red.", "error");
-		}
-		*/
 	});
 	
 </script>

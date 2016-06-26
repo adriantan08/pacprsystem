@@ -73,7 +73,7 @@
 			<font class="label">PR#: </font>
 		</td>
 		<td>
-			<input type=number id="prNum" name="editable" class="input-read" disabled value="<?=$prDetails['pr_id']?>" />
+			<input type=number min="0" id="prNum" name="editable" class="input-read" disabled value="<?=$prDetails['pr_id']?>" />
 		</td>
 	</tr>
 	<tr>
@@ -91,7 +91,7 @@
 		</td>
 		<td>
 			<div id="amountPlaceholderRead">P <?=number_format($prDetails['amount'])?></div>
-			<div id="amountPlaceholderEdit" style="display:none;" >P <input type=number id="prAmount"  name="editable" class="input-read" disabled value="<?=$prDetails['amount']?>"/></div>
+			<div id="amountPlaceholderEdit" style="display:none;" >P <input type=number id="prAmount" min="0"  name="editable" class="input-read" disabled value="<?=$prDetails['amount']?>"/></div>
 		</td>
 	</tr>
 	<tr>
@@ -249,10 +249,11 @@
 	
 	$("button[name='submitButton']").click(function(){
 		var action = null;
+		
 		if($(this).attr('id') == 'draft')
-			action = 0;
+			action = <?=DRAFT_STATUS?>;
 		else if($(this).attr('id') == 'submit')
-			action = 1;
+			action = <?=SUBMITTED_STATUS?>;
 			
 		var check = runValidation();
 		publishPr("<?=base_url()?>", action, 'update');

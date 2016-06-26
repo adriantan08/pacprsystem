@@ -43,7 +43,7 @@ class api extends CI_Controller {
 	 function approve(){
 		 //At this point, we already checked if there is a session;
 		 //We then check if user is authorized to approve
-		if($this->isAsh()){
+		if($this->user_model->isAsh() || $this->user_model->isVerifier() || $this->user_model->isApprover()){
 			if(isset($_POST['approvalType']) && isset($_POST['prNum']) && isset($_POST['status'])){
 				
 				$catch = $this->crud_model->updatePrStatus($_POST['prNum'], $_POST['status'], $_POST['approvalType']);
@@ -54,13 +54,6 @@ class api extends CI_Controller {
 		else{
 			$this->kick();
 		}
-	 }
-	 
-	 function isAsh(){
-		 if($this->session->userdata('userRole') == 'ASH'){
-			 return true;
-		 }
-		 return false;
 	 }
 	
 }

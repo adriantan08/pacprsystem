@@ -111,7 +111,7 @@ class crud_model extends CI_Model {
 				b.details AS `details`
 			FROM pac_pr_header a, pac_pr_details b
 			WHERE a.pr_id = b.pr_id
-			AND a.pr_status = 1
+			AND a.pr_status = ".VERIFIED_STATUS."
 			ORDER BY changed_on desc;
 		";
 		$q = $this->getdb()->query($sql);
@@ -243,15 +243,32 @@ class crud_model extends CI_Model {
 	}
 	
 	function updatePrStatus($prNum, $prStatus, $approvalType){
+		$userId = $this->getCurrentRequestor();
+		$userRole = $this->getCurrentUserRole();
+		
+		if($userRole == 'ASH'){
+			$column = 'approver1_id';
+		}
+		else if($userRole == 'VERIFIER'){
+			$column = 'approver2_id';
+		}
+		else if($userRole == 'APPROVER'){
+			$column = 'approver3_id';
+		}
+		else
+			exit(); //problem with getting current user role. If role doesn't match anything, do nothing.
+		
 		$sql = "
 			UPDATE pac_pr_header
 			SET
-				pr_status = ?
+				pr_status = ?,
+				".$column." = ?
 			WHERE
 				pr_id = ?;
 		";
 		$this->getdb()->query($sql, array(
 								$prStatus,
+								$userId,
 								$prNum
 							));
 	
@@ -317,8 +334,11 @@ class crud_model extends CI_Model {
 	}
 
 	function getCurrentRequestor(){
-		//should get user logged-in ID
-		return 0;
+		return $this->session->userdata('userId');
+	}
+	
+	function getCurrentUserRole(){
+		return $this->session->userdata('userRole');
 	}
 /*******************************************************************
 *
