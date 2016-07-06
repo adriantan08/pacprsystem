@@ -27,7 +27,6 @@ class api extends CI_Controller {
 	}
 	 
 	 
-	 
 	function create($intent){
 		 
 		 if(isset($_POST['postData'])){
@@ -55,5 +54,31 @@ class api extends CI_Controller {
 			$this->kick();
 		}
 	 }
+	 
+	 function uploadreceipt(){
+		//we need to set error reporting 0, since the script is expecting a pure json response.
+		//this is so that the error message we throw can get back to the script and display error message as an alert
+		error_reporting(0);
+
+		$file = $_FILES['files'];
+		
+		//Error handling in case move_uploaded_file failed. probable cause is that mountpoint_upload folder was not found
+		try {
+			print_r(UPLOAD_DIR.$file['name'][0]);
+			//throw exception if can't move the file
+			if (!move_uploaded_file($file['tmp_name'][0], UPLOAD_DIR.$file['name'][0])) {
+				throw new Exception('Could not move file');
+			}
+
+			
+		} catch (Exception $e) {
+			
+			$arr = array("serverResponse"=>"We have some problems in the upload server. Please contact support.");
+			echo json_encode($arr);
+		}
+		
+		
+	
+	}
 	
 }

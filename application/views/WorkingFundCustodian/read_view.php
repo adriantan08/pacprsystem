@@ -40,7 +40,7 @@
 
 </style>
 
-<div style="position:relative; top:5%; left:25%; width:40%;"><br>
+<div style="position:relative; top:5%; left:10%; width:40%;"><br>
 <table>
 <tr>
 <td>

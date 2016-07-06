@@ -1,8 +1,11 @@
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="<?=base_url()?>lib/jqueryupload/css/jquery.fileupload.css">
+
 <style type="text/css">
 .form-style-1 {
     margin:10px auto;
     max-width: 400px;
-    padding: 20px 12px 10px 20px;
+    padding: 10px 12px 10px 20px;
     font: 12px "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 .form-style-1 li {
@@ -82,6 +85,11 @@ select{
 }
 .form-style-1 .required{
     color:red;
+}
+
+#targetImg{
+	max-width:600px;
+	
 }
 </style>
 
@@ -220,83 +228,216 @@ select{
 </table>
 </div><br/><br/>
 =======-->
-<div class="align:left">
-<ul class="form-style-1">
-    <li><label>PR Date <span class="required">*</span></label>
-    <input type="text" id="prDate" name="field1" class="field-divided"/>
-    </li>
-    <li>
-        <label>PR # <span class="required">*</span></label>
-        <input type="number" id="prNum" name="field2" class="field-long" />
-    </li>
-    <li>
-        <label>Payee <span class="required">*</span></label>
-        <input type="text" id="prPayee" name="field3" class="field-long" />
-    </li>
-    <li>
-        <label>Amount <span class="required">*</span></label>
-        <input type="number" id="prAmount" name="field4" class="field-long" />
-    </li>
-    <li>
-        <label>Form: <span class="required">*</span></label>
-        <span>
-  			<input type="radio" name="prForm" value="cash"/> Cash
-  			<input type="radio" name="prForm" value="check"/> Check
-  			<input type="radio" name="prForm" value="none"/> None
-  			</span>
-    </li>
-    <li>
-        <label>Purpose: <span class="required">*</span></label>
-        <span>
-  			<input type="radio" name="prPurpose" value="disbursement"/> Disbursement
-  			<input type="radio" name="prPurpose" value="liquidation"/> Liquidation
-  			<input type="radio" name="prPurpose" value="recordonly"/> Record Only
-  			</span>
-    </li>
-    <li>
-        <label>Disbursement Class: <span class="required">*</span></label>
-        <span>
-  			<input type="radio" name="prDisbClass" value="spent"/> Spent
-  			<input type="radio" name="prDisbClass" value="unspent"/> Unspent
-  			</span>
-    </li>
-    <li>
-        <label>Disbursement Yield: <span class="required">*</span></label>
-        <span>
-  			<input type="radio" name="prDisbYield" value="consumable"/> Consumable
-  			<input type="radio" name="prDisbYield" value="asset"/> Asset
-  			</span>
-    </li>
-    <li>
-        <label>Supporting Documents: </label>
-    </li>
-    <li>
-        <label>Receiving Report No.: </label>
-        <input type=text id="prRcvReportNo"/>
-    </li>
-    <li>
-        <label>Invoice No.: </label>
-        <input type=text id="prInvoiceNo"/>
-    </li>
-    <li>
-        <label>Others: </label>
-        <input type=text id="prOthers"/>
-    </li>
-    <li>
-        <label>Details: </label>
-        <textarea id="prDetails" rows=10 cols=40 class="field-textarea"></textarea>
-    </li>
-    <li>
-    <button style="background-color:green" class="flatbutton" name="submitButtom" id="draft">Draft</button>
-    <button style="background-color:green" class="flatbutton" name="submitButtom" id="submit">Submit for Approval</button>
-    <button style="width:100px;" class="flatbutton" id="cancel">Cancel</button>
-    </li>
-</ul>
-</div>
+<table style="position:relative; left:10%;" >
+<tr>
+<td style="position:relative; left:0%;">
+	<div style="min-width:600px;">
+	<ul class="form-style-1">
+		<li><label>PR Date <span class="required">*</span></label>
+		<input type="text" id="prDate" name="field1" class="field-divided"/>
+		</li>
+		<li>
+			<label>PR # <span class="required">*</span></label>
+			<input type="number" id="prNum" name="field2" class="field-long" />
+		</li>
+		<li>
+			<label>Payee <span class="required">*</span></label>
+			<input type="text" id="prPayee" name="field3" class="field-long" />
+		</li>
+		<li>
+			<label>Amount (Php) <span class="required">*</span></label>
+			<input type="number" id="prAmount" name="field4" class="field-long" />
+		</li>
+		<li>
+			<label>Form: <span class="required">*</span></label>
+			<span>
+				<input type="radio" name="prForm" value="cash"/> Cash
+				<input type="radio" name="prForm" value="check"/> Check
+				<input type="radio" name="prForm" value="none"/> None
+				</span>
+		</li>
+		<li>
+			<label>Purpose: <span class="required">*</span></label>
+			<span>
+				<input type="radio" name="prPurpose" value="disbursement"/> Disbursement
+				<input type="radio" name="prPurpose" value="liquidation"/> Liquidation
+				<input type="radio" name="prPurpose" value="recordonly"/> Record Only
+				</span>
+		</li>
+		<li>
+			<label>Disbursement Class: <span class="required">*</span></label>
+			<span>
+				<input type="radio" name="prDisbClass" value="spent"/> Spent
+				<input type="radio" name="prDisbClass" value="unspent"/> Unspent
+				</span>
+		</li>
+		<li>
+			<label>Disbursement Yield: <span class="required">*</span></label>
+			<span>
+				<input type="radio" name="prDisbYield" value="consumable"/> Consumable
+				<input type="radio" name="prDisbYield" value="asset"/> Asset
+				</span>
+		</li>
+		<li>
+			<label>Supporting Documents: </label>
+		</li>
+		<li>
+			<label>PO/JO No.: </label>
+			<input type=text id="prPoJoNo"/>
+		</li>
+		<li>
+			<label>Receiving Report No.: </label>
+			<input type=text id="prRcvReportNo"/>
+		</li>
+		<li>
+			<label>Invoice No.: </label>
+			<input type=text id="prInvoiceNo"/>
+		</li>
+		<li>
+			<label>Others: </label>
+			<input type=text id="prOthers"/>
+		</li>
+		<li>
+			<label>Details: </label>
+			<textarea id="prDetails" rows=10 cols=40 class="field-textarea"></textarea>
+		</li>
+		<li>
+		<button style="background-color:green" class="flatbutton" name="submitButtom" id="draft">Draft</button>
+		<button style="background-color:green" class="flatbutton" name="submitButtom" id="submit">Submit for Approval</button>
+		<button style="background-color:green" class="flatbutton"id="uploadButton">UPLOAD</button>
+		<button style="width:100px;" class="flatbutton" id="cancel">Cancel</button>
+		</li>
+	</ul>
+	</div>
+</td>
+<td valign=top> 
+<span id="image_div">
+	<h2>Upload Receipts</h2>
+	
+    <!-- The fileinput-button span is used to style the file input field as button -->
+    <span class="btn btn-success fileinput-button">
+        <i class="glyphicon glyphicon-plus"></i>
+        <span>Select file</span>
+		
+        <!-- The file input field used as target for the file upload widget -->
+        <input id="fileupload" type="file" name="files[]" multiple>
+    </span><br><br>
+	<div id="uploadDiv"></div>
+    <br>
+    <br>
+    <!-- The global progress bar -->
+    <div id="progress" class="progress" style="width:300px;"> 
+        <div class="progress-bar progress-bar-success"></div>
+    </div>
+    <!-- The container for the uploaded files -->
+    <div id="files" class="files"><img id="targetImg"/></div>
+	<div id="result"></div>
+    <br>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Information</h3>
+        </div>
+        <div class="panel-body">
+            <ul>
+               <li>Maximum upload limit of <strong>2MB.</strong></li>
+			   <li>Supported image formats: jpg, png, gif</li>
+			   
+            </ul>
+        </div>
+    </div>
+	
 
+	
 
+</span>
+</td>
+</tr>
+</table>
 <script src="<?=base_url()?>js/create_pr.js"></script>
 <script src="<?=base_url()?>js/form_validator.js"></script>
+
+<!------JQUERY UPLOAD IMPORT-------
+*
+*
+-->
+<!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
+<script src="<?=base_url()?>lib/jqueryupload/js/vendor/jquery.ui.widget.js"></script>
+
+<!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
+<script src="<?=base_url()?>lib/jqueryupload/js/jquery.iframe-transport.js"></script>
+<!-- The basic File Upload plugin -->
+<script src="<?=base_url()?>lib/jqueryupload/js/jquery.fileupload.js"></script>
+<!-- The File Upload processing plugin -->
+<script src="<?=base_url()?>lib/jqueryupload/js/jquery.fileupload-process.js"></script>
+<script src="<?=base_url()?>lib/jqueryupload/js/jquery.fileupload-validate.js"></script>
+<!------JQUERY UPLOAD IMPORT--------->
+
+<script>
+/*jslint unparam: true */
+/*global window, $ */
+var uploadDataHandler;
+$(function () {
+    'use strict';
+    var url ='<?=base_url()?>api/uploadreceipt';
+    $('#fileupload').fileupload({
+        url: url,
+        dataType: 'json',  
+		maxFileSize: 2000000, // 2 MB
+		
+		add: function (e, data) {
+			var fileType = data.files[0].name.split('.').pop().toLowerCase(), allowdtypes = 'jpeg,jpg,png,gif';
+			
+			var fileSize = data.files[0].size;
+			if (allowdtypes.indexOf(fileType) < 0) {
+				swal("Unsupported data format",'Processing ' + data.files[0].name + ' failed.',"error");
+				return false;
+			}
+			if(fileSize > 2000000){
+				swal("File is too big.",'Processing ' + data.files[0].name + ' failed.',"error");
+				return false;
+			}
+			
+			if (data.files && data.files[0]) {
+				var reader = new FileReader();
+				reader.onload = function(e) {
+					$('#targetImg').attr('src', e.target.result);
+					
+				}
+				reader.readAsDataURL(data.files[0]);
+				uploadDataHandler = data;
+				
+			}
+		},
+		done: function (e, data) {
+			var r = data.result["serverResponse"];
+			if(r.indexOf("support") != -1)
+				swal("Data Upload Failed!",r,"error");
+			else
+				swal("Data Upload Completed!",r,"success");
+        },
+		progressall: function (e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            $('#progress .progress-bar').css(
+                'width',
+                progress + '%'
+            );
+			
+        },
+		processfail:function(e, data){
+			var file = data.files[data.index];
+			//file.error here displays the particular error code/response
+			swal(file.error,'Processing ' + data.files[data.index].name + ' failed.', 'error');
+			
+		},
+		processdone:function(e, data){
+			
+		}
+	
+    }).prop('disabled', !$.support.fileInput)
+        .parent().addClass($.support.fileInput ? undefined : 'disabled');
+});
+</script>
+
 <script>
 
 	$( "#prDate").datepicker("setDate", new Date());
@@ -314,5 +455,11 @@ select{
 		
 
 	});
+	
+	$("#uploadButton").click(function(){
+		
+		uploadDataHandler.submit();
+	});
+	
 
 </script>
