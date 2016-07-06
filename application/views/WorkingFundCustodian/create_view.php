@@ -304,7 +304,7 @@ select{
 		<li>
 		<button style="background-color:green" class="flatbutton" name="submitButtom" id="draft">Draft</button>
 		<button style="background-color:green" class="flatbutton" name="submitButtom" id="submit">Submit for Approval</button>
-		<button style="background-color:green" class="flatbutton"id="uploadButton">UPLOAD</button>
+		
 		<button style="width:100px;" class="flatbutton" id="cancel">Cancel</button>
 		</li>
 	</ul>
@@ -353,6 +353,7 @@ select{
 </td>
 </tr>
 </table>
+<input type=hidden id="imagefile" value="none"/>
 <script src="<?=base_url()?>js/create_pr.js"></script>
 <script src="<?=base_url()?>js/form_validator.js"></script>
 
@@ -381,7 +382,9 @@ $(function () {
     var url ='<?=base_url()?>api/uploadreceipt';
     $('#fileupload').fileupload({
         url: url,
-        dataType: 'json',  
+        dataType:'json',
+		method:'POST',
+		
 		maxFileSize: 2000000, // 2 MB
 		
 		add: function (e, data) {
@@ -404,6 +407,10 @@ $(function () {
 					
 				}
 				reader.readAsDataURL(data.files[0]);
+				/*passed data to global var uploadDataHandler so we can call data.submit() later on when drafting / submitting
+					also included the prNum value as additional form data before passing to uploadDataHandler
+				*/
+				
 				uploadDataHandler = data;
 				
 			}
@@ -412,8 +419,8 @@ $(function () {
 			var r = data.result["serverResponse"];
 			if(r.indexOf("support") != -1)
 				swal("Data Upload Failed!",r,"error");
-			else
-				swal("Data Upload Completed!",r,"success");
+			//else
+			//	swal("Data Upload Completed!",r,"success");
         },
 		progressall: function (e, data) {
             var progress = parseInt(data.loaded / data.total * 100, 10);
@@ -451,15 +458,34 @@ $(function () {
 			action = <?=SUBMITTED_STATUS?>;
 			
 		var check = runValidation();
-		publishPr("<?=base_url()?>", action,'create');
+		
+		//this should be !check. we just bypassed. revert when moving to prod
+		if(!check){
+			
+			//upload formData in case use changes the prNum
+			uploadDataHandler.formData= {prNum : document.getElementById('prNum').value};
+			
+			
+			uploadDataHandler.submit().done(function(e){
+				var response = e;
+				
+				if(response['serverResponse'] == 'success'){
+					alert('uploadsuccess');
+					document.getElementById('imagefile').value = response['image'];
+					publishPr("<?=base_url()?>", action,'create');
+				}
+			});
+			
+			
+			
+			
+			
+		}
 		
 
 	});
 	
-	$("#uploadButton").click(function(){
-		
-		uploadDataHandler.submit();
-	});
+	
 	
 
 </script>

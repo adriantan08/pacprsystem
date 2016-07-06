@@ -38,8 +38,8 @@ class crud_model extends CI_Model {
 
 		//INSERT TO pac_pr_details
 		$sql = "
-			INSERT INTO pac_pr_details(pr_id, payee, amount, payment_form, purpose, dist_class, dist_yield, po_jo_no, rr_no, inv_no, others, details, changed_on)
-			VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?);
+			INSERT INTO pac_pr_details(pr_id, payee, amount, payment_form, purpose, dist_class, dist_yield, po_jo_no, rr_no, inv_no, others, details, changed_on, receipt_img)
+			VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?);
 		";
 		$this->getdb()->query($sql, array(
 								$arr['prNum'],
@@ -57,7 +57,9 @@ class crud_model extends CI_Model {
 								$arr['prOthers'],
 								$arr['prDetails'],
 
-								$serverDate
+								$serverDate,
+								
+								$arr['prReceiptImg']
 							));
 		$this->logHistory($json,"CREATE");
 

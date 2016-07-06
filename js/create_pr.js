@@ -13,7 +13,7 @@ function publishPr(base_url, action, intent){
 	var prInvoiceNo = sanitize(document.getElementById('prInvoiceNo').value);
 	var prOthers = sanitize(document.getElementById('prOthers').value);
 	var prDetails = sanitize(document.getElementById('prDetails').value);
-	
+	var prReceiptImg = document.getElementById('imagefile').value;
 	
 	//convert new line of Details text area to what HTML can understand
 	prDetails = prDetails.replace(/\r?\n/g, '<br/>');
@@ -33,7 +33,8 @@ function publishPr(base_url, action, intent){
 			prInvoiceNo:prInvoiceNo,
 			prOthers:prOthers,
 			prDetails:prDetails,
-			prStatus:action
+			prStatus:action,
+			prReceiptImg: prReceiptImg
 	});
 	
 	$.ajax({
