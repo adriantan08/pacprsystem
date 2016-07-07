@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="<?=base_url()?>css/bootstrap.min.css">
 <link rel="stylesheet" href="<?=base_url()?>lib/jqueryupload/css/jquery.fileupload.css">
 
 <style type="text/css">
@@ -220,8 +220,8 @@ select{
 	
 	<tr>
 		<td colspan=2 align=center>
-			<button style="background-color:green" class="flatbutton" name="submitButtom" id="draft">Draft</button>
-			<button style="background-color:green" class="flatbutton" name="submitButtom" id="submit">Submit for Approval</button>
+			<button style="background-color:green" class="flatbutton" name="submitButton" id="draft">Draft</button>
+			<button style="background-color:green" class="flatbutton" name="submitButton" id="submit">Submit for Approval</button>
 			<button style="width:100px;" class="flatbutton" id="cancel">Cancel</button>
 		</td>
 	</tr>
@@ -302,8 +302,8 @@ select{
 			<textarea id="prDetails" rows=10 cols=40 class="field-textarea"></textarea>
 		</li>
 		<li>
-		<button style="background-color:green" class="flatbutton" name="submitButtom" id="draft">Draft</button>
-		<button style="background-color:green" class="flatbutton" name="submitButtom" id="submit">Submit for Approval</button>
+		<button style="background-color:green" class="flatbutton" name="submitButton" id="draft">Draft</button>
+		<button style="background-color:green" class="flatbutton" name="submitButton" id="submit">Submit for Approval</button>
 		
 		<button style="width:100px;" class="flatbutton" id="cancel">Cancel</button>
 		</li>
@@ -346,13 +346,11 @@ select{
         </div>
     </div>
 	
-
-	
-
 </span>
 </td>
 </tr>
 </table>
+
 <input type=hidden id="imagefile" value="none"/>
 <script src="<?=base_url()?>js/create_pr.js"></script>
 <script src="<?=base_url()?>js/form_validator.js"></script>
@@ -403,6 +401,7 @@ $(function () {
 			if (data.files && data.files[0]) {
 				var reader = new FileReader();
 				reader.onload = function(e) {
+					$('#targetImg').attr('width', '300px');
 					$('#targetImg').attr('src', e.target.result);
 					
 				}
@@ -450,7 +449,7 @@ $(function () {
 	$( "#prDate").datepicker("setDate", new Date());
 	$( "#prDate").datepicker({ dateFormat: 'yy/mm/dd'});
 
-	$("button[name='submitButtom']").click(function(){
+	$("button[name='submitButton']").click(function(){
 		var action = null;
 		if($(this).attr('id') == 'draft')
 			action = <?=DRAFT_STATUS?>;
@@ -470,22 +469,12 @@ $(function () {
 				var response = e;
 				
 				if(response['serverResponse'] == 'success'){
-					alert('uploadsuccess');
+					
 					document.getElementById('imagefile').value = response['image'];
 					publishPr("<?=base_url()?>", action,'create');
 				}
 			});
-			
-			
-			
-			
-			
 		}
 		
-
 	});
-	
-	
-	
-
 </script>

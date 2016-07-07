@@ -2,6 +2,12 @@ body{
 	font-family:'Arial';
 	font-size:13px;
 }
+
+#myH3{
+	font-family:Arial;
+	font-size:2em;
+	font-weight:normal;
+}
 		
 #trans-nav {list-style-type: none; height: 52px; padding: 0; margin: 0; z-index:999;}
 #trans-nav li { float: left; position: relative; padding: 0; line-height: 50px; background: #33b5e5 url(nav-bg.png) repeat-x 0 0; }

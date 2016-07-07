@@ -176,7 +176,8 @@ class crud_model extends CI_Model {
 				b.po_jo_no AS `po_jo_no`,
 				b.rr_no AS `rr_no`,
 				b.inv_no AS `inv_no`,
-				b.others AS `others`
+				b.others AS `others`,
+				b.receipt_img as `receipt_img`
 			FROM pac_pr_header a, pac_pr_details b
 			WHERE a.pr_id = b.pr_id
 			AND a.pr_id = ?
@@ -247,7 +248,8 @@ class crud_model extends CI_Model {
 				inv_no = ?,
 				others = ?,
 				details = ?,
-				changed_on = ?
+				changed_on = ?,
+				receipt_img = ?
 			WHERE
 				pr_id = ?;
 		";
@@ -266,7 +268,8 @@ class crud_model extends CI_Model {
 								$arr['prOthers'],
 								$arr['prDetails'],
 								$serverDate,
-
+								$arr['prReceiptImg'],
+								
 								$arr['prNum']
 							));
 

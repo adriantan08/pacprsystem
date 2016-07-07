@@ -50,7 +50,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	</div>
 <br/><br/><br/>
 <div>
-<h2>Welcome <?=$this->session->userdata('empFirstName').' '.$this->session->userdata('empLastName').'('.strtoupper($this->session->userdata('userRole')).')'?></h2><hr class="carved"/>
+<h3 id="myH3">Welcome <?=$this->session->userdata('empFirstName').' '.$this->session->userdata('empLastName').'('.strtoupper($this->session->userdata('userRole')).')'?></h3><hr class="carved"/>
 		<?= $content?>
 </div>
 </body>

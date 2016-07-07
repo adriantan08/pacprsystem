@@ -14,7 +14,7 @@
     } );
 </script>
 
-<div style="width: 75%; margin: 0 auto; padding: 120px 0 40px;">
+<div style="width: 75%; margin: 0 auto; padding: 20px 0 40px;">
     <ul class="tabs" data-persist="true">
 		<li><a href="#view0">Drafted PRs</a></li>
         <li><a href="#view1">Submitted PRs</a></li>

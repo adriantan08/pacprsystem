@@ -85,7 +85,8 @@ class api extends CI_Controller {
 			
 		} catch (Exception $e) {
 			
-			$arr = array("serverResponse"=>"We have some problems in the upload server. Please contact support.");
+			$arr = array("serverResponse"=>"We have some problems in the upload server. Please contact support.",
+							"error stacktrace"=>"$e");
 			echo json_encode($arr);
 		}
 		
