@@ -94,4 +94,8 @@ class api extends CI_Controller {
 	
 	}
 	
+	function getpayees(){
+		echo json_encode($this->crud_model->getDistinctPayees());
+	}
+	
 }

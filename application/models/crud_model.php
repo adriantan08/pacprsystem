@@ -190,6 +190,23 @@ class crud_model extends CI_Model {
 		}
 		return null;
 	}
+	
+	function getDistinctPayees(){
+		$sql = "
+			SELECT DISTINCT(payee) FROM pac_pr_details
+			WHERE payee IS NOT NULL AND payee != ''
+			ORDER BY payee ASC;
+		";
+		$q = $this->getdb()->query($sql);
+		if($q->num_rows()>0){
+			$arr = array();
+			foreach($q->result_array() as $row){
+				$arr[] = $row['payee'];
+			}
+			return json_encode($arr);
+		}
+		return null;
+	}
 
 
 /*******************************************************************

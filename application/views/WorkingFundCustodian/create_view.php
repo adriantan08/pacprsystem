@@ -477,4 +477,20 @@ $(function () {
 		}
 		
 	});
+	
+	
+	$("#prPayee").autocomplete({
+		source: JSON.parse('<?=$this->crud_model->getDistinctPayees()?>'),
+		//source: [{label:"Label1", value:"Value1"}],
+		minLength: 0,
+		position: {
+			my : "right top",
+			at: "right bottom"
+		},
+		//action here to dictate where to go once an entry has been selected
+		select: function(event, ui) {
+			
+		},
+		
+	});
 </script>
