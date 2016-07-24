@@ -98,7 +98,7 @@
               </thead>
               <tbody>
                 <?php
-                  $prList = $this->crud_model->getPrListForWfc('50');
+                  $prList = $this->crud_model->getPrListForWfc('40');
                   if($prList != null){
                     foreach($prList as $list){
                       echo '<tr>';

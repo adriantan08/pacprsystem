@@ -59,19 +59,24 @@ class api extends CI_Controller {
 		//we need to set error reporting 0, since the script is expecting a pure json response.
 		//this is so that the error message we throw can get back to the script and display error message as an alert
 		error_reporting(0);
+		
 		date_default_timezone_set(DEFAULT_TIMEZONE);
-		$serverDate = date('Y-m-d H-i-s');
+		$serverDate = date('Y-m-d H-i-s-u');
 		
 		$prNum = $_REQUEST['prNum'];
+		//imgNum is added to support unique naming convention for multiple image upload
+		$imgNum = $_REQUEST['imgNum'];
 		$file = $_FILES['files'];
 		
 		$extension = strtolower(pathinfo($file['name'][0], PATHINFO_EXTENSION));
 		
 		//Error handling in case move_uploaded_file failed. probable cause is that mountpoint_upload folder was not found
 		try {
-			//Image Uploaded formate: PR<prnumber>-Y-m-d H-i-s.<extension based on original image file
-			//Example: PR123-2016-7-7 04-55-00.png
-			$imgFileName = 'PR'.$prNum.'-'.$serverDate.'.'.$extension;
+			//IMAGE UPLOAD DATA FORMAT:  PR<prnumber>-<imgNum>-Y-m-d H-i-s.<extension based on original image file
+			//We don't rely on combination of PRNum and date only in case upload was really FAST.
+			//Example: PR123-2016-7-7 04-55-00-132323.png
+			
+			$imgFileName = 'PR'.$prNum.'-'.$imgNum.'-'.$serverDate.'.'.$extension;
 			
 			//throw exception if can't move the file
 			if (!move_uploaded_file($file['tmp_name'][0], UPLOAD_DIR.$imgFileName)) {

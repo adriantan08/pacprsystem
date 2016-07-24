@@ -302,6 +302,7 @@ select{
 			<textarea id="prDetails" rows=10 cols=40 class="field-textarea"></textarea>
 		</li>
 		<li>
+		
 		<button style="background-color:green" class="flatbutton" name="submitButton" id="draft">Draft</button>
 		<button style="background-color:green" class="flatbutton" name="submitButton" id="submit">Submit for Approval</button>
 		
@@ -330,7 +331,7 @@ select{
         <div class="progress-bar progress-bar-success"></div>
     </div>
     <!-- The container for the uploaded files -->
-    <div id="files" class="files"><img id="targetImg"/></div>
+    <div id="files" class="files"><div id="targetImg"></div></div>
 	<div id="result"></div>
     <br>
     <div class="panel panel-default">
@@ -374,7 +375,9 @@ select{
 <script>
 /*jslint unparam: true */
 /*global window, $ */
-var uploadDataHandler;
+//Declaring this as objects, to support multiple image upload
+var uploadDataHandler = [];
+var imageCtr = 0;
 $(function () {
     'use strict';
     var url ='<?=base_url()?>api/uploadreceipt';
@@ -401,8 +404,21 @@ $(function () {
 			if (data.files && data.files[0]) {
 				var reader = new FileReader();
 				reader.onload = function(e) {
-					$('#targetImg').attr('width', '300px');
-					$('#targetImg').attr('src', e.target.result);
+					var elem = document.createElement('img');
+					elem.id = 'image-'+imageCtr;
+					elem.style.width = '300px';
+					elem.src = e.target.result;
+					$('#targetImg').append(elem);
+					
+					$('#targetImg').append(document.createElement('br'));
+					var elem = document.createElement('button');
+					elem.id = 'imageRemoveButton-'+imageCtr;
+					elem.addEventListener("click", function(){removeImage(imageCtr);});
+					elem.className = 'flatbutton';
+					
+					elem.innerHTML = 'Remove';
+					elem.style.backgroundColor="red";
+					$('#targetImg').append(elem);
 					
 				}
 				reader.readAsDataURL(data.files[0]);
@@ -410,8 +426,9 @@ $(function () {
 					also included the prNum value as additional form data before passing to uploadDataHandler
 				*/
 				
-				uploadDataHandler = data;
+				uploadDataHandler[imageCtr] = data;
 				
+				imageCtr++;
 			}
 		},
 		done: function (e, data) {
@@ -460,24 +477,64 @@ $(function () {
 		
 		//this should be !check. we just bypassed. revert when moving to prod
 		if(!check){
+			var imgStrings = "";
+			var allUploadsSuccess = true;
+			var imgCtr = 0;
 			
-			//upload formData in case use changes the prNum
-			uploadDataHandler.formData= {prNum : document.getElementById('prNum').value};
+			//Reset the value of DOM (id = imagefile) placeholder
+			document.getElementById('imagefile').value = "none";
 			
-			
-			uploadDataHandler.submit().done(function(e){
-				var response = e;
+			//this loop is responsible to submit() all uploadHandlers to upload all images to the server
+			for(var key in uploadDataHandler){
 				
-				if(response['serverResponse'] == 'success'){
+				//temporary set ajax calls to async to allow us to wait until all uploads finish before initiating publishing. We have to wait for upload to finish since we will need the final value of placeholder input (imagefile) DOM to get uploaded image and associate to the PR.
+				$.ajaxSetup({ async: false });
+				if(uploadDataHandler.hasOwnProperty(key)){
+					var uploadObject = uploadDataHandler[key]; 
 					
-					document.getElementById('imagefile').value = response['image'];
-					publishPr("<?=base_url()?>", action,'create');
+					//always get prNum in case changes the prNum
+					uploadObject.formData= {
+						prNum : document.getElementById('prNum').value,
+						imgNum : imgCtr
+					};
+					imgCtr++;
+					uploadObject.submit().done(function(e){
+						var response = e;
+						
+						if(response['serverResponse'] == 'success'){
+							//foreach success upload, we append (double piped) the image name generated in the hidden input field use as placeholder.
+							
+							if(document.getElementById('imagefile').value == "none")
+								document.getElementById('imagefile').value = response['image']+"||";
+							else
+								document.getElementById('imagefile').value += response['image']+"||";
+							
+						}
+						else{
+							allUploadsSuccess = false;
+						}
+					});
+					
 				}
-			});
+				
+			}
+			if(allUploadsSuccess){
+				publishPr("<?=base_url()?>", action,'create');
+				
+			}
+			else{
+				swal("Something went wrong during upload","","error");
+			}
+			
 		}
 		
 	});
 	
+	
+	
+	function removeImage(id){
+		alert("removing image: "+"image"+id);
+	}
 	
 	$("#prPayee").autocomplete({
 		source: JSON.parse('<?=$this->crud_model->getDistinctPayees()?>'),
