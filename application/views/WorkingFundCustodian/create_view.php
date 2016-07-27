@@ -401,25 +401,33 @@ $(function () {
 				return false;
 			}
 			
-			if (data.files && data.files[0]) {
+			//Assume that an iteration will occure here in case user adds multiple files in one attempt
+				var elemImg = document.createElement('img');
+				var elemButton = document.createElement('button');
+				
+				elemImg.id = 'image-'+imageCtr;
+				elemImg.style.width = '300px';
+				
+				$('#targetImg').append(elemImg);
+				
+				$('#targetImg').append(document.createElement('br'));
+				$('#targetImg').append(document.createElement('br'));
+				
+				elemButton.id = 'imageRemoveId-'+imageCtr;
+				elemButton.name = 'imageRemoveButton';
+				elemButton.addEventListener("click", function(){removeImage(elemImg.id, elemButton.id);});
+				elemButton.className = 'flatbutton';
+				
+				elemButton.innerHTML = 'Remove';
+				elemButton.style.backgroundColor="red";
+				$('#targetImg').append(elemButton);
+				$('#targetImg').append(document.createElement('br'));
+				$('#targetImg').append(document.createElement('br'));
+				
+				//Wait until read object finishes getting img from local, then use it as src attribute of the recently created img
 				var reader = new FileReader();
 				reader.onload = function(e) {
-					var elem = document.createElement('img');
-					elem.id = 'image-'+imageCtr;
-					elem.style.width = '300px';
-					elem.src = e.target.result;
-					$('#targetImg').append(elem);
-					
-					$('#targetImg').append(document.createElement('br'));
-					var elem = document.createElement('button');
-					elem.id = 'imageRemoveButton-'+imageCtr;
-					elem.addEventListener("click", function(){removeImage(imageCtr);});
-					elem.className = 'flatbutton';
-					
-					elem.innerHTML = 'Remove';
-					elem.style.backgroundColor="red";
-					$('#targetImg').append(elem);
-					
+					elemImg.src = e.target.result;
 				}
 				reader.readAsDataURL(data.files[0]);
 				/*passed data to global var uploadDataHandler so we can call data.submit() later on when drafting / submitting
@@ -429,7 +437,8 @@ $(function () {
 				uploadDataHandler[imageCtr] = data;
 				
 				imageCtr++;
-			}
+				
+			
 		},
 		done: function (e, data) {
 			var r = data.result["serverResponse"];
@@ -531,9 +540,27 @@ $(function () {
 	});
 	
 	
-	
-	function removeImage(id){
-		alert("removing image: "+"image"+id);
+	function removeImage(imgId, buttonId){
+		
+		//temporarily changed prototype to cater to removing element by id from parent's child nodes
+		Element.prototype.remove = function() {
+			this.parentElement.removeChild(this);
+		}
+		NodeList.prototype.remove = HTMLCollection.prototype.remove = function() {
+			for(var i = this.length - 1; i >= 0; i--) {
+				if(this[i] && this[i].parentElement) {
+					this[i].parentElement.removeChild(this[i]);
+				}
+			}
+		}
+		
+		document.getElementById(imgId).remove();
+		document.getElementById(buttonId).remove();
+		var id = imgId.split('-')[1];
+		if(typeof uploadDataHandler[id] !== 'undefined')
+			uploadDataHandler.splice(id,1);
+		
+		
 	}
 	
 	$("#prPayee").autocomplete({
