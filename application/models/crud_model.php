@@ -270,6 +270,8 @@ class crud_model extends CI_Model {
 			WHERE
 				pr_id = ?;
 		";
+		if($arr['prReceiptImg']=="")
+			$arr['prReceiptImg'] = 'none';
 		$this->getdb()->query($sql, array(
 								$arr['prPayee'],
 								$arr['prAmount'],

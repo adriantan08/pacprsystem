@@ -67,3 +67,26 @@ function publishPr(base_url, action, intent){
 			});
 	});
 }
+
+function removeImage(imgId, buttonId){
+		
+		//temporarily changed prototype to cater to removing element by id from parent's child nodes
+		Element.prototype.remove = function() {
+			this.parentElement.removeChild(this);
+		}
+		NodeList.prototype.remove = HTMLCollection.prototype.remove = function() {
+			for(var i = this.length - 1; i >= 0; i--) {
+				if(this[i] && this[i].parentElement) {
+					this[i].parentElement.removeChild(this[i]);
+				}
+			}
+		}
+		
+		document.getElementById(imgId).remove();
+		document.getElementById(buttonId).remove();
+		var id = imgId.split('-')[1];
+		if(typeof uploadDataHandler[id] !== 'undefined')
+			uploadDataHandler.splice(id,1);
+		
+		
+	}

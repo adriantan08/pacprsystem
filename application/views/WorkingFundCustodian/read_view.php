@@ -41,12 +41,17 @@
 	border-bottom:0;
 }
 
+#targetImg{
+	max-width:600px;
+	
+}
+
 </style>
 
 <div style="position:relative; top:5%; left:10%;"><br>
 <table>
 <tr>
-<td>
+<td valign=top>
 	<table>
 	<tr>
 	<td>
@@ -231,7 +236,35 @@
         <div class="progress-bar progress-bar-success"></div>
     </div>
     <!-- The container for the uploaded files -->
-    <div id="files" class="files"><img id="targetImg" src="<?=IMG_DIR.$prDetails['receipt_img']?>" width=300px/></div>
+    <div id="files" class="files">
+	<div id="targetImg"></div>
+	
+	<div id="existingImagesDiv">
+	<?php
+		if($prDetails['receipt_img'] !== 'none'){
+			/*if there's at least one image, exploding will always result into an array i.e. IMG1||IMG2||
+			
+			we just have to always check if current array value is no blank
+			*/
+			
+			$imgArr = explode("||", $prDetails['receipt_img']);
+			//for goodness sake, we still want to catch if it's array
+			if(is_array($imgArr)){
+				for($i=0; $i<count($imgArr); $i++){
+					if($imgArr[$i] !== ""){
+						$imgDomId = "image-".$i;
+						$buttonDomId = "removebutton-".$i;
+						echo '<img name="existingImages" id="'.$imgDomId.'" width=300px src = "'.IMG_DIR.$imgArr[$i].'" data-filename="'.$imgArr[$i].'"/><br/><br/>';
+						
+						echo '<button class="flatbutton" style="background-color:red; visibility:hidden;" name="removeImageButtons" id = "'.$buttonDomId.'" onclick="removeExistingImage('."'".$imgDomId."'".','."'".$buttonDomId."'".');"> Remove</button><br/><br/>';
+					}
+				}
+			}
+			
+		}
+	?>
+	</div>
+	</div>
 	<div id="result"></div>
     <br>
     <div class="panel panel-default">
@@ -279,7 +312,8 @@
 **********************************************************************************************************/
 /*jslint unparam: true */
 /*global window, $ */
-var uploadDataHandler = null;
+var uploadDataHandler = [];
+var imageCtr = 0;
 $(function () {
     'use strict';
     var url ='<?=base_url()?>api/uploadreceipt';
@@ -303,21 +337,43 @@ $(function () {
 				return false;
 			}
 			
-			if (data.files && data.files[0]) {
+			
+				//Assume that an iteration will occure here in case user adds multiple files in one attempt
+				var elemImg = document.createElement('img');
+				var elemButton = document.createElement('button');
+				
+				elemImg.id = 'image-'+imageCtr;
+				elemImg.style.width = '300px';
+				
+				$('#targetImg').append(elemImg);
+				
+				$('#targetImg').append(document.createElement('br'));
+				$('#targetImg').append(document.createElement('br'));
+				
+				elemButton.id = 'imageRemoveId-'+imageCtr;
+				elemButton.name = 'imageRemoveButton';
+				elemButton.addEventListener("click", function(){removeImage(elemImg.id, elemButton.id);});
+				elemButton.className = 'flatbutton';
+				
+				elemButton.innerHTML = 'Remove';
+				elemButton.style.backgroundColor="red";
+				$('#targetImg').append(elemButton);
+				$('#targetImg').append(document.createElement('br'));
+				$('#targetImg').append(document.createElement('br'));
+				
+				//Wait until read object finishes getting img from local, then use it as src attribute of the recently created img
 				var reader = new FileReader();
 				reader.onload = function(e) {
-					$('#targetImg').attr('width', '300px');
-					$('#targetImg').attr('src', e.target.result);
-					
+					elemImg.src = e.target.result;
 				}
 				reader.readAsDataURL(data.files[0]);
 				/*passed data to global var uploadDataHandler so we can call data.submit() later on when drafting / submitting
 					also included the prNum value as additional form data before passing to uploadDataHandler
 				*/
 				
-				uploadDataHandler = data;
+				uploadDataHandler[imageCtr] = data;
 				
-			}
+				imageCtr++;
 		},
 		done: function (e, data) {
 			var r = data.result["serverResponse"];
@@ -389,6 +445,13 @@ $(function () {
 		document.getElementById('prDetails').disabled = false;
 		document.getElementById('finishEditDiv').style.visibility = 'visible';
 		document.getElementById('selectUploadButton').style.visibility = 'visible';
+		
+		//this will reveal all removeImageButtons if there's any images initially uploaded
+		if(document.getElementsByName("removeImageButtons") !== 'undefined')
+			var nodes = document.getElementsByName("removeImageButtons");
+			for(var i=0; i < nodes.length; i++)
+				nodes[i].style.visibility="visible";
+		
 		//swal("You may now start editing!","","info");
 	});
 	
@@ -405,25 +468,111 @@ $(function () {
 		
 		//this should be !check. we just bypassed. revert when moving to prod
 		if(!check){
-			alert('here');
-			if(uploadDataHandler == null){
+			var imgStrings = "";
+			var allUploadsSuccess = true;
+			var imgCtr = 0;
+			
+			//Reset the value of DOM (id = imagefile) placeholder
+			document.getElementById('imagefile').value = "none";
+			
+			//this loop is responsible to submit() all uploadHandlers to upload all images to the server
+			for(var key in uploadDataHandler){
+				
+				//temporary set ajax calls to async to allow us to wait until all uploads finish before initiating publishing. We have to wait for upload to finish since we will need the final value of placeholder input (imagefile) DOM to get uploaded image and associate to the PR.
+				$.ajaxSetup({ async: false });
+				if(uploadDataHandler.hasOwnProperty(key)){
+					var uploadObject = uploadDataHandler[key]; 
+					
+					//always get prNum in case changes the prNum
+					uploadObject.formData= {
+						prNum : document.getElementById('prNum').value,
+						imgNum : imgCtr
+					};
+					imgCtr++;
+					uploadObject.submit().done(function(e){
+						var response = e;
+						
+						if(response['serverResponse'] == 'success'){
+							//foreach success upload, we append (double piped) the image name generated in the hidden input field use as placeholder.
+							
+							if(document.getElementById('imagefile').value == "none")
+								document.getElementById('imagefile').value = response['image']+"||";
+							else
+								document.getElementById('imagefile').value += response['image']+"||";
+							
+						}
+						else{
+							allUploadsSuccess = false;
+						}
+					});
+					
+				}
+			}
+			/*FINALLY, we also have to get the existing images previously uploaded!*/
+			if(document.getElementById('imagefile').value == "none")
+				document.getElementById('imagefile').value = getExistingImages();
+			else
+				document.getElementById('imagefile').value += getExistingImages();
+			
+			if(allUploadsSuccess){
 				publishPr("<?=base_url()?>", action,'update');
+				
 			}
 			else{
-					alert('upload change. uploading sequence');
-			//upload formData in case use changes the prNum
-				uploadDataHandler.formData= {prNum : document.getElementById('prNum').value};
-				uploadDataHandler.submit().done(function(e){
-					var response = e;
-					
-					if(response['serverResponse'] == 'success'){
-						alert('uploadsuccess');
-						document.getElementById('imagefile').value = response['image'];
-						publishPr("<?=base_url()?>", action,'update');
-					}
-				});
+				swal("Something went wrong during upload","","error");
+			}
+			
+		}
+		
+	});
+	
+	//this function removes the image and the button that goes with it.
+	//This is purely used for existing images since we are just manipulating/fixing the DOMs
+	function removeExistingImage(imgId, buttonId){
+		
+		//temporarily changed prototype to cater to removing element by id from parent's child nodes
+		Element.prototype.remove = function() {
+			this.parentElement.removeChild(this);
+		}
+		NodeList.prototype.remove = HTMLCollection.prototype.remove = function() {
+			for(var i = this.length - 1; i >= 0; i--) {
+				if(this[i] && this[i].parentElement) {
+					this[i].parentElement.removeChild(this[i]);
+				}
 			}
 		}
+		
+		document.getElementById(imgId).remove();
+		document.getElementById(buttonId).remove();
+	}
+	
+	
+	
+	//this function gets all existing images retained by the user so it gets included in the update. 
+	function getExistingImages(){
+		var imagesString = "";
+		
+		if(document.getElementsByName("existingImages") !== 'undefined')
+			var nodes = document.getElementsByName("existingImages");
+			for(var i=0; i < nodes.length; i++)
+				imagesString += nodes[i].getAttribute('data-filename')+"||";
+	
+		return imagesString;
+	}
+	
+	
+	$("#prPayee").autocomplete({
+		source: JSON.parse('<?=$this->crud_model->getDistinctPayees()?>'),
+		//source: [{label:"Label1", value:"Value1"}],
+		minLength: 0,
+		position: {
+			my : "right top",
+			at: "right bottom"
+		},
+		//action here to dictate where to go once an entry has been selected
+		select: function(event, ui) {
+			
+		},
 		
 	});
 	
