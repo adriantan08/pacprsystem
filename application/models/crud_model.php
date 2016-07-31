@@ -1,64 +1,3 @@
-
-Conversation opened. 1 read message.
-
-Skip to content
-Using Gmail with screen readers
-3
-Search
-
-
-
-Take me to Inbox
-Gmail
-COMPOSE
-Labels
-Inbox (94)
-Starred
-Important
-Sent Mail
-Drafts (8)
-Circles
-[Imap]/Sent
-Call log
-Facebook (872)
-Google+ (416)
-Meralco Binondo Bills
-News
-SMS
-Twitter (1,150)
-Uber Receipts (125)
-More 
-Hangouts
-
- 
- 
- 
-  More 
-1 of 863  
- 
-Print all In new window
-file
-Inbox
-x 
-
-florence sison
-Attachments11:10 PM (34 minutes ago)
-
-to me 
-Attachments area
-	
-Click here to Reply or Forward
-8.98 GB (7%) of 119 GB used
-Manage
-Terms - Privacy
-Last account activity: 34 minutes ago
-Details
-florence sison's profile photo
-florence sison
-HP
-
-Show details
-
 <?php
 class crud_model extends CI_Model {
 
@@ -626,6 +565,3 @@ class crud_model extends CI_Model {
 
 }
 ?>
-crud_model.php
-Open with
-Displaying crud_model.php.
