@@ -1,3 +1,64 @@
+
+Conversation opened. 1 read message.
+
+Skip to content
+Using Gmail with screen readers
+3
+Search
+
+
+
+Take me to Inbox
+Gmail
+COMPOSE
+Labels
+Inbox (94)
+Starred
+Important
+Sent Mail
+Drafts (8)
+Circles
+[Imap]/Sent
+Call log
+Facebook (872)
+Google+ (416)
+Meralco Binondo Bills
+News
+SMS
+Twitter (1,150)
+Uber Receipts (125)
+More 
+Hangouts
+
+ 
+ 
+ 
+  More 
+1 of 863  
+ 
+Print all In new window
+file
+Inbox
+x 
+
+florence sison
+Attachments11:10 PM (34 minutes ago)
+
+to me 
+Attachments area
+	
+Click here to Reply or Forward
+8.98 GB (7%) of 119 GB used
+Manage
+Terms - Privacy
+Last account activity: 34 minutes ago
+Details
+florence sison's profile photo
+florence sison
+HP
+
+Show details
+
 <?php
 class crud_model extends CI_Model {
 
@@ -58,7 +119,7 @@ class crud_model extends CI_Model {
 								$arr['prDetails'],
 
 								$serverDate,
-								
+
 								$arr['prReceiptImg']
 							));
 		$this->logHistory($json,"CREATE");
@@ -100,6 +161,96 @@ class crud_model extends CI_Model {
 		return null;
 	}
 
+	//for WFC only
+	function getDraftedPRs($status){
+		$sql = "
+			SELECT
+				a.pr_id AS `pr_id`,
+				a.pr_status AS `pr_status`,
+				a.pr_date AS `pr_date`,
+				c.emp_firstname AS `emp_firstname`,
+				c.emp_lastname AS `emp_lastname`,
+				b.payment_form AS `pr_paymentForm`,
+				b.payee AS `payee`,
+				b.amount AS `amount`
+			FROM pac_pr_header a, pac_pr_details b, pac_employees c
+			WHERE a.pr_id = b.pr_id
+			AND a.pr_status = ?
+			AND a.requestor_id = c.emp_id
+			ORDER BY a.pr_date desc;
+		";
+		$q = $this->getdb()->query($sql, array($status));
+		if($q->num_rows()>0){
+			return $q->result_array();
+		}
+		return null;
+	}
+
+	//for WFC,ASH only
+	function getSubPRs($status){
+		$sql = "
+			SELECT
+				a.pr_id AS `pr_id`,
+				a.pr_status AS `pr_status`,
+				a.pr_date AS `pr_date`,
+				c.emp_firstname AS `emp_firstname`,
+				c.emp_lastname AS `emp_lastname`,
+				b.payment_form AS `pr_paymentForm`,
+				b.payee AS `payee`,
+				b.amount AS `amount`
+			FROM pac_pr_header a, pac_pr_details b, pac_employees c
+			WHERE a.pr_id = b.pr_id
+			AND a.pr_status in ".$status."
+			AND a.requestor_id = c.emp_id
+			ORDER BY a.pr_date desc;
+		";
+		$q = $this->getdb()->query($sql);
+		if($q->num_rows()>0){
+			return $q->result_array();
+		}
+		return null;
+	}
+
+	//for ALL
+	function getApprovedPRs($status, $amount){
+
+		$sql = "
+		SELECT
+		a.pr_id AS `pr_id`,
+		a.pr_status AS `pr_status`,
+		a.pr_date AS `pr_date`,
+		b.payment_form AS `pr_paymentForm`,
+		c.emp_firstname AS `emp_firstname`,
+		c.emp_lastname AS `emp_lastname`,
+		d.emp_firstname AS `asc_firstname`,
+		d.emp_lastname AS `asc_lastname`,
+		e.emp_firstname AS `ver_firstname`,
+		e.emp_lastname AS `ver_lastname`,
+		f.emp_firstname AS `app_firstname`,
+		f.emp_lastname AS `app_lastname`,
+		b.payee AS `payee`,
+		b.amount AS `amount`,
+		a.approver1_id AS `approver1_id`,
+		a.approver2_id AS `approver2_id`,
+		a.approver3_id AS `approver3_id`
+		FROM pac_pr_header a, pac_pr_details b, pac_employees c, pac_employees d, pac_employees e,
+		pac_employees f
+		WHERE a.pr_id = b.pr_id
+		AND a.pr_status = ?
+		AND b.amount ".$amount."
+		AND a.requestor_id = c.emp_id
+		AND a.approver1_id = d.emp_id
+		AND a.approver2_id = e.emp_id
+		AND a.approver3_id = f.emp_id
+		ORDER BY a.pr_date desc
+		";
+		$q = $this->getdb()->query($sql, array($status));
+		if($q->num_rows()>0){
+			return $q->result_array();
+		}
+		return null;
+	}
+
 	function getPrListForAsh($status){
 		$sql = "
 			SELECT
@@ -132,6 +283,7 @@ class crud_model extends CI_Model {
 				a.pr_id AS `pr_id`,
 				a.pr_status AS `pr_status`,
 				a.pr_date AS `pr_date`,
+				b.payment_form AS `pr_paymentForm`,
 				c.emp_firstname AS `emp_firstname`,
 				c.emp_lastname AS `emp_lastname`,
 				b.payee AS `payee`,
@@ -145,10 +297,73 @@ class crud_model extends CI_Model {
 			AND a.requestor_id = c.emp_id
 			AND c.emp_id = ?
 			ORDER BY a.pr_date desc;
-
 		";
 		$uid = $this->getCurrentRequestor();
 		$q = $this->getdb()->query($sql, array($status,$uid));
+		if($q->num_rows()>0){
+			return $q->result_array();
+		}
+		return null;
+	}
+
+	function getPrListForAa($status){
+		$sql = "
+			SELECT
+				a.pr_id AS `pr_id`,
+				a.pr_status AS `pr_status`,
+				a.pr_date AS `pr_date`,
+				c.emp_firstname AS `emp_firstname`,
+				c.emp_lastname AS `emp_lastname`,
+				b.payee AS `payee`,
+				b.amount AS `amount`,
+				a.approver1_id AS `approver1_id`,
+				a.approver2_id AS `approver2_id`,
+				a.approver3_id AS `approver3_id`
+			FROM pac_pr_header a, pac_pr_details b, pac_employees c
+			WHERE a.pr_id = b.pr_id
+			AND a.pr_status = ?
+			AND a.requestor_id = c.emp_id
+			ORDER BY a.pr_date desc;
+		";
+		$q = $this->getdb()->query($sql, array($status));
+		if($q->num_rows()>0){
+			return $q->result_array();
+		}
+		return null;
+	}
+
+	function getPrListForV($status, $amount){
+
+		$sql = "
+		SELECT
+		a.pr_id AS `pr_id`,
+		a.pr_status AS `pr_status`,
+		a.pr_date AS `pr_date`,
+		c.emp_firstname AS `emp_firstname`,
+		c.emp_lastname AS `emp_lastname`,
+		d.emp_firstname AS `asc_firstname`,
+		d.emp_lastname AS `asc_lastname`,
+		e.emp_firstname AS `ver_firstname`,
+		e.emp_lastname AS `ver_lastname`,
+		f.emp_firstname AS `app_firstname`,
+		f.emp_lastname AS `app_lastname`,
+		b.payee AS `payee`,
+		b.amount AS `amount`,
+		a.approver1_id AS `approver1_id`,
+		a.approver2_id AS `approver2_id`,
+		a.approver3_id AS `approver3_id`
+		FROM pac_pr_header a, pac_pr_details b, pac_employees c, pac_employees d, pac_employees e,
+		pac_employees f
+		WHERE a.pr_id = b.pr_id
+		AND a.pr_status = ?
+		AND b.amount ".$amount."
+		AND a.requestor_id = c.emp_id
+		AND a.approver1_id = d.emp_id
+		AND a.approver2_id = e.emp_id
+		AND a.approver3_id = f.emp_id
+		ORDER BY a.pr_date desc
+		";
+		$q = $this->getdb()->query($sql, array($status));
 		if($q->num_rows()>0){
 			return $q->result_array();
 		}
@@ -190,7 +405,7 @@ class crud_model extends CI_Model {
 		}
 		return null;
 	}
-	
+
 	function getDistinctPayees(){
 		$sql = "
 			SELECT DISTINCT(payee) FROM pac_pr_details
@@ -207,7 +422,6 @@ class crud_model extends CI_Model {
 		}
 		return null;
 	}
-	
 	
 	function getCandidatePr(){
 		$sql = "SELECT MAX(pr_id) +1 AS `max` FROM pac_pr_header;";
@@ -280,8 +494,6 @@ class crud_model extends CI_Model {
 			WHERE
 				pr_id = ?;
 		";
-		if($arr['prReceiptImg']=="")
-			$arr['prReceiptImg'] = 'none';
 		$this->getdb()->query($sql, array(
 								$arr['prPayee'],
 								$arr['prAmount'],
@@ -298,7 +510,7 @@ class crud_model extends CI_Model {
 								$arr['prDetails'],
 								$serverDate,
 								$arr['prReceiptImg'],
-								
+
 								$arr['prNum']
 							));
 
@@ -311,7 +523,7 @@ class crud_model extends CI_Model {
 	function updatePrStatus($prNum, $prStatus, $approvalType){
 		$userId = $this->getCurrentRequestor();
 		$userRole = $this->getCurrentUserRole();
-		
+
 		if($userRole == 'ASH'){
 			$column = 'approver1_id';
 		}
@@ -323,7 +535,7 @@ class crud_model extends CI_Model {
 		}
 		else
 			exit(); //problem with getting current user role. If role doesn't match anything, do nothing.
-		
+
 		$sql = "
 			UPDATE pac_pr_header
 			SET
@@ -402,7 +614,7 @@ class crud_model extends CI_Model {
 	function getCurrentRequestor(){
 		return $this->session->userdata('userId');
 	}
-	
+
 	function getCurrentUserRole(){
 		return $this->session->userdata('userRole');
 	}
@@ -414,3 +626,6 @@ class crud_model extends CI_Model {
 
 }
 ?>
+crud_model.php
+Open with
+Displaying crud_model.php.
