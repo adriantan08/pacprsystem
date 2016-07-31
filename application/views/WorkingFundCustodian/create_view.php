@@ -238,7 +238,7 @@ select{
 		</li>
 		<li>
 			<label>PR # <span class="required">*</span></label>
-			<input type="number" id="prNum" name="field2" class="field-long" />
+			<input type="number" id="prNum" name="field2" value=<?=$candidatePR?> class="field-long"  disabled/>
 		</li>
 		<li>
 			<label>Payee <span class="required">*</span></label>

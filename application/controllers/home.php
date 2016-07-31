@@ -56,7 +56,8 @@ class home extends CI_Controller {
 			$this->logout();
 		
 		$data['title'] = 'Create';
-		$data['content'] = $this->load->view('WorkingFundCustodian/create_view', '', true);
+		$data['candidatePR'] = $this->crud_model->getCandidatePr();
+		$data['content'] = $this->load->view('WorkingFundCustodian/create_view', $data, true);
 		$this->load->view('template_view', $data);
 	}
 

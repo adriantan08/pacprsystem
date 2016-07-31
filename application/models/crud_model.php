@@ -207,6 +207,16 @@ class crud_model extends CI_Model {
 		}
 		return null;
 	}
+	
+	
+	function getCandidatePr(){
+		$sql = "SELECT MAX(pr_id) +1 AS `max` FROM pac_pr_header;";
+		$q = $this->getdb()->query($sql);
+		if($q->num_rows()>0){
+			return $q->first_row()->max;
+		}
+		return null;
+	}
 
 
 /*******************************************************************
