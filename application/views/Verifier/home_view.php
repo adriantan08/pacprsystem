@@ -135,7 +135,7 @@
               </thead>
               <tbody>
                 <?php
-                  $prList = $this->crud_model->getPrListForV('25','> 0');
+                  $prList = $this->crud_model->getPrListForV('35','> 0');
                   if($prList != null){
                     foreach($prList as $list){
                       echo '<tr>';

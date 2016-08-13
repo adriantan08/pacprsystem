@@ -9,7 +9,7 @@ class home extends CI_Controller {
 	 }
 
 	 function checkSession(){
-		
+
 
 		if($this->session->userdata('userId')== null && $this->session->userdata('userId')== ''){
 			$this->logout();
@@ -30,18 +30,16 @@ class home extends CI_Controller {
 
 	public function welcome(){
 		$data['title'] = 'Home';
-		
+
 		if($this->session->userdata('userRole') == "ASH"){
 			$data['content'] = $this->load->view('AdminSecHead/home_view',null,true);
 			$this->load->view('template_view_ash', $data);
 		}
 		else if($this->session->userdata('userRole') == "VERIFIER"){
-			//include verifier home page here
 			$data['content'] = $this->load->view('Verifier/home_view',null,true);
 			$this->load->view('template_view_ash', $data);
 		}
 		else if($this->session->userdata('userRole') == "APPROVER"){
-			//include verifier home page here
 			$data['content'] = $this->load->view('ApprovingAuth/home_view',null,true);
 			$this->load->view('template_view_ash', $data);
 		}
@@ -55,7 +53,7 @@ class home extends CI_Controller {
 		//Initial role check authorization
 		if(!$this->user_model->isWcf())
 			$this->logout();
-		
+
 		$data['title'] = 'Create';
 		$data['candidatePR'] = $this->crud_model->getCandidatePr();
 		$data['content'] = $this->load->view('WorkingFundCustodian/create_view', $data, true);
@@ -68,7 +66,7 @@ class home extends CI_Controller {
 		//Initial role check authorization
 		if(!$this->user_model->isWcf())
 			$this->logout();
-		
+
 		$data = $this->WorkingFundCustodianContent($id);
 		$this->load->view('template_view', $data);
 	}
@@ -78,7 +76,7 @@ class home extends CI_Controller {
 		//Initial role check authorization
 		if(!$this->user_model->isWcf())
 			$this->logout();
-		
+
 		$data['title'] = 'View';
 		$data['prDetails'] = $this->crud_model->getPrById($id);
 		$data['content'] = $this->load->view('WorkingFundCustodian/read_view', $data, true);
@@ -92,7 +90,7 @@ class home extends CI_Controller {
 		//Initial role check authorization
 		if(!$this->user_model->isAsh())
 			$this->logout();
-		
+
 		$data['title'] = 'Approve - Admin Sec. Head';
 		$data['prDetails'] = $this->crud_model->getPrById($id);
 		$data['content'] = $this->load->view('AdminSecHead/approve_view', $data, true);
@@ -106,7 +104,7 @@ class home extends CI_Controller {
 		//Initial role check authorization
 		if(!$this->user_model->isVerifier())
 			$this->logout();
-		
+
 		$data['title'] = 'Approve - Verifier';
 		$data['prDetails'] = $this->crud_model->getPrById($id);
 		$data['content'] = $this->load->view('Verifier/approve_view', $data, true);
@@ -120,7 +118,7 @@ class home extends CI_Controller {
 		//Initial role check authorization
 		if(!$this->user_model->isApprover())
 			$this->logout();
-		
+
 		$data['title'] = 'Approve - Approver';
 		$data['prDetails'] = $this->crud_model->getPrById($id);
 		$data['content'] = $this->load->view('ApprovingAuth/approve_view', $data, true);

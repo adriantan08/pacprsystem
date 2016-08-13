@@ -114,8 +114,11 @@ class crud_model extends CI_Model {
 		return null;
 	}
 
-	//for WFC only
+//WFC
 	function getDraftedPRs($status){
+		$empId = $this->session->userdata('userId');
+		$empRole = $this->session->userdata('userRole');
+		$roleQuery = "AND a.requestor_id = ".$empId;
 		$sql = "
 			SELECT
 				a.pr_id AS `pr_id`,
@@ -129,6 +132,7 @@ class crud_model extends CI_Model {
 			FROM pac_pr_header a, pac_pr_details b, pac_employees c
 			WHERE a.pr_id = b.pr_id
 			AND a.pr_status = ?
+			".$roleQuery."
 			AND a.requestor_id = c.emp_id
 			ORDER BY a.pr_date desc;
 		";
@@ -139,22 +143,40 @@ class crud_model extends CI_Model {
 		return null;
 	}
 
-	//for WFC,ASH only
+//WFC
 	function getSubPRs($status){
+
+		$empId = $this->session->userdata('userId');
+		$empRole = $this->session->userdata('userRole');
+		$roleQuery = "";
+		if($empRole=='WCF') {
+			$roleQuery = "AND a.requestor_id = ".$empId;
+		}
+		if($empRole=='ASH') {
+			$roleQuery = "AND (a.approver1_id = ".$empId." or a.approver1_id is null) ";
+		}
+		if($empRole=='VERIFIER') {
+			$roleQuery = "AND (a.approver2_id = ".$empId." or a.approver2_id is null) ";
+		}
+		if($empRole=='APPROVER') {
+			$roleQuery = "AND (a.approver3_id = ".$empId." or a.approver3_id is null) ";
+		}
 		$sql = "
 			SELECT
 				a.pr_id AS `pr_id`,
-				a.pr_status AS `pr_status`,
+				d.status_name AS `pr_status`,
 				a.pr_date AS `pr_date`,
 				c.emp_firstname AS `emp_firstname`,
 				c.emp_lastname AS `emp_lastname`,
 				b.payment_form AS `pr_paymentForm`,
 				b.payee AS `payee`,
 				b.amount AS `amount`
-			FROM pac_pr_header a, pac_pr_details b, pac_employees c
+			FROM pac_pr_header a, pac_pr_details b, pac_employees c, pac_pr_status d
 			WHERE a.pr_id = b.pr_id
-			AND a.pr_status in ".$status."
+			AND a.pr_status in ".$status.
+			$roleQuery."
 			AND a.requestor_id = c.emp_id
+			AND a.pr_status = d.status
 			ORDER BY a.pr_date desc;
 		";
 		$q = $this->getdb()->query($sql);
@@ -259,33 +281,7 @@ class crud_model extends CI_Model {
 		return null;
 	}
 
-	function getPrListForAa($status){
-		$sql = "
-			SELECT
-				a.pr_id AS `pr_id`,
-				a.pr_status AS `pr_status`,
-				a.pr_date AS `pr_date`,
-				c.emp_firstname AS `emp_firstname`,
-				c.emp_lastname AS `emp_lastname`,
-				b.payee AS `payee`,
-				b.amount AS `amount`,
-				a.approver1_id AS `approver1_id`,
-				a.approver2_id AS `approver2_id`,
-				a.approver3_id AS `approver3_id`
-			FROM pac_pr_header a, pac_pr_details b, pac_employees c
-			WHERE a.pr_id = b.pr_id
-			AND a.pr_status = ?
-			AND a.requestor_id = c.emp_id
-			ORDER BY a.pr_date desc;
-		";
-		$q = $this->getdb()->query($sql, array($status));
-		if($q->num_rows()>0){
-			return $q->result_array();
-		}
-		return null;
-	}
-
-	function getPrListForV($status, $amount){
+	function getPrListForAa($status, $amount){
 
 		$sql = "
 		SELECT
@@ -305,17 +301,55 @@ class crud_model extends CI_Model {
 		a.approver1_id AS `approver1_id`,
 		a.approver2_id AS `approver2_id`,
 		a.approver3_id AS `approver3_id`
-		FROM pac_pr_header a, pac_pr_details b, pac_employees c, pac_employees d, pac_employees e,
-		pac_employees f
+		FROM pac_pr_header a left outer join pac_employees f on a.approver3_id = f.emp_id, pac_pr_details b, pac_employees c, pac_employees d, pac_employees e
 		WHERE a.pr_id = b.pr_id
 		AND a.pr_status = ?
 		AND b.amount ".$amount."
 		AND a.requestor_id = c.emp_id
 		AND a.approver1_id = d.emp_id
 		AND a.approver2_id = e.emp_id
-		AND a.approver3_id = f.emp_id
 		ORDER BY a.pr_date desc
 		";
+		$q = $this->getdb()->query($sql, array($status));
+		if($q->num_rows()>0){
+			return $q->result_array();
+		}
+		return null;
+	}
+
+	function getPrListForV($status, $amount){
+		$empId = $this->session->userdata('userId');
+		$query = " and (a.approver2_id = ".$empId." or  a.approver2_id is null) ";
+		if($status=='30' or $status=='25') {
+			$query = " and a.approver2_id = ".$empId;
+		}
+
+		$sql = "
+		SELECT
+		a.pr_id AS `pr_id`,
+		a.pr_status AS `pr_status`,
+		a.pr_date AS `pr_date`,
+		c.emp_firstname AS `emp_firstname`,
+		c.emp_lastname AS `emp_lastname`,
+		d.emp_firstname AS `asc_firstname`,
+		d.emp_lastname AS `asc_lastname`,
+		e.emp_firstname AS `ver_firstname`,
+		e.emp_lastname AS `ver_lastname`,
+		b.payee AS `payee`,
+		b.amount AS `amount`,
+		a.approver1_id AS `approver1_id`,
+		a.approver2_id AS `approver2_id`,
+		a.approver3_id AS `approver3_id`
+		FROM pac_pr_header a left outer join pac_employees e on a.approver2_id = e.emp_id, pac_pr_details b, pac_employees c, pac_employees d
+		WHERE a.pr_id = b.pr_id
+		AND a.pr_status = ?
+		AND b.amount ".$amount.
+		$query."
+		AND a.requestor_id = c.emp_id
+		AND a.approver1_id = d.emp_id
+		ORDER BY a.pr_date desc
+	";
+
 		$q = $this->getdb()->query($sql, array($status));
 		if($q->num_rows()>0){
 			return $q->result_array();
@@ -375,7 +409,7 @@ class crud_model extends CI_Model {
 		}
 		return null;
 	}
-	
+
 	function getCandidatePr(){
 		$sql = "SELECT MAX(pr_id) +1 AS `max` FROM pac_pr_header;";
 		$q = $this->getdb()->query($sql);
