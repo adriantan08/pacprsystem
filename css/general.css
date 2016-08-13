@@ -259,3 +259,16 @@ textarea{
 	white-space: pre-line;
 }
 
+.commentsTable{background-color:white; border-collapse: collapse; border-radius:5px; min-width:400px; max-width:400px;}
+.commentsTable td{
+	 border-bottom: 1px solid #BDBDBD;
+	 
+}
+.commentsTable td p{
+	word-break: break-all;
+	text-align:left;
+	font-size:14px;
+	
+}
+
+

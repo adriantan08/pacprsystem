@@ -103,4 +103,13 @@ class api extends CI_Controller {
 		echo json_encode($this->crud_model->getDistinctPayees());
 	}
 	
+	function addcomment(){
+		if(isset($_POST['comment']) && isset($_POST['prId'])){
+			$this->crud_model->addComment($_POST['prId'],$_POST['comment']);
+		}
+		 else{
+			 echo 'post data error';
+		 }
+	}
+	
 }

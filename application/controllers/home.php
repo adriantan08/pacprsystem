@@ -37,11 +37,12 @@ class home extends CI_Controller {
 		}
 		else if($this->session->userdata('userRole') == "VERIFIER"){
 			//include verifier home page here
-			//$data['content'] = $this->load->view('AdminSecHead/home_view',null,true);
+			$data['content'] = $this->load->view('Verifier/home_view',null,true);
 			$this->load->view('template_view_ash', $data);
 		}
 		else if($this->session->userdata('userRole') == "APPROVER"){
 			//include verifier home page here
+			$data['content'] = $this->load->view('ApprovingAuth/home_view',null,true);
 			$this->load->view('template_view_ash', $data);
 		}
 		else{

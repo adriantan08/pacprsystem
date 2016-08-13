@@ -64,6 +64,20 @@ class crud_model extends CI_Model {
 		$this->logHistory($json,"CREATE");
 
 	}
+	
+	function addComment($prId, $comment){
+		$userId = $this->session->userdata('userId');
+		$sql = "
+			INSERT INTO pac_pr_comments(pr_id, comment_text, comment_by)
+			VALUES(?,?,?);
+		";
+		
+		$this->getdb()->query($sql, array(
+			$prId, $comment, $userId
+		));
+		
+		
+	}
 
 /*******************************************************************
 *
@@ -367,6 +381,26 @@ class crud_model extends CI_Model {
 		$q = $this->getdb()->query($sql);
 		if($q->num_rows()>0){
 			return $q->first_row()->max;
+		}
+		return null;
+	}
+	
+	function getComments($prId){
+		$sql = "
+			SELECT  
+			a.comment_text,
+			a.date_added,
+			b.emp_firstname,
+			b.emp_lastname,
+			b.emp_email
+		FROM pac_pr_comments a, pac_employees b
+		WHERE a.comment_by = b.emp_id
+		AND a.pr_id = ?
+		ORDER BY a.date_added DESC;";
+		
+		$q = $this->getdb()->query($sql, array($prId));
+		if($q->num_rows()>0){
+			return $q->result_array();
 		}
 		return null;
 	}

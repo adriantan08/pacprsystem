@@ -39,21 +39,24 @@
 }
 
 .approveButton{
-	width:150px;
+	width:100px;
 	background-color:#00b48d;
 }
 .rejectButton{
-	width:150px;
+	width:100px;
 	background-color:red;
 }
 
 </style>
 
-<div style="position:relative; top:5%; left:25%; width:40%;"><br>
+<div style="position:relative; top:5%; left:5%; width:95%;"><br>
+<table>
+<tr>
+<td valign=top>
 <table>
 <tr>
 <td>
-	<font style="font-size:15px;"><b>View Payment Record</b></font><br>
+	<font style="font-size:15px;"><b>PR# <?=$prDetails['pr_id']?></b></font><br>
 	<br><i>Last Modified: <?=$prDetails['changed_on']?></i><br><br>
 </td>
 
@@ -75,14 +78,7 @@
 			<input class="input-read" name="editable" type=text disabled id="prDate" value="<?=$prDetails['pr_date']?>" /> 
 		</td>
 	</tr>
-	<tr>
-		<td>
-			<font class="label">PR#: </font>
-		</td>
-		<td>
-			<input type=number id="prNum" name="editable" class="input-read" disabled value="<?=$prDetails['pr_id']?>" />
-		</td>
-	</tr>
+	
 	<tr>
 		<td>
 			<font class="label">Payee: </font>
@@ -211,6 +207,50 @@
 	
 
 </table>
+</td>
+</td>
+<td valign=top style="position:relative; left:10%; min-width:250px;">
+	<h2>Receipts</h2>
+	<div id="existingImagesDiv">
+	<?php
+		if($prDetails['receipt_img'] !== 'none' && $prDetails['receipt_img'] !== null){
+			/*if there's at least one image, exploding will always result into an array i.e. IMG1||IMG2||
+			
+			we just have to always check if current array value is no blank
+			*/
+			
+			$imgArr = explode("||", $prDetails['receipt_img']);
+			//for goodness sake, we still want to catch if it's array
+			if(is_array($imgArr)){
+				for($i=0; $i<count($imgArr); $i++){
+					if($imgArr[$i] !== ""){
+						$imgDomId = "image-".$i;
+						$buttonDomId = "removebutton-".$i;
+						echo '<img name="existingImages" id="'.$imgDomId.'" width=300px src = "'.IMG_DIR.$imgArr[$i].'" data-filename="'.$imgArr[$i].'"/><br/><br/>';
+						
+						echo '<button class="flatbutton" style="background-color:red; visibility:hidden;" name="removeImageButtons" id = "'.$buttonDomId.'" onclick="removeExistingImage('."'".$imgDomId."'".','."'".$buttonDomId."'".');"> Remove</button><br/><br/>';
+					}
+				}
+			}
+			
+		}
+		else{
+			echo 'No receipts.';
+		}
+		
+	?>
+	</div>
+</td>
+<td valign=top style="border-left:1px; position:relative; left:20%;">
+	<?php
+		echo $this->load->view('comments_view', null, true);
+	?>
+</td>
+</tr>
+
+
+</table>
+<input type=hidden id="prNum" value="<?=$prDetails['pr_id']?>" />
 </div><br/><br/>
 <script src="<?=base_url()?>js/approve_pr.js"></script>
 
