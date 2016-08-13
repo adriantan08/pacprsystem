@@ -71,7 +71,7 @@
               </thead>
               <tbody>
                 <?php
-                  $prList = $this->crud_model->getSubPrs('(10,15,20,25,30,35)');
+                  $prList = $this->crud_model->getSubPrs('(10,20,25,30,35)');
                   if($prList != null){
                     foreach($prList as $list){
                       echo '<tr>';
