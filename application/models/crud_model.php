@@ -133,7 +133,7 @@ class crud_model extends CI_Model {
 			WHERE a.pr_id = b.pr_id
 			AND a.pr_status = ?
 			".$roleQuery."
-			AND a.requestor_id = c.emp_id
+			AND a.requestor_id = c.id
 			ORDER BY a.pr_date desc;
 		";
 		$q = $this->getdb()->query($sql, array($status));
@@ -150,16 +150,16 @@ class crud_model extends CI_Model {
 		$empRole = $this->session->userdata('userRole');
 		$roleQuery = "";
 		if($empRole=='WCF') {
-			$roleQuery = "AND a.requestor_id = ".$empId;
+			$roleQuery = " AND a.requestor_id = ".$empId;
 		}
 		if($empRole=='ASH') {
-			$roleQuery = "AND (a.approver1_id = ".$empId." or a.approver1_id is null) ";
+			$roleQuery = " AND (a.approver1_id = ".$empId." or a.approver1_id is null) ";
 		}
 		if($empRole=='VERIFIER') {
-			$roleQuery = "AND (a.approver2_id = ".$empId." or a.approver2_id is null) ";
+			$roleQuery = " AND (a.approver2_id = ".$empId." or a.approver2_id is null) ";
 		}
 		if($empRole=='APPROVER') {
-			$roleQuery = "AND (a.approver3_id = ".$empId." or a.approver3_id is null) ";
+			$roleQuery = " AND (a.approver3_id = ".$empId." or a.approver3_id is null) ";
 		}
 		$sql = "
 			SELECT
@@ -175,7 +175,7 @@ class crud_model extends CI_Model {
 			WHERE a.pr_id = b.pr_id
 			AND a.pr_status in ".$status.
 			$roleQuery."
-			AND a.requestor_id = c.emp_id
+			AND a.requestor_id = c.id
 			AND a.pr_status = d.status
 			ORDER BY a.pr_date desc;
 		";
@@ -213,10 +213,10 @@ class crud_model extends CI_Model {
 		WHERE a.pr_id = b.pr_id
 		AND a.pr_status = ?
 		AND b.amount ".$amount."
-		AND a.requestor_id = c.emp_id
-		AND a.approver1_id = d.emp_id
-		AND a.approver2_id = e.emp_id
-		AND a.approver3_id = f.emp_id
+		AND a.requestor_id = c.id
+		AND a.approver1_id = d.id
+		AND a.approver2_id = e.id
+		AND a.approver3_id = f.id
 		ORDER BY a.pr_date desc
 		";
 		$q = $this->getdb()->query($sql, array($status));
@@ -242,7 +242,7 @@ class crud_model extends CI_Model {
 			FROM pac_pr_header a, pac_pr_details b, pac_employees c
 			WHERE a.pr_id = b.pr_id
 			AND a.pr_status = ?
-			AND a.requestor_id = c.emp_id
+			AND a.requestor_id = c.id
 			ORDER BY a.pr_date desc;
 		";
 		$q = $this->getdb()->query($sql, array($status));
@@ -269,8 +269,8 @@ class crud_model extends CI_Model {
 			FROM pac_pr_header a, pac_pr_details b, pac_employees c
 			WHERE a.pr_id = b.pr_id
 			AND a.pr_status = ?
-			AND a.requestor_id = c.emp_id
-			AND c.emp_id = ?
+			AND a.requestor_id = c.id
+			AND c.id = ?
 			ORDER BY a.pr_date desc;
 		";
 		$uid = $this->getCurrentRequestor();
@@ -301,13 +301,13 @@ class crud_model extends CI_Model {
 		a.approver1_id AS `approver1_id`,
 		a.approver2_id AS `approver2_id`,
 		a.approver3_id AS `approver3_id`
-		FROM pac_pr_header a left outer join pac_employees f on a.approver3_id = f.emp_id, pac_pr_details b, pac_employees c, pac_employees d, pac_employees e
+		FROM pac_pr_header a left outer join pac_employees f on a.approver3_id = f.id, pac_pr_details b, pac_employees c, pac_employees d, pac_employees e
 		WHERE a.pr_id = b.pr_id
 		AND a.pr_status = ?
 		AND b.amount ".$amount."
-		AND a.requestor_id = c.emp_id
-		AND a.approver1_id = d.emp_id
-		AND a.approver2_id = e.emp_id
+		AND a.requestor_id = c.id
+		AND a.approver1_id = d.id
+		AND a.approver2_id = e.id
 		ORDER BY a.pr_date desc
 		";
 		$q = $this->getdb()->query($sql, array($status));
@@ -340,13 +340,13 @@ class crud_model extends CI_Model {
 		a.approver1_id AS `approver1_id`,
 		a.approver2_id AS `approver2_id`,
 		a.approver3_id AS `approver3_id`
-		FROM pac_pr_header a left outer join pac_employees e on a.approver2_id = e.emp_id, pac_pr_details b, pac_employees c, pac_employees d
+		FROM pac_pr_header a left outer join pac_employees e on a.approver2_id = e.id, pac_pr_details b, pac_employees c, pac_employees d
 		WHERE a.pr_id = b.pr_id
 		AND a.pr_status = ?
 		AND b.amount ".$amount.
 		$query."
-		AND a.requestor_id = c.emp_id
-		AND a.approver1_id = d.emp_id
+		AND a.requestor_id = c.id
+		AND a.approver1_id = d.id
 		ORDER BY a.pr_date desc
 	";
 
@@ -428,7 +428,7 @@ class crud_model extends CI_Model {
 			b.emp_lastname,
 			b.emp_email
 		FROM pac_pr_comments a, pac_employees b
-		WHERE a.comment_by = b.emp_id
+		WHERE a.comment_by = b.id
 		AND a.pr_id = ?
 		ORDER BY a.date_added DESC;";
 		

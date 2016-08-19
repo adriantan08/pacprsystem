@@ -1,14 +1,8 @@
 <h2> Comments</h2><br/>
-<?php 
-	
-	if($this->session->userdata('userRole') != 'WCF'){
-		
-?>
-	
 	<div>
 		<table><tr><td>
-		<textarea id="commentsTextarea" rows=5 cols=30></textarea>
-		</td><td>&nbsp&nbsp
+		<textarea id="commentsTextarea" rows=3 cols=30></textarea>
+		</td><td valign=top>&nbsp&nbsp
 		<button id="addCommentButton" class="flatbutton">
 			Add Comment
 		</button></td>
@@ -41,10 +35,7 @@
 		}
 	});
 </script>
-<?php
-		
-	}
-?>
+
 	<div>
 		<?php
 			$commentsArr = $this->crud_model->getComments($prDetails['pr_id']);

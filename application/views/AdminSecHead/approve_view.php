@@ -208,7 +208,7 @@
 
 </table>
 </td>
-<td valign=top style="position:relative; left:10%;">
+<td valign=top style="position:relative; left:10%; min-width:300px;">
 	<h2>Receipts</h2>
 	<div id="existingImagesDiv">
 	<?php

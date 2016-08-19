@@ -48,15 +48,15 @@
 
 </style>
 
-<div style="position:relative; top:5%; left:10%;"><br>
+<div style="position:relative; top:5%; left:3%;"><br>
 <table>
 <tr>
 <td valign=top>
 	<table>
 	<tr>
 	<td>
-		<font style="font-size:15px;"><b>View Payment Record</b></font><br>
-		<br><i>Last Modified: <?=$prDetails['changed_on']?></i><br><br>
+		<font style="font-size:18px;"><b>PR# <?=$prDetails['pr_id']?></b></font>
+		<br>Last Modified: <?=$prDetails['changed_on']?><br><br>
 	</td>
 
 	<td>
@@ -215,7 +215,7 @@
 
 </table>
 </td>
-<td valign=top style="position:relative; left:20%;">
+<td valign=top style="position:relative; left:10%;">
 	
 	<span id="image_div">
 	<h2>Upload Receipts</h2>
@@ -281,6 +281,11 @@
     </div>
 	
 </span>
+</td>
+<td valign=top style="border-left:1px; position:relative; left:20%;">
+	<?php
+		echo $this->load->view('comments_view', null, true);
+	?>
 </td>
 </tr></table>
 

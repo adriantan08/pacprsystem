@@ -15,18 +15,18 @@ class user_model extends CI_Model {
 	function auth($username, $password){
 		$sql ="
 			SELECT 
-				a.emp_id,
+				a.id as `emp_id`,
 				a.emp_firstname,
 				a.emp_lastname,
 				a.emp_email,
-				b.role_name,
+				b.name as `role_name`,
 				a.emp_username,
 				a.emp_password
 			FROM 
 				pac_employees a,
 				pac_emp_roles b
 			WHERE
-				a.emp_roleid = b.role_id AND
+				a.emp_role_id = b.id AND
 				a.emp_username = ?;
 		";
 		
