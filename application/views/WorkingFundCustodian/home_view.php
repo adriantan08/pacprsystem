@@ -42,7 +42,10 @@
                     foreach($prList as $list){
                       echo '<tr>';
                       echo '<td>'.$list['pr_date'].'</td>';
-                      echo '<td>'.anchor_popup('home/view/'.$list['pr_id'], $list['pr_id']).'</td>';
+					  $readStyle = "";
+					  if(!$list['request_read_flag'])
+						$readStyle = "<b/>";
+                      echo '<td>'.$readStyle.anchor('home/view/'.$list['pr_id'], $list['pr_id'], array("class"=>"anchorStrip", "target"=>"_blank")).'</td>';
                       echo '<td>'.$list['pr_paymentForm'].'</td>';
                       echo '<td>'.$list['payee'].'</td>';
                       echo '<td>'.$list['amount'].'</td>';

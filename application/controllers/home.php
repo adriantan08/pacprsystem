@@ -66,7 +66,8 @@ class home extends CI_Controller {
 		//Initial role check authorization
 		if(!$this->user_model->isWcf())
 			$this->logout();
-
+		
+		$this->crud_model->toggleRead('WCF', $id);
 		$data = $this->WorkingFundCustodianContent($id);
 		$this->load->view('template_view', $data);
 	}

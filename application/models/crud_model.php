@@ -101,6 +101,7 @@ class crud_model extends CI_Model {
 				a.approver1_id AS `approver1_id`,
 				a.approver2_id AS `approver2_id`,
 				a.approver3_id AS `approver3_id`,
+				a.request_read_flag AS `request_read_flag`,
 				b.payee AS `payee`,
 				b.details AS `details`
 			FROM pac_pr_header a, pac_pr_details b
@@ -124,6 +125,7 @@ class crud_model extends CI_Model {
 				a.pr_id AS `pr_id`,
 				a.pr_status AS `pr_status`,
 				a.pr_date AS `pr_date`,
+				a.request_read_flag AS `request_read_flag`,
 				c.emp_firstname AS `emp_firstname`,
 				c.emp_lastname AS `emp_lastname`,
 				b.payment_form AS `pr_paymentForm`,
@@ -166,6 +168,10 @@ class crud_model extends CI_Model {
 				a.pr_id AS `pr_id`,
 				d.status_name AS `pr_status`,
 				a.pr_date AS `pr_date`,
+				a.request_read_flag AS `request_read_flag`,
+				a.approver1_read_flag AS `request1_read_flag`,
+				a.approver2_read_flag AS `request2_read_flag`,
+				a.approver3_read_flag AS `request3_read_flag`,
 				c.emp_firstname AS `emp_firstname`,
 				c.emp_lastname AS `emp_lastname`,
 				b.payment_form AS `pr_paymentForm`,
@@ -194,6 +200,10 @@ class crud_model extends CI_Model {
 		a.pr_id AS `pr_id`,
 		a.pr_status AS `pr_status`,
 		a.pr_date AS `pr_date`,
+		a.request_read_flag AS `request_read_flag`,
+		a.approver1_read_flag AS `request1_read_flag`,
+		a.approver2_read_flag AS `request2_read_flag`,
+		a.approver3_read_flag AS `request3_read_flag`,
 		b.payment_form AS `pr_paymentForm`,
 		c.emp_firstname AS `emp_firstname`,
 		c.emp_lastname AS `emp_lastname`,
@@ -232,6 +242,9 @@ class crud_model extends CI_Model {
 				a.pr_id AS `pr_id`,
 				a.pr_status AS `pr_status`,
 				a.pr_date AS `pr_date`,
+				
+				a.approver1_read_flag AS `request1_read_flag`,
+				
 				c.emp_firstname AS `emp_firstname`,
 				c.emp_lastname AS `emp_lastname`,
 				b.payee AS `payee`,
@@ -258,6 +271,8 @@ class crud_model extends CI_Model {
 				a.pr_id AS `pr_id`,
 				a.pr_status AS `pr_status`,
 				a.pr_date AS `pr_date`,
+				a.request_read_flag AS `request_read_flag`,
+				
 				b.payment_form AS `pr_paymentForm`,
 				c.emp_firstname AS `emp_firstname`,
 				c.emp_lastname AS `emp_lastname`,
@@ -288,6 +303,9 @@ class crud_model extends CI_Model {
 		a.pr_id AS `pr_id`,
 		a.pr_status AS `pr_status`,
 		a.pr_date AS `pr_date`,
+
+		a.approver2_read_flag AS `request2_read_flag`,
+				
 		c.emp_firstname AS `emp_firstname`,
 		c.emp_lastname AS `emp_lastname`,
 		d.emp_firstname AS `asc_firstname`,
@@ -329,6 +347,9 @@ class crud_model extends CI_Model {
 		a.pr_id AS `pr_id`,
 		a.pr_status AS `pr_status`,
 		a.pr_date AS `pr_date`,
+		
+		a.approver3_read_flag AS `request3_read_flag`,
+		
 		c.emp_firstname AS `emp_firstname`,
 		c.emp_lastname AS `emp_lastname`,
 		d.emp_firstname AS `asc_firstname`,
@@ -558,6 +579,29 @@ class crud_model extends CI_Model {
 							));
 
 		$this->logHistoryApproval($prNum, $prStatus, $approvalType);
+	}
+	
+	function toggleRead($roleRead, $prId){
+		if($roleRead=='WCF'){
+			$column = "request_read_flag";
+		}
+		else if($roleRead=='ASH'){
+			$column = "approver1_read_flag";
+		}
+		else if($roleRead=='VERIFIER'){
+			$column = "approver2_read_flag";
+		}
+		else if($roleRead=='APPROVER'){
+			$column = "approver3_read_flag";
+		}
+		else{
+			exit('Unkown role');
+		}
+		
+		
+		$sql = "UPDATE pac_pr_header SET ".$column." = 1 WHERE pr_id = ?;";
+		
+		$this->getdb()->query($sql, array($prId));
 	}
 
 /*******************************************************************

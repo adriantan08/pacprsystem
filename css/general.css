@@ -271,4 +271,14 @@ textarea{
 	
 }
 
+.anchorStrip{
+	 text-decoration: none !important;
+	 
+}
+.anchorStrip {color:inherit;}      /* unvisited link */
+.anchorStrip:visited {color:inherit;}  /* visited link */
+.anchorStrip:hover {color:inherit;}  /* mouse over link */
+.anchorStrip:active {color:inherit;}  /* selected link */
+
+
 
