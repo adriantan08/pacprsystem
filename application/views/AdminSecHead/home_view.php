@@ -40,7 +40,13 @@
                     foreach($prList as $list){
                       echo '<tr>';
                       echo '<td>'.$list['pr_date'].'</td>';
-                      echo '<td>'.anchor_popup('home/view_adminsechead/'.$list['pr_id'], $list['pr_id']).'</td>';
+					
+					//When displaying PR_ID, we BOLD them if unread, otherwise normal font weight	
+					  $readStyle = "";
+					  if(!$list['approver1_read_flag'])
+						$readStyle = "<b/>";
+                      echo '<td>'.$readStyle.anchor('home/view_adminsechead/'.$list['pr_id'], $list['pr_id'], array("class"=>"anchorStrip", "target"=>"_blank")).'</td>';
+					  
                       echo '<td>'.$list['pr_paymentForm'].'</td>';
                       echo '<td>'.$list['payee'].'</td>';
                       echo '<td>'.$list['amount'].'</td>';
@@ -73,7 +79,13 @@
                     foreach($prList as $list){
                       echo '<tr>';
                       echo '<td>'.$list['pr_date'].'</td>';
-                      echo '<td>'.anchor_popup('home/view_adminsechead/'.$list['pr_id'], $list['pr_id']).'</td>';
+                      
+					  //When displaying PR_ID, we BOLD them if unread, otherwise normal font weight	
+					  $readStyle = "";
+					  if(!$list['approver1_read_flag'])
+						$readStyle = "<b/>";
+                      echo '<td>'.$readStyle.anchor('home/view_adminsechead/'.$list['pr_id'], $list['pr_id'], array("class"=>"anchorStrip", "target"=>"_blank")).'</td>';
+					  
                       echo '<td>'.$list['pr_paymentForm'].'</td>';
                       echo '<td>'.$list['payee'].'</td>';
                       echo '<td>'.$list['amount'].'</td>';
@@ -105,7 +117,13 @@
                     foreach($prList as $list){
                       echo '<tr>';
                       echo '<td>'.$list['pr_date'].'</td>';
-                      echo '<td>'.anchor_popup('home/view_adminsechead/'.$list['pr_id'], $list['pr_id']).'</td>';
+                      
+					  //When displaying PR_ID, we BOLD them if unread, otherwise normal font weight	
+					  $readStyle = "";
+					  if(!$list['approver1_read_flag'])
+						$readStyle = "<b/>";
+                      echo '<td>'.$readStyle.anchor('home/view_adminsechead/'.$list['pr_id'], $list['pr_id'], array("class"=>"anchorStrip", "target"=>"_blank")).'</td>';
+					  
                       echo '<td>'.$list['payee'].'</td>';
                       echo '<td>'.$list['amount'].'</td>';
                       echo '<td>'.$list['approver2_id'].'</td>';

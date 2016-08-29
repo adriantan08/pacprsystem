@@ -225,7 +225,9 @@
 					if($imgArr[$i] !== ""){
 						$imgDomId = "image-".$i;
 						$buttonDomId = "removebutton-".$i;
-						echo '<img name="existingImages" id="'.$imgDomId.'" width=300px src = "'.IMG_DIR.$imgArr[$i].'" data-filename="'.$imgArr[$i].'"/><br/><br/>';
+						
+						echo '<a href="'.IMG_DIR.$imgArr[$i].'" target="_blank"><img name="existingImages" id="'.$imgDomId.'" width=300px src = "'.IMG_DIR.$imgArr[$i].'" data-filename="'.$imgArr[$i].'"/></a><br/><br/>';
+						
 						
 						echo '<button class="flatbutton" style="background-color:red; visibility:hidden;" name="removeImageButtons" id = "'.$buttonDomId.'" onclick="removeExistingImage('."'".$imgDomId."'".','."'".$buttonDomId."'".');"> Remove</button><br/><br/>';
 					}

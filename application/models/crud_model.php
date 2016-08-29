@@ -169,9 +169,9 @@ class crud_model extends CI_Model {
 				d.status_name AS `pr_status`,
 				a.pr_date AS `pr_date`,
 				a.request_read_flag AS `request_read_flag`,
-				a.approver1_read_flag AS `request1_read_flag`,
-				a.approver2_read_flag AS `request2_read_flag`,
-				a.approver3_read_flag AS `request3_read_flag`,
+				a.approver1_read_flag AS `approver1_read_flag`,
+				a.approver2_read_flag AS `approver2_read_flag`,
+				a.approver3_read_flag AS `approver3_read_flag`,
 				c.emp_firstname AS `emp_firstname`,
 				c.emp_lastname AS `emp_lastname`,
 				b.payment_form AS `pr_paymentForm`,
@@ -201,9 +201,9 @@ class crud_model extends CI_Model {
 		a.pr_status AS `pr_status`,
 		a.pr_date AS `pr_date`,
 		a.request_read_flag AS `request_read_flag`,
-		a.approver1_read_flag AS `request1_read_flag`,
-		a.approver2_read_flag AS `request2_read_flag`,
-		a.approver3_read_flag AS `request3_read_flag`,
+		a.approver1_read_flag AS `approver1_read_flag`,
+		a.approver2_read_flag AS `approver2_read_flag`,
+		a.approver3_read_flag AS `approver3_read_flag`,
 		b.payment_form AS `pr_paymentForm`,
 		c.emp_firstname AS `emp_firstname`,
 		c.emp_lastname AS `emp_lastname`,
@@ -243,7 +243,7 @@ class crud_model extends CI_Model {
 				a.pr_status AS `pr_status`,
 				a.pr_date AS `pr_date`,
 				
-				a.approver1_read_flag AS `request1_read_flag`,
+				a.approver1_read_flag AS `approver1_read_flag`,
 				
 				c.emp_firstname AS `emp_firstname`,
 				c.emp_lastname AS `emp_lastname`,
@@ -304,7 +304,7 @@ class crud_model extends CI_Model {
 		a.pr_status AS `pr_status`,
 		a.pr_date AS `pr_date`,
 
-		a.approver2_read_flag AS `request2_read_flag`,
+		a.approver3_read_flag AS `approver3_read_flag`,
 				
 		c.emp_firstname AS `emp_firstname`,
 		c.emp_lastname AS `emp_lastname`,
@@ -348,7 +348,7 @@ class crud_model extends CI_Model {
 		a.pr_status AS `pr_status`,
 		a.pr_date AS `pr_date`,
 		
-		a.approver3_read_flag AS `request3_read_flag`,
+		a.approver2_read_flag AS `approver2_read_flag`,
 		
 		c.emp_firstname AS `emp_firstname`,
 		c.emp_lastname AS `emp_lastname`,

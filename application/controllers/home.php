@@ -91,7 +91,8 @@ class home extends CI_Controller {
 		//Initial role check authorization
 		if(!$this->user_model->isAsh())
 			$this->logout();
-
+		
+		$this->crud_model->toggleRead('ASH', $id);
 		$data['title'] = 'Approve - Admin Sec. Head';
 		$data['prDetails'] = $this->crud_model->getPrById($id);
 		$data['content'] = $this->load->view('AdminSecHead/approve_view', $data, true);
@@ -105,7 +106,8 @@ class home extends CI_Controller {
 		//Initial role check authorization
 		if(!$this->user_model->isVerifier())
 			$this->logout();
-
+		
+		$this->crud_model->toggleRead('VERIFIER', $id);
 		$data['title'] = 'Approve - Verifier';
 		$data['prDetails'] = $this->crud_model->getPrById($id);
 		$data['content'] = $this->load->view('Verifier/approve_view', $data, true);
@@ -120,10 +122,18 @@ class home extends CI_Controller {
 		if(!$this->user_model->isApprover())
 			$this->logout();
 
+		$this->crud_model->toggleRead('APPROVER', $id);
 		$data['title'] = 'Approve - Approver';
 		$data['prDetails'] = $this->crud_model->getPrById($id);
 		$data['content'] = $this->load->view('ApprovingAuth/approve_view', $data, true);
 		$this->load->view('template_view_ash', $data);
 	}
+	
+	
+	function print_preview($prList){
+		$prList = urldecode($prList);
+		echo $prList;
+	}
+	
 
 }

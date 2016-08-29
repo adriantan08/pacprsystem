@@ -42,7 +42,13 @@
                     foreach($prList as $list){
                       echo '<tr>';
                       echo '<td>'.$list['pr_date'].'</td>';
-                      echo '<td>'.anchor_popup('home/view_verifier/'.$list['pr_id'], $list['pr_id'], array("class"=>"anchorStrip")).'</td>';
+					
+					  //When displaying PR_ID, we BOLD them if unread, otherwise normal font weight	
+					  $readStyle = "";
+					  if(!$list['approver2_read_flag'])
+						$readStyle = "<b/>";
+                      echo '<td>'.$readStyle.anchor('home/view_verifier/'.$list['pr_id'], $list['pr_id'], array("class"=>"anchorStrip", "target"=>"_blank")).'</td>';
+					  
                       echo '<td>'.$list['payee'].'</td>';
                       echo '<td>'.$list['amount'].'</td>';
                       echo '<td>'.$list['emp_firstname'].' '.$list['emp_lastname'].'</td>';
@@ -75,7 +81,13 @@
                     foreach($prList as $list){
                       echo '<tr>';
                       echo '<td>'.$list['pr_date'].'</td>';
-                      echo '<td>'.anchor_popup('home/view_verifier/'.$list['pr_id'], $list['pr_id']).'</td>';
+                    
+					//When displaying PR_ID, we BOLD them if unread, otherwise normal font weight	
+					  $readStyle = "";
+					  if(!$list['approver2_read_flag'])
+						$readStyle = "<b/>";
+                      echo '<td>'.$readStyle.anchor('home/view_verifier/'.$list['pr_id'], $list['pr_id'], array("class"=>"anchorStrip", "target"=>"_blank")).'</td>';
+					
                       echo '<td>'.$list['payee'].'</td>';
                       echo '<td>'.$list['amount'].'</td>';
                       echo '<td>'.$list['emp_firstname'].' '.$list['emp_lastname'].'</td>';
@@ -108,7 +120,13 @@
                     foreach($prList as $list){
                       echo '<tr>';
                       echo '<td>'.$list['pr_date'].'</td>';
-                      echo '<td>'.anchor_popup('home/view_verifier/'.$list['pr_id'], $list['pr_id']).'</td>';
+                      
+					  //When displaying PR_ID, we BOLD them if unread, otherwise normal font weight	
+					  $readStyle = "";
+					  if(!$list['approver2_read_flag'])
+						$readStyle = "<b/>";
+                      echo '<td>'.$readStyle.anchor('home/view_verifier/'.$list['pr_id'], $list['pr_id'], array("class"=>"anchorStrip", "target"=>"_blank")).'</td>';
+					  
                       echo '<td>'.$list['payee'].'</td>';
                       echo '<td>'.$list['amount'].'</td>';
                       echo '<td>'.$list['emp_firstname'].' '.$list['emp_lastname'].'</td>';
@@ -140,7 +158,13 @@
                     foreach($prList as $list){
                       echo '<tr>';
                       echo '<td>'.$list['pr_date'].'</td>';
-                      echo '<td>'.anchor_popup('home/view_verifier/'.$list['pr_id'], $list['pr_id']).'</td>';
+                      
+					  //When displaying PR_ID, we BOLD them if unread, otherwise normal font weight	
+					  $readStyle = "";
+					  if(!$list['approver2_read_flag'])
+						$readStyle = "<b/>";
+                      echo '<td>'.$readStyle.anchor('home/view_verifier/'.$list['pr_id'], $list['pr_id'], array("class"=>"anchorStrip", "target"=>"_blank")).'</td>';
+					  
                       echo '<td>'.$list['payee'].'</td>';
                       echo '<td>'.$list['amount'].'</td>';
                       echo '<td>'.$list['emp_firstname'].' '.$list['emp_lastname'].'</td>';
