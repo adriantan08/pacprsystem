@@ -38,7 +38,7 @@
 
 	<div>
 		<?php
-			$commentsArr = $this->crud_model->getComments($prDetails['pr_id']);
+			$commentsArr = $this->Crud_model->getComments($prDetails['pr_id']);
 			
 			if($commentsArr!=null){
 				echo '<hr class="carved"/>';

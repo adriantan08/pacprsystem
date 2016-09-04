@@ -37,7 +37,7 @@
               </thead>
               <tbody>
                 <?php
-                  $prList = $this->crud_model->getPrListForV('20','< 1001');
+                  $prList = $this->Crud_model->getPrListForV('20','< 1001');
                   if($prList != null){
                     foreach($prList as $list){
                       echo '<tr>';
@@ -76,7 +76,7 @@
               </thead>
               <tbody>
                 <?php
-                  $prList = $this->crud_model->getPrListForV('20','> 1000');
+                  $prList = $this->Crud_model->getPrListForV('20','> 1000');
                   if($prList != null){
                     foreach($prList as $list){
                       echo '<tr>';
@@ -115,7 +115,7 @@
               </thead>
               <tbody>
                 <?php
-                  $prList = $this->crud_model->getPrListForV('30','> 0');
+                  $prList = $this->Crud_model->getPrListForV('30','> 0');
                   if($prList != null){
                     foreach($prList as $list){
                       echo '<tr>';
@@ -153,7 +153,7 @@
               </thead>
               <tbody>
                 <?php
-                  $prList = $this->crud_model->getPrListForV('35','> 0');
+                  $prList = $this->Crud_model->getPrListForV('35','> 0');
                   if($prList != null){
                     foreach($prList as $list){
                       echo '<tr>';

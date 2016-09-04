@@ -1,8 +1,11 @@
 <?php
-class user_model extends CI_Model {
+class User_model extends CI_Model {
 	
 	function getdb(){
-		return $this->load->database('default',true);
+		if(ENVIRONMENT !== 'production')
+			return $this->load->database('default',true);
+		else
+			return $this->load->database('production',true);
 	}
 	
 /*******************************************************************

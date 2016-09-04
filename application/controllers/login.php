@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class login extends CI_Controller {
+class Login extends CI_Controller {
 
 	 public function __construct(){
 		parent::__construct();
@@ -25,7 +25,7 @@ class login extends CI_Controller {
 		if(isset($_POST['u']) && isset($_POST['p'])){
 			$this->load->model('user_model');
 			
-			$result = $this->user_model->auth($_POST['u'], $_POST['p']);
+			$result = $this->User_model->auth($_POST['u'], $_POST['p']);
 			if($result == null){
 				echo 'Username not found.';
 			}

@@ -485,7 +485,7 @@ $(function () {
 		var check = runValidation();
 		
 		//this should be !check. we just bypassed. revert when moving to prod
-		if(!check){
+		if(check){
 			var imgStrings = "";
 			var allUploadsSuccess = true;
 			var imgCtr = 0;
@@ -536,6 +536,9 @@ $(function () {
 			}
 			
 		}
+		else{
+			swal("Validation failed.","Please review your entry.","error");
+		}
 		
 	});
 	
@@ -543,7 +546,7 @@ $(function () {
 	
 	
 	$("#prPayee").autocomplete({
-		source: JSON.parse('<?=$this->crud_model->getDistinctPayees()?>'),
+		source: JSON.parse('<?=$this->Crud_model->getDistinctPayees()?>'),
 		//source: [{label:"Label1", value:"Value1"}],
 		minLength: 0,
 		position: {

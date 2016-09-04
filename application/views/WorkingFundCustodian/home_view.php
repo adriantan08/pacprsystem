@@ -29,7 +29,7 @@
               </thead>
               <tbody>
                 <?php
-                  $prList = $this->crud_model->getDraftedPRs('0');
+                  $prList = $this->Crud_model->getDraftedPRs('0');
                   if($prList != null){
                     foreach($prList as $list){
                       echo '<tr>';
@@ -70,7 +70,7 @@
               </thead>
               <tbody>
                 <?php
-                  $prList = $this->crud_model->getSubPrs('(10,20,25,30,35)');
+                  $prList = $this->Crud_model->getSubPrs('(10,20,25,30,35)');
                   if($prList != null){
                     foreach($prList as $list){
                       echo '<tr>';
@@ -118,7 +118,7 @@
               </thead>
               <tbody>
                 <?php
-                  $prList = $this->crud_model->getApprovedPRs('40', '>0');
+                  $prList = $this->Crud_model->getApprovedPRs('40', '>0');
                   if($prList != null){
                     foreach($prList as $list){
                       echo '<tr>';
@@ -160,7 +160,7 @@
               </thead>
               <tbody>
                 <?php
-                  $prList = $this->crud_model->getPrListForWfc('15');
+                  $prList = $this->Crud_model->getPrListForWfc('15');
                   if($prList != null){
                     foreach($prList as $list){
                       echo '<tr>';

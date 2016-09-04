@@ -35,7 +35,7 @@
               </thead>
               <tbody>
                 <?php
-                  $prList = $this->crud_model->getSubPRs('(10)');
+                  $prList = $this->Crud_model->getSubPRs('(10)');
                   if($prList != null){
                     foreach($prList as $list){
                       echo '<tr>';
@@ -74,7 +74,7 @@
               </thead>
               <tbody>
                 <?php
-                  $prList = $this->crud_model->getSubPRs('(20)');
+                  $prList = $this->Crud_model->getSubPRs('(20)');
                   if($prList != null){
                     foreach($prList as $list){
                       echo '<tr>';
@@ -112,7 +112,7 @@
               </thead>
               <tbody>
                 <?php
-                  $prList = $this->crud_model->getPrListForAsh('25');
+                  $prList = $this->Crud_model->getPrListForAsh('25');
                   if($prList != null){
                     foreach($prList as $list){
                       echo '<tr>';

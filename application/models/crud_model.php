@@ -1,8 +1,11 @@
 <?php
-class crud_model extends CI_Model {
+class Crud_model extends CI_Model {
 
 	function getdb(){
-		return $this->load->database('default',true);
+		if(ENVIRONMENT !== 'production')
+			return $this->load->database('default',true);
+		else
+			return $this->load->database('production',true);
 	}
 
 /*******************************************************************
@@ -114,6 +117,62 @@ class crud_model extends CI_Model {
 		}
 		return null;
 	}
+	
+	//USED IN PRINT
+	function getBulkPr($ids){
+		$ids = explode(' ', $ids);
+		
+		//prepare the question marks for the prepared statement later where the $ids will be binded
+		$questionmarks = array();
+		if(count($ids)>0){
+			foreach($ids as $i){
+				//To be safe on our question, we check if we got all IDs are integer. 
+				if(!is_numeric($i)) exit("Malfromed parameter");
+				$questionmarks[] = '?';
+			}
+		}
+		else
+			exit("Nothing to print.");
+		
+		$sql = "
+			SELECT
+				a.pr_id AS `pr_id`,
+				a.pr_date AS `pr_date`,
+				a.pr_status AS `pr_status`,
+				a.pr_status AS `pr_status`,
+				a.changed_on AS `changed_on`,
+				a.approver1_id AS `approver1_id`,
+				a.approver2_id AS `approver2_id`,
+				a.approver3_id AS `approver3_id`,
+				b.payee AS `payee`,
+				b.amount AS `amount`,
+				b.details AS `details`,
+				b.payment_form AS `payment_form`,
+				b.purpose AS `purpose`,
+				b.dist_class AS `dist_class`,
+				b.dist_yield AS `dist_yield`,
+				b.po_jo_no AS `po_jo_no`,
+				b.rr_no AS `rr_no`,
+				b.inv_no AS `inv_no`,
+				b.others AS `others`,
+				b.receipt_img as `receipt_img`
+			FROM pac_pr_header a, pac_pr_details b
+			WHERE a.pr_id = b.pr_id
+			AND a.pr_id IN (
+			
+		";
+		$sql .= implode(',', $questionmarks);
+		$sql .= ")
+				ORDER BY a.pr_id ASC;
+		;";
+		
+		$q = $this->getdb()->query($sql, $ids);
+		if($q->num_rows()>0){
+			return $q->result_array();
+		}
+		return null;
+	}
+	
 
 //WFC
 	function getDraftedPRs($status){
@@ -459,6 +518,8 @@ class crud_model extends CI_Model {
 		}
 		return null;
 	}
+	
+
 
 
 /*******************************************************************

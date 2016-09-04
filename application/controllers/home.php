@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class home extends CI_Controller {
+class Home extends CI_Controller {
 
 	 public function __construct(){
 		parent::__construct();
@@ -51,11 +51,11 @@ class home extends CI_Controller {
 
 	public function create(){
 		//Initial role check authorization
-		if(!$this->user_model->isWcf())
+		if(!$this->User_model->isWcf())
 			$this->logout();
 
 		$data['title'] = 'Create';
-		$data['candidatePR'] = $this->crud_model->getCandidatePr();
+		$data['candidatePR'] = $this->Crud_model->getCandidatePr();
 		$data['content'] = $this->load->view('WorkingFundCustodian/create_view', $data, true);
 		$this->load->view('template_view', $data);
 	}
@@ -64,10 +64,10 @@ class home extends CI_Controller {
 	//This view is the main handler on how to decide to view the PR based on user role
 	public function view($id){
 		//Initial role check authorization
-		if(!$this->user_model->isWcf())
+		if(!$this->User_model->isWcf())
 			$this->logout();
 		
-		$this->crud_model->toggleRead('WCF', $id);
+		$this->Crud_model->toggleRead('WCF', $id);
 		$data = $this->WorkingFundCustodianContent($id);
 		$this->load->view('template_view', $data);
 	}
@@ -75,11 +75,11 @@ class home extends CI_Controller {
 
 	public function WorkingFundCustodianContent($id){
 		//Initial role check authorization
-		if(!$this->user_model->isWcf())
+		if(!$this->User_model->isWcf())
 			$this->logout();
 
 		$data['title'] = 'View';
-		$data['prDetails'] = $this->crud_model->getPrById($id);
+		$data['prDetails'] = $this->Crud_model->getPrById($id);
 		$data['content'] = $this->load->view('WorkingFundCustodian/read_view', $data, true);
 		return $data;
 	}
@@ -89,12 +89,12 @@ class home extends CI_Controller {
 	***/
 	public function view_adminsechead($id){
 		//Initial role check authorization
-		if(!$this->user_model->isAsh())
+		if(!$this->User_model->isAsh())
 			$this->logout();
 		
-		$this->crud_model->toggleRead('ASH', $id);
+		$this->Crud_model->toggleRead('ASH', $id);
 		$data['title'] = 'Approve - Admin Sec. Head';
-		$data['prDetails'] = $this->crud_model->getPrById($id);
+		$data['prDetails'] = $this->Crud_model->getPrById($id);
 		$data['content'] = $this->load->view('AdminSecHead/approve_view', $data, true);
 		$this->load->view('template_view_ash', $data);
 	}
@@ -104,12 +104,12 @@ class home extends CI_Controller {
 	*****/
 	public function view_verifier($id){
 		//Initial role check authorization
-		if(!$this->user_model->isVerifier())
+		if(!$this->User_model->isVerifier())
 			$this->logout();
 		
-		$this->crud_model->toggleRead('VERIFIER', $id);
+		$this->Crud_model->toggleRead('VERIFIER', $id);
 		$data['title'] = 'Approve - Verifier';
-		$data['prDetails'] = $this->crud_model->getPrById($id);
+		$data['prDetails'] = $this->Crud_model->getPrById($id);
 		$data['content'] = $this->load->view('Verifier/approve_view', $data, true);
 		$this->load->view('template_view_ash', $data);
 	}
@@ -119,20 +119,22 @@ class home extends CI_Controller {
 	*****/
 	public function view_approver($id){
 		//Initial role check authorization
-		if(!$this->user_model->isApprover())
+		if(!$this->User_model->isApprover())
 			$this->logout();
 
-		$this->crud_model->toggleRead('APPROVER', $id);
+		$this->Crud_model->toggleRead('APPROVER', $id);
 		$data['title'] = 'Approve - Approver';
-		$data['prDetails'] = $this->crud_model->getPrById($id);
+		$data['prDetails'] = $this->Crud_model->getPrById($id);
 		$data['content'] = $this->load->view('ApprovingAuth/approve_view', $data, true);
 		$this->load->view('template_view_ash', $data);
 	}
 	
 	
-	function print_preview($prList){
+	function print_preview($prList=null){
 		$prList = urldecode($prList);
-		echo $prList;
+		
+		$data['prList'] = $this->Crud_model->getBulkPr($prList);
+		$this->load->view('print_view', $data);
 	}
 	
 

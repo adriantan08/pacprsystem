@@ -58,8 +58,16 @@
 		<font style="font-size:18px;"><b>PR# <?=$prDetails['pr_id']?></b></font>
 		<br>Last Modified: <?=$prDetails['changed_on']?><br><br>
 	</td>
-
 	<td>
+	<?php
+	if($prDetails['pr_status'] == 30){
+		echo '<div style="position:relative; left:50px; font-size:17px;"><i><b>Pending review</b></i></div>';
+	}
+	else if($prDetails['pr_status'] == 40){
+		echo '<div style="position:relative; left:50px; font-size:17px; color:green;"><b>Approved</b></div>';
+	}
+	else{
+	?>
 		<span>
 			<button style="position:relative; left:10px;" class="flatbutton" id="editButton">Edit</button>
 			<span id="finishEditDiv" style="visibility:hidden;">
@@ -68,6 +76,10 @@
 			</span>
 		</span>
 		
+	<?php	
+		
+	}
+	?>
 	</td>
 	</tr>
 	</table>
@@ -208,7 +220,7 @@
 			<font class="mylabel">Details:</font>
 		</td>
 		<td>
-			<textarea disabled style="text-align:left;" id="prDetails" rows=10 cols=40><?=$prDetails['details']?></textarea>
+			<textarea disabled style="text-align:left;" id="prDetails" rows=10 cols=40><?=str_replace('<br/>','&#10;',$prDetails['details'])?></textarea>
 		</td>
 	</tr>
 	
@@ -472,7 +484,7 @@ $(function () {
 		var check = runValidation();
 		
 		//this should be !check. we just bypassed. revert when moving to prod
-		if(!check){
+		if(check){
 			var imgStrings = "";
 			var allUploadsSuccess = true;
 			var imgCtr = 0;
@@ -528,7 +540,9 @@ $(function () {
 			}
 			
 		}
-		
+		else{
+			swal("Validation failed.","Please review your entry.","error");
+		}
 	});
 	
 	//this function removes the image and the button that goes with it.
@@ -567,7 +581,7 @@ $(function () {
 	
 	
 	$("#prPayee").autocomplete({
-		source: JSON.parse('<?=$this->crud_model->getDistinctPayees()?>'),
+		source: JSON.parse('<?=$this->Crud_model->getDistinctPayees()?>'),
 		//source: [{label:"Label1", value:"Value1"}],
 		minLength: 0,
 		position: {
