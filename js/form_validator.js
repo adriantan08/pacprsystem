@@ -36,11 +36,14 @@ function runValidation(){
 	bool = validateRadio("prDisbClass");
 	bool = validateRadio("prDisbYield");
 	
-	bool = validateIsElementEmpty("prPoJoNo");
-	bool = validateIsElementEmpty("prRcvReportNo");
-	bool = validateIsElementEmpty("prInvoiceNo");
+	//9-17-2016 Removing validation as requested.
+	//bool = validateIsElementEmpty("prPoJoNo");
+	//bool = validateIsElementEmpty("prRcvReportNo");
+	//bool = validateIsElementEmpty("prInvoiceNo");
 	bool = validateIsElementEmpty("prOthers");
 	bool = validateIsElementEmpty("prDetails");
+	
+	bool = validateMinCharTextfield(25, "prOthers");
 	
 	if(!bool){
 		hit = true;
@@ -57,13 +60,7 @@ function runValidation(){
 /*************************************************************************************************************************/	
 	
 }
-function validateReloadTab(){
-	if(!isInViewProject())
-		if(document.getElementById("sub_mountpointdiv").innerHTML.trim() ==""){
-			return false;
-		}
-	return true;
-}
+
 
 function revertElementStyle(id){
 	document.getElementById(id).style.borderBottom=revertStyleInput;
@@ -73,6 +70,22 @@ function validateIsElementEmpty(id){
 	
 	var val = document.getElementById(id).value;
 	if(val == ""){
+		document.getElementById(id).style.borderBottom=errStyleInput;
+		hit = true;
+		return false;
+	}
+	else{
+		document.getElementById(id).style.borderBottom=revertStyleInput;
+	}
+	
+	return true;
+}
+
+function validateMinCharTextfield(charCount, id){
+	
+	var val = document.getElementById(id).value;
+	
+	if(val.length < charCount){
 		document.getElementById(id).style.borderBottom=errStyleInput;
 		hit = true;
 		return false;

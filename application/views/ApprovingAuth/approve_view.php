@@ -93,7 +93,7 @@
 			<font class="label">Amount: </font>
 		</td>
 		<td>
-			<div id="amountPlaceholderRead">P <?=number_format($prDetails['amount'])?></div>
+			<div id="amountPlaceholderRead">P <?=number_format($prDetails['amount'], 2,'.',',')?></div>
 			<div id="amountPlaceholderEdit" style="display:none;" >P <input type=number id="prAmount"  name="editable" class="input-read" disabled value="<?=$prDetails['amount']?>"/></div>
 		</td>
 	</tr>
@@ -259,12 +259,29 @@
 	$("button[name='submitButton']").click(function(){
 		var status = null;
 		var prNum = document.getElementById('prNum').value;
-		if($(this).attr('id') == 'return')
-			status = <?=UNAPPROVED_STATUS?>;
+		if($(this).attr('id') == 'return'){
+			status = <?=FORREVIEW_STATUS?>;
+			
+			$.ajax({
+				url:"<?=base_url()?>api/addcomment",
+				method:"POST",
+				async: true,
+				data:{
+					prId : <?=$prDetails['pr_id']?>,
+					comment: "The ticket was sent back by an Approver (auto-generated)."
+					
+				},
+				success: function(data){}
+			})
+			.done(function(data){
+				approvePr("<?=base_url()?>", 'APPROVER', status, prNum);
+			});
+		}
 		else if($(this).attr('id') == 'verify')
 			status = <?=APPROVED_STATUS?>;
 		
-		approvePr("<?=base_url()?>", 'VERIFIER', status, prNum);
+		
+		
 		
 	});
 	

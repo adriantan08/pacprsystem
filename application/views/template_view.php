@@ -29,7 +29,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <body>
 
 
-	<div id = "navigation" style="background: #33b5e5; position:absolute; top:0px; width:90%; left:0px;">
+	<div id = "navigation" style="background: #33b5e5; position:absolute; top:0px; width:95%; left:0px;">
 		<ul id="trans-nav">
 			<li><?php echo anchor('/home', 'Home');?></li>
 			<li><?php echo anchor('/create', 'Create');?></li>
@@ -38,19 +38,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 	</div>
 
-	<div style="background: #33b5e5; width:10%; position:absolute; top:0; right:0px;">
+	<div style="background: #33b5e5; width:5%; position:absolute; top:0; right:0px;">
 		<ul id="trans-nav">
+		<li><?php echo anchor('/home/logout', 'Logout');?></li>
+			<!-- Removing dropdown navigation since there's no Manage Account yet, only logout. 
 			<li><a href="#">My Account
 				<ul>
 					<li><a href="#">Manage Account</a></li>
 					<li><?php echo anchor('/home/logout', 'Logout');?></li>
 				</ul>
-			</li>
+			</li>-->
 		</ul>
 	</div>
 <br/><br/><br/>
 <div>
-<h3 id="myH3">Welcome <?=$this->session->userdata('empFirstName').' '.$this->session->userdata('empLastName').'('.strtoupper($this->session->userdata('userRole')).')'?></h3><hr class="carved"/>
+<h3 id="myH3" style="position:relative; left:20px;">Welcome <?=$this->session->userdata('empFirstName').' '.$this->session->userdata('empLastName').'('.strtoupper($this->session->userdata('userRole')).')'?></h3><hr class="carved"/>
 		<?= $content?>
 </div>
 </body>

@@ -210,7 +210,7 @@ class Crud_model extends CI_Model {
 		$empId = $this->session->userdata('userId');
 		$empRole = $this->session->userdata('userRole');
 		$roleQuery = "";
-		if($empRole=='WCF') {
+		if($empRole=='WFC') {
 			$roleQuery = " AND a.requestor_id = ".$empId;
 		}
 		if($empRole=='ASH') {
@@ -519,7 +519,25 @@ class Crud_model extends CI_Model {
 		return null;
 	}
 	
-
+	function getExpCodes(){
+		$sql="
+				SELECT
+					exp_code_id,
+					exp_desc,
+					exp_remarks,
+					
+				FROM
+					pac_exp_codes
+				WHERE
+					`status` = 'A'
+				ORDER BY exp_code_id ASC;
+		";
+		$q = $this->getdb()->query($sql);
+		if($q->num_rows()>0){
+			return $q->result_array();
+		}
+		return null;
+	}
 
 
 /*******************************************************************
@@ -643,7 +661,7 @@ class Crud_model extends CI_Model {
 	}
 	
 	function toggleRead($roleRead, $prId){
-		if($roleRead=='WCF'){
+		if($roleRead=='WFC'){
 			$column = "request_read_flag";
 		}
 		else if($roleRead=='ASH'){

@@ -23,6 +23,7 @@ class User_model extends CI_Model {
 				a.emp_lastname,
 				a.emp_email,
 				b.name as `role_name`,
+				a.exp_code_id,
 				a.emp_username,
 				a.emp_password
 			FROM 
@@ -40,8 +41,8 @@ class User_model extends CI_Model {
 	}
 	
 	
-	 function isWcf(){
-		 if($this->session->userdata('userRole') == 'WCF'){
+	 function isWfc(){
+		 if($this->session->userdata('userRole') == 'WFC'){
 			 return true;
 		 }
 		 return false;

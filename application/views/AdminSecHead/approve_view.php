@@ -93,7 +93,7 @@
 			<font class="label">Amount: </font>
 		</td>
 		<td>
-			<div id="amountPlaceholderRead">P <?=number_format($prDetails['amount'])?></div>
+			<div id="amountPlaceholderRead">P <?=number_format($prDetails['amount'], 2,'.',',')?></div>
 			<div id="amountPlaceholderEdit" style="display:none;" >P <input type=number id="prAmount"  name="editable" class="input-read" disabled value="<?=$prDetails['amount']?>"/></div>
 		</td>
 	</tr>

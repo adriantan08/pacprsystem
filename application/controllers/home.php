@@ -51,11 +51,12 @@ class Home extends CI_Controller {
 
 	public function create(){
 		//Initial role check authorization
-		if(!$this->User_model->isWcf())
+		if(!$this->User_model->isWfc())
 			$this->logout();
 
 		$data['title'] = 'Create';
 		$data['candidatePR'] = $this->Crud_model->getCandidatePr();
+		$data['expCodes'] = $this->Crud_model->getExpCodes();
 		$data['content'] = $this->load->view('WorkingFundCustodian/create_view', $data, true);
 		$this->load->view('template_view', $data);
 	}
@@ -64,10 +65,10 @@ class Home extends CI_Controller {
 	//This view is the main handler on how to decide to view the PR based on user role
 	public function view($id){
 		//Initial role check authorization
-		if(!$this->User_model->isWcf())
+		if(!$this->User_model->isWfc())
 			$this->logout();
 		
-		$this->Crud_model->toggleRead('WCF', $id);
+		$this->Crud_model->toggleRead('WFC', $id);
 		$data = $this->WorkingFundCustodianContent($id);
 		$this->load->view('template_view', $data);
 	}
@@ -75,7 +76,7 @@ class Home extends CI_Controller {
 
 	public function WorkingFundCustodianContent($id){
 		//Initial role check authorization
-		if(!$this->User_model->isWcf())
+		if(!$this->User_model->isWfc())
 			$this->logout();
 
 		$data['title'] = 'View';

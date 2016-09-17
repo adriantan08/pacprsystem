@@ -7,12 +7,12 @@ class Api extends CI_Controller {
 		parent::__construct();
 		
 		//ENABLE THIS ON PROD OR WHEN LOGIN IS UP. 
-		//$this->checkSession();
+		$this->checkSession();
 	 }
 	 
 	 function index(){
 		//ENABLE THIS ON PROD OR WHEN LOGIN IS UP. 
-		//$this->checkSession();
+		$this->checkSession();
 	 }
 	 
 	 function checkSession(){

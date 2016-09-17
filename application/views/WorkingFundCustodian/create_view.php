@@ -294,7 +294,7 @@ select{
 			<input type=text id="prInvoiceNo"/>
 		</li>
 		<li>
-			<label>Others: </label>
+			<label>Others (min. 25 chars): </label>
 			<input type=text id="prOthers"/>
 		</li>
 		<li>
@@ -484,7 +484,7 @@ $(function () {
 			
 		var check = runValidation();
 		
-		//this should be !check. we just bypassed. revert when moving to prod
+		//this should be check. we just bypassed. revert when moving to prod
 		if(check){
 			var imgStrings = "";
 			var allUploadsSuccess = true;

@@ -16,7 +16,7 @@
 
 <div style="width: 75%; margin: 0 auto; padding: 120px 0 40px;">
     <ul class="tabs" data-persist="true">
-        <li><a href="#view1">Posted PRs (>1k PhP)</a></li>
+        <li><a href="#view1">Posted PRs (<u><</u>1k PhP)</a></li>
         <li><a href="#view2">Posted PRs (1k+ PhP)</a></li>
         <li><a href="#view3">Verified PRs</a></li>
         <li><a href="#view4">Returned PRs</a></li>

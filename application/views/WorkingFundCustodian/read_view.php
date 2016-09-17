@@ -60,7 +60,10 @@
 	</td>
 	<td>
 	<?php
-	if($prDetails['pr_status'] == 30){
+	if($prDetails['pr_status'] == SUBMITTED_STATUS || 
+		$prDetails['pr_status'] == POSTED_STATUS ||
+		$prDetails['pr_status'] == VERIFIED_STATUS
+		){
 		echo '<div style="position:relative; left:50px; font-size:17px;"><i><b>Pending review</b></i></div>';
 	}
 	else if($prDetails['pr_status'] == 40){
@@ -112,7 +115,7 @@
 			<font class="mylabel">Amount: </font>
 		</td>
 		<td>
-			<div id="amountPlaceholderRead">P <?=number_format($prDetails['amount'])?></div>
+			<div id="amountPlaceholderRead">P <?=number_format($prDetails['amount'], 2,'.',',')?></div>
 			<div id="amountPlaceholderEdit" style="display:none;" >P <input type=number id="prAmount" min="0"  name="editable" class="input-read" disabled value="<?=$prDetails['amount']?>"/></div>
 		</td>
 	</tr>
@@ -209,7 +212,7 @@
 	</tr>
 	<tr class="supportingDocumentSection">
 		<td>
-			<font class="mylabel">Others:</font>
+			<font class="mylabel">Others (min. 25 chars)::</font>
 		</td>
 		<td>
 			<input type=text id="prOthers" name="editable" class="input-read" disabled value="<?=$prDetails['others']?>"/>
@@ -476,6 +479,9 @@ $(function () {
 	
 	$("button[name='submitButton']").click(function(){
 		var action = null;
+		
+		//lock the button while validation is running to prevent re-enrty.
+		$(this).prop('disabled', true);
 		if($(this).attr('id') == 'draft')
 			action = <?=DRAFT_STATUS?>;
 		else if($(this).attr('id') == 'submit')
@@ -483,7 +489,7 @@ $(function () {
 			
 		var check = runValidation();
 		
-		//this should be !check. we just bypassed. revert when moving to prod
+		//this should be check. we just bypassed. revert when moving to prod
 		if(check){
 			var imgStrings = "";
 			var allUploadsSuccess = true;
@@ -541,6 +547,8 @@ $(function () {
 			
 		}
 		else{
+			//revert clicked button back to enabled to allow another revision
+			$(this).prop('disabled', false);
 			swal("Validation failed.","Please review your entry.","error");
 		}
 	});
