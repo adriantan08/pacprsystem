@@ -30,10 +30,33 @@ class Api extends CI_Controller {
 	function create($intent){
 		 
 		 if(isset($_POST['postData'])){
+			 //take a hold of the POST data for inner manipulation
+			$temp = json_decode($_POST['postData'],true);
+			//run approval logic here to determine what is the correct status 
+			if($temp[0]['prStatus'] == SUBMITTED_STATUS){
+				$stepsArr = $this->Crud_model->determineNextStatus($temp[0]['prExpCode']);
+				if($stepsArr['post_step'] == 0 
+					&& $stepsArr['verify_step'] != 0){
+							$temp[0]['prStatus'] = POSTED_STATUS;
+				}
+				else if($stepsArr['post_step'] == 0 
+						&& $stepsArr['verify_step'] == 0
+						&& $stepsArr['approve_step'] != 0){
+							$temp[0]['prStatus'] = VERIFIED_STATUS;	
+				}
+				//else what's gonna happen is it will be retained to SUBMITTED_STATUS 
+				
+				echo $temp[0]['prStatus'];
+				//now to send it back to $_POST data 
+				$_POST['postData'] = json_encode($temp);
+			}
+			
 			if($intent == 'create')
 				$catch = $this->Crud_model->addPaymentRecord($_POST['postData']);
 			else if($intent == 'update')
 				$catch = $this->Crud_model->updatePaymentRecord($_POST['postData']);
+			
+			
 			
 			//what to do with catch based on returned result after insert
 		 }

@@ -15,7 +15,7 @@
 
 <div style="width: 75%; margin: 0 auto; padding: 120px 0 40px;">
     <ul class="tabs" data-persist="true">
-      <li><a href="#view1">Verified PRs (>1k PhP)</a></li>
+      <li><a href="#view1">Verified PRs (<1k PhP)</a></li>
       <li><a href="#view2">Verified PRs (1k+ PhP)</a></li>
       <li><a href="#view3">Approved PRs</a></li>
     </ul>

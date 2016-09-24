@@ -61,12 +61,17 @@
 </td>
 
 <td>
+	<?php
+		if($prDetails['pr_status'] == APPROVED_STATUS){
+			echo '<div style="position:relative; left:50px; font-size:17px; color:green;"><i><b>Approved</b></i></div>';
+		}else{
+	?>
 	<span>
-		<button style="position:relative; left:20px;" class="flatbutton approveButton" id="verify" name="submitButton">Approve</button>
+		<button style="position:relative; left:20px;" class="flatbutton approveButton" id="approve" name="submitButton">Approve</button>
 		<button style="position:relative; left:20px;" class="flatbutton rejectButton" id="return" name="submitButton">Return PR</button>
 		
 	</span>
-	
+	<?php } ?>
 </td>
 </tr>
 </table><br>
@@ -277,9 +282,10 @@
 				approvePr("<?=base_url()?>", 'APPROVER', status, prNum);
 			});
 		}
-		else if($(this).attr('id') == 'verify')
+		else if($(this).attr('id') == 'approve'){
 			status = <?=APPROVED_STATUS?>;
-		
+			approvePr("<?=base_url()?>", 'APPROVER', status, prNum);
+		}
 		
 		
 		

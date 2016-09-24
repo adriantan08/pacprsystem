@@ -298,6 +298,12 @@ select{
 			<input type=text id="prOthers"/>
 		</li>
 		<li>
+			<label>Expenditure Code <span class="required">*</span></label>
+			<input type="text" id="prExpCode" name="field3" class="field-long" />
+			<input type="hidden" id="truePrCode" value=""/>
+			
+		</li>
+		<li>
 			<label>Details: </label>
 			<textarea id="prDetails" rows=10 cols=40 class="field-textarea"></textarea>
 		</li>
@@ -550,8 +556,8 @@ $(function () {
 		//source: [{label:"Label1", value:"Value1"}],
 		minLength: 0,
 		position: {
-			my : "right top",
-			at: "right bottom"
+			my : "left top",
+			at: "left bottom"
 		},
 		//action here to dictate where to go once an entry has been selected
 		select: function(event, ui) {
@@ -559,4 +565,21 @@ $(function () {
 		},
 		
 	});
+	
+	$("#prExpCode").autocomplete({
+		
+		source: JSON.parse('<?=$expCodesList?>'),
+		//source: [{"Label1":"Label1", "Value1":"Value1", "Label2":"Label2", "Value2":"Value2", }],
+		minLength: 0,
+		position: {
+			my : "left top",
+			at: "left bottom"
+		},
+		//action here to dictate where to go once an entry has been selected
+		select: function(event, ui) {
+			document.getElementById("truePrCode").value = ui.item.code;
+		},
+		
+	});
+	
 </script>

@@ -12,6 +12,7 @@ function publishPr(base_url, action, intent){
 	var prRcvReportNo = sanitize(document.getElementById('prRcvReportNo').value);
 	var prInvoiceNo = sanitize(document.getElementById('prInvoiceNo').value);
 	var prOthers = sanitize(document.getElementById('prOthers').value);
+	var prExpCode = sanitize(document.getElementById('truePrCode').value);
 	var prDetails = sanitize(document.getElementById('prDetails').value);
 	var prReceiptImg = document.getElementById('imagefile').value;
 	
@@ -32,6 +33,7 @@ function publishPr(base_url, action, intent){
 			prRcvReportNo:prRcvReportNo,
 			prInvoiceNo:prInvoiceNo,
 			prOthers:prOthers,
+			prExpCode:prExpCode,
 			prDetails:prDetails,
 			prStatus:action,
 			prReceiptImg: prReceiptImg
@@ -65,6 +67,7 @@ function publishPr(base_url, action, intent){
 				
 				window.location.href=base_url+'home';
 			});
+		
 	});
 }
 

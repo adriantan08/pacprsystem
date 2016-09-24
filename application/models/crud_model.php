@@ -41,8 +41,8 @@ class Crud_model extends CI_Model {
 
 		//INSERT TO pac_pr_details
 		$sql = "
-			INSERT INTO pac_pr_details(pr_id, payee, amount, payment_form, purpose, dist_class, dist_yield, po_jo_no, rr_no, inv_no, others, details, changed_on, receipt_img)
-			VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+			INSERT INTO pac_pr_details(pr_id, payee, amount, payment_form, purpose, dist_class, dist_yield, po_jo_no, rr_no, inv_no, others, details, changed_on, receipt_img, exp_code)
+			VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
 		";
 		$this->getdb()->query($sql, array(
 								$arr['prNum'],
@@ -62,7 +62,8 @@ class Crud_model extends CI_Model {
 
 								$serverDate,
 
-								$arr['prReceiptImg']
+								$arr['prReceiptImg'],
+								$arr['prExpCode']
 							));
 		$this->logHistory($json,"CREATE");
 
@@ -214,13 +215,13 @@ class Crud_model extends CI_Model {
 			$roleQuery = " AND a.requestor_id = ".$empId;
 		}
 		if($empRole=='ASH') {
-			$roleQuery = " AND (a.approver1_id = ".$empId." or a.approver1_id is null) ";
+			$roleQuery = " AND (a.approver1_id = ".$empId." or a.approver1_id = 999) ";
 		}
 		if($empRole=='VERIFIER') {
-			$roleQuery = " AND (a.approver2_id = ".$empId." or a.approver2_id is null) ";
+			$roleQuery = " AND (a.approver2_id = ".$empId." or a.approver2_id = 999) ";
 		}
 		if($empRole=='APPROVER') {
-			$roleQuery = " AND (a.approver3_id = ".$empId." or a.approver3_id is null) ";
+			$roleQuery = " AND (a.approver3_id = ".$empId." or a.approver3_id = 999) ";
 		}
 		$sql = "
 			SELECT
@@ -396,7 +397,7 @@ class Crud_model extends CI_Model {
 
 	function getPrListForV($status, $amount){
 		$empId = $this->session->userdata('userId');
-		$query = " and (a.approver2_id = ".$empId." or  a.approver2_id is null) ";
+		$query = " and (a.approver2_id = ".$empId." or  a.approver2_id = 999) ";
 		if($status=='30' or $status=='25') {
 			$query = " and a.approver2_id = ".$empId;
 		}
@@ -420,7 +421,12 @@ class Crud_model extends CI_Model {
 		a.approver1_id AS `approver1_id`,
 		a.approver2_id AS `approver2_id`,
 		a.approver3_id AS `approver3_id`
-		FROM pac_pr_header a left outer join pac_employees e on a.approver2_id = e.id, pac_pr_details b, pac_employees c, pac_employees d
+		FROM 
+			pac_pr_header a left outer join 
+				pac_employees e on a.approver2_id = e.id, 
+			pac_pr_details b, 
+			pac_employees c, 
+			pac_employees d
 		WHERE a.pr_id = b.pr_id
 		AND a.pr_status = ?
 		AND b.amount ".$amount.
@@ -459,9 +465,12 @@ class Crud_model extends CI_Model {
 				b.rr_no AS `rr_no`,
 				b.inv_no AS `inv_no`,
 				b.others AS `others`,
-				b.receipt_img as `receipt_img`
-			FROM pac_pr_header a, pac_pr_details b
+				b.receipt_img as `receipt_img`,
+				CONCAT(b.exp_code,' - ',c.exp_desc) as `exp_code`,
+				b.exp_code as `exp_code_only`
+			FROM pac_pr_header a, pac_pr_details b, pac_exp_codes c
 			WHERE a.pr_id = b.pr_id
+			AND b.exp_code = c.exp_code_id
 			AND a.pr_id = ?
 			LIMIT 1;
 		";
@@ -520,24 +529,47 @@ class Crud_model extends CI_Model {
 	}
 	
 	function getExpCodes(){
+		$expCode = $this->session->userdata('expCodeId');
 		$sql="
-				SELECT
-					exp_code_id,
-					exp_desc,
-					exp_remarks,
-					
-				FROM
-					pac_exp_codes
-				WHERE
-					`status` = 'A'
-				ORDER BY exp_code_id ASC;
+			SELECT 
+				exp_code_id,
+				exp_desc,
+				exp_remarks,
+				`status`
+			FROM pac_exp_codes WHERE submit_step IN 
+				(SELECT exp_code_id 
+					FROM pac_employees 
+					WHERE exp_code_id = $expCode)
+			AND `status` = 'A';
+
+
 		";
 		$q = $this->getdb()->query($sql);
 		if($q->num_rows()>0){
-			return $q->result_array();
+			$a = $q->result_array();
+			$fArr = array();
+			foreach($a as $row){
+				$fArr[] =
+					array(
+						"label"=>$row['exp_code_id'].' - '.str_replace("'","",$row['exp_desc']),
+						"code"=>$row['exp_code_id']
+					);
+			}
+			return json_encode($fArr);
 		}
 		return null;
 	}
+	
+	function determineNextStatus($expCode){
+		$sql = "
+			SELECT post_step, verify_step, approve_step FROM pac_exp_codes
+			WHERE exp_code_id = '$expCode';
+		";
+		$q = $this->getdb()->query($sql);
+		if($q->num_rows()>0){
+			return $q->first_row('array');
+		}
+	}	
 
 
 /*******************************************************************
@@ -597,7 +629,8 @@ class Crud_model extends CI_Model {
 				others = ?,
 				details = ?,
 				changed_on = ?,
-				receipt_img = ?
+				receipt_img = ?,
+				exp_code = ?
 			WHERE
 				pr_id = ?;
 		";
@@ -617,7 +650,8 @@ class Crud_model extends CI_Model {
 								$arr['prDetails'],
 								$serverDate,
 								$arr['prReceiptImg'],
-
+								$arr['prExpCode'],
+								
 								$arr['prNum']
 							));
 

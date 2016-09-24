@@ -40,7 +40,10 @@ function runValidation(){
 	//bool = validateIsElementEmpty("prPoJoNo");
 	//bool = validateIsElementEmpty("prRcvReportNo");
 	//bool = validateIsElementEmpty("prInvoiceNo");
+	
 	bool = validateIsElementEmpty("prOthers");
+	bool = validateIsElementEmpty("prExpCode");
+	
 	bool = validateIsElementEmpty("prDetails");
 	
 	bool = validateMinCharTextfield(25, "prOthers");

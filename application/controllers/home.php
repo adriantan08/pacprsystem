@@ -56,7 +56,7 @@ class Home extends CI_Controller {
 
 		$data['title'] = 'Create';
 		$data['candidatePR'] = $this->Crud_model->getCandidatePr();
-		$data['expCodes'] = $this->Crud_model->getExpCodes();
+		$data['expCodesList'] = $this->Crud_model->getExpCodes();
 		$data['content'] = $this->load->view('WorkingFundCustodian/create_view', $data, true);
 		$this->load->view('template_view', $data);
 	}
@@ -81,6 +81,8 @@ class Home extends CI_Controller {
 
 		$data['title'] = 'View';
 		$data['prDetails'] = $this->Crud_model->getPrById($id);
+		
+		$data['expCodesList'] = $this->Crud_model->getExpCodes();
 		$data['content'] = $this->load->view('WorkingFundCustodian/read_view', $data, true);
 		return $data;
 	}

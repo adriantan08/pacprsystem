@@ -61,12 +61,18 @@
 </td>
 
 <td>
+	<?php
+		if($prDetails['pr_status'] == VERIFIED_STATUS){
+			echo '<div style="position:relative; left:50px; font-size:17px;"><i><b>Pending review</b></i></div>';
+		}else{
+	?>
+	
 	<span>
 		<button style="position:relative; left:20px;" class="flatbutton approveButton" id="verify" name="submitButton">VERIFY</button>
 		<button style="position:relative; left:20px;" class="flatbutton rejectButton" id="return" name="submitButton">Return PR</button>
 		
 	</span>
-	
+	<?php } ?>
 </td>
 </tr>
 </table><br>

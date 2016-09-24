@@ -18,13 +18,21 @@
 		border: 0;
 		outline: 0;
 		background: transparent;
+		
 	}
 	input:focus{
 		outline:none;
 	}
+	.hideable-longtext{
+		word-break:break-all;
+		max-width:300px;
+	}
+	
 	textarea{
 		
 	}
+	
+	
 	
 .myTable{
 	background-color:white; 
@@ -212,10 +220,24 @@
 	</tr>
 	<tr class="supportingDocumentSection">
 		<td>
-			<font class="mylabel">Others (min. 25 chars)::</font>
+			<font class="mylabel">Others (min. 25 chars):</font>
 		</td>
 		<td>
-			<input type=text id="prOthers" name="editable" class="input-read" disabled value="<?=$prDetails['others']?>"/>
+			<div name="hideable" class="hideable-longtext"><?=$prDetails['others']?>
+			</div>
+			<input style="display:none" type=text id="prOthers" name="editable" class="input-read long-input" disabled value="<?=$prDetails['others']?>"/>
+		</td>
+	</tr>
+	<tr class="supportingDocumentSection">
+		<td>
+			<font class="mylabel">Expenditure Code: </font>
+		</td>
+			
+		<td>
+			<div name="hideable" class="hideable-longtext"><?=$prDetails['exp_code']?>
+			</div>
+			<input style="display:none" type=text id="prExpCode" name="editable" class="input-read long-input" disabled value="<?=$prDetails['exp_code']?>"/>
+			<input type="hidden" id="truePrCode" value="<?=$prDetails['exp_code_only']?>"/>
 		</td>
 	</tr>
 	<tr>
@@ -473,6 +495,17 @@ $(function () {
 				nodes[i].style.visibility="visible";
 		
 		//swal("You may now start editing!","","info");
+		
+		//Hide the labels and display the input fields for edit
+		var nodes = document.getElementsByName('hideable');
+		
+		for(var i=0; i<nodes.length; i++){
+			nodes[i].style.display = "none";
+			
+		}
+		document.getElementById('prOthers').style.display="block";
+		document.getElementById('prExpCode').style.display="block";
+		
 	});
 	
 	
@@ -598,6 +631,23 @@ $(function () {
 		},
 		//action here to dictate where to go once an entry has been selected
 		select: function(event, ui) {
+			
+		},
+		
+	});
+	
+	$("#prExpCode").autocomplete({
+		
+		source: JSON.parse('<?=$expCodesList?>'),
+		//source: [{"Label1":"Label1", "Value1":"Value1", "Label2":"Label2", "Value2":"Value2", }],
+		minLength: 0,
+		position: {
+			my : "left top",
+			at: "left bottom"
+		},
+		//action here to dictate where to go once an entry has been selected
+		select: function(event, ui) {
+			document.getElementById("truePrCode").value = ui.item.code;
 			
 		},
 		

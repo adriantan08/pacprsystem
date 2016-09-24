@@ -61,11 +61,18 @@
 </td>
 
 <td>
+
+	<?php
+		if($prDetails['pr_status'] == POSTED_STATUS){
+			echo '<div style="position:relative; left:50px; font-size:17px;"><i><b>Pending review</b></i></div>';
+		}else{
+	?>
 	<span>
 		<button style="position:relative; left:20px;" class="flatbutton approveButton" id="post" name="submitButton">Post</button>
 		<button style="position:relative; left:20px;" class="flatbutton rejectButton" id="review" name="submitButton">For Review</button>
 		
 	</span>
+	<?php }?>
 	
 </td>
 </tr>
