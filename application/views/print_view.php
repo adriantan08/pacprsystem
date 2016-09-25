@@ -1,6 +1,10 @@
 <style type="text/css">
 	.supportingDocumentSection td{
 		position:relative; left:5%;
+	
+		word-break:break-all;
+		max-width:300px;
+	
 	}
 	.mylabel{
 		font-weight:600;
@@ -31,7 +35,7 @@
 }
 
 </style>
-
+<body oncontextmenu="return false;">
 <div style="position:relative; top:1%; left:1%;"><br>
 <table>
 <?php
@@ -192,6 +196,14 @@ foreach($prList as $prDetails){
 				<?=$prDetails['others']?>
 			</td>
 		</tr>
+		<tr class="supportingDocumentSection">
+			<td>
+				<font class="mylabel">Expenditure Code:</font>
+			</td>
+			<td>
+				<?=str_replace('|','<br>',$prDetails['exp_code'])?>
+			</td>
+		</tr>
 		<tr>
 			<td valign=top>
 				<font class="mylabel">Details:</font>
@@ -218,3 +230,4 @@ foreach($prList as $prDetails){
 }
 ?>	
 </table>
+</body>

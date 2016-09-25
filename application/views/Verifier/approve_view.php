@@ -68,7 +68,7 @@
 	?>
 	
 	<span>
-		<button style="position:relative; left:20px;" class="flatbutton approveButton" id="verify" name="submitButton">VERIFY</button>
+		<button style="position:relative; left:20px;" class="flatbutton approveButton" id="verify" name="submitButton">Verify</button>
 		<button style="position:relative; left:20px;" class="flatbutton rejectButton" id="return" name="submitButton">Return PR</button>
 		
 	</span>
@@ -200,6 +200,17 @@
 		</td>
 		<td>
 			<input type=text id="prOthers" name="editable" class="input-read" disabled value="<?=$prDetails['others']?>"/>
+		</td>
+	</tr>
+	<tr class="supportingDocumentSection">
+		<td>
+			<font class="label">Expenditure Code: </font>
+		</td>
+			
+		<td>
+			<div class="hideable-longtext"><?=$prDetails['exp_code']?>
+			</div>
+			
 		</td>
 	</tr>
 	<tr>

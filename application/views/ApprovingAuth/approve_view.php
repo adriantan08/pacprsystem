@@ -201,6 +201,17 @@
 			<input type=text id="prOthers" name="editable" class="input-read" disabled value="<?=$prDetails['others']?>"/>
 		</td>
 	</tr>
+	<tr class="supportingDocumentSection">
+		<td>
+			<font class="label">Expenditure Code: </font>
+		</td>
+			
+		<td>
+			<div class="hideable-longtext"><?=$prDetails['exp_code']?>
+			</div>
+			
+		</td>
+	</tr>
 	<tr>
 		<td valign=top>
 			<font class="label">Details:</font>

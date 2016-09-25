@@ -156,9 +156,11 @@ class Crud_model extends CI_Model {
 				b.rr_no AS `rr_no`,
 				b.inv_no AS `inv_no`,
 				b.others AS `others`,
-				b.receipt_img as `receipt_img`
-			FROM pac_pr_header a, pac_pr_details b
+				b.receipt_img as `receipt_img`,
+				CONCAT(c.exp_code_id,'|',c.exp_desc) as `exp_code`
+			FROM pac_pr_header a, pac_pr_details b, pac_exp_codes c
 			WHERE a.pr_id = b.pr_id
+			AND b.exp_code = c.exp_code_id
 			AND a.pr_id IN (
 			
 		";

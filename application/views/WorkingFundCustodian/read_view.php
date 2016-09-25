@@ -23,10 +23,7 @@
 	input:focus{
 		outline:none;
 	}
-	.hideable-longtext{
-		word-break:break-all;
-		max-width:300px;
-	}
+	
 	
 	textarea{
 		
