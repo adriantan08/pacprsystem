@@ -198,7 +198,7 @@ class Crud_model extends CI_Model {
 			AND a.pr_status = ?
 			".$roleQuery."
 			AND a.requestor_id = c.id
-			ORDER BY a.pr_date desc;
+			ORDER BY a.changed_on DESC;
 		";
 		$q = $this->getdb()->query($sql, array($status));
 		if($q->num_rows()>0){
@@ -245,7 +245,7 @@ class Crud_model extends CI_Model {
 			$roleQuery."
 			AND a.requestor_id = c.id
 			AND a.pr_status = d.status
-			ORDER BY a.pr_date desc;
+			ORDER BY a.changed_on DESC;
 		";
 		$q = $this->getdb()->query($sql);
 		if($q->num_rows()>0){
@@ -289,7 +289,7 @@ class Crud_model extends CI_Model {
 		AND a.approver1_id = d.id
 		AND a.approver2_id = e.id
 		AND a.approver3_id = f.id
-		ORDER BY a.pr_date desc
+		ORDER BY a.changed_on DESC
 		";
 		$q = $this->getdb()->query($sql, array($status));
 		if($q->num_rows()>0){
@@ -318,7 +318,7 @@ class Crud_model extends CI_Model {
 			WHERE a.pr_id = b.pr_id
 			AND a.pr_status = ?
 			AND a.requestor_id = c.id
-			ORDER BY a.pr_date desc;
+			ORDER BY a.changed_on DESC;
 		";
 		$q = $this->getdb()->query($sql, array($status));
 		if($q->num_rows()>0){
@@ -348,7 +348,7 @@ class Crud_model extends CI_Model {
 			AND a.pr_status = ?
 			AND a.requestor_id = c.id
 			AND c.id = ?
-			ORDER BY a.pr_date desc;
+			ORDER BY a.changed_on DESC;
 		";
 		$uid = $this->getCurrentRequestor();
 		$q = $this->getdb()->query($sql, array($status,$uid));
@@ -388,7 +388,7 @@ class Crud_model extends CI_Model {
 		AND a.requestor_id = c.id
 		AND a.approver1_id = d.id
 		AND a.approver2_id = e.id
-		ORDER BY a.pr_date desc
+		ORDER BY a.changed_on DESC;
 		";
 		$q = $this->getdb()->query($sql, array($status));
 		if($q->num_rows()>0){
@@ -435,7 +435,7 @@ class Crud_model extends CI_Model {
 		$query."
 		AND a.requestor_id = c.id
 		AND a.approver1_id = d.id
-		ORDER BY a.pr_date desc
+		ORDER BY a.changed_on DESC;
 	";
 
 		$q = $this->getdb()->query($sql, array($status));

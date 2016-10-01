@@ -7,17 +7,17 @@
 
 <script>
     $(document).ready(function() {
-        $('#mytable1').DataTable();
-        $('#mytable2').DataTable();
-        $('#mytable3').DataTable();
+        $('#mytable1').DataTable({"pageLength":50});
+        $('#mytable2').DataTable({"pageLength":50});
+        $('#mytable3').DataTable({"pageLength":50});
     } );
 </script>
 
 <div style="width: 75%; margin: 0 auto; padding: 120px 0 40px;">
     <ul class="tabs" data-persist="true">
-        <li><a href="#view1">Submitted PRs</a></li>
-        <li><a href="#view2">Posted PRs</a></li>
-        <li><a href="#view3">Returned PRs</a></li>
+        <li><a id="tabHeader" href="#view1">Submitted</a></li>
+        <li><a id="tabHeader" href="#view2">Posted</a></li>
+        <li><a id="tabHeader" href="#view3">Returned</a></li>
     </ul>
     <div class="tabcontents">
         <div id="view1">
@@ -45,7 +45,7 @@
 					  $readStyle = "";
 					  if(!$list['approver1_read_flag'])
 						$readStyle = "<b/>";
-                      echo '<td>'.$readStyle.anchor('home/view_adminsechead/'.$list['pr_id'], $list['pr_id'], array("class"=>"anchorStrip", "target"=>"_blank")).'</td>';
+                      echo '<td>'.$readStyle.anchor('home/view_adminsechead/'.$list['pr_id'], $list['pr_id'], array("class"=>"anchorStrip")).'</td>';
 					  
                       echo '<td>'.$list['pr_paymentForm'].'</td>';
                       echo '<td>'.$list['payee'].'</td>';
@@ -84,7 +84,7 @@
 					  $readStyle = "";
 					  if(!$list['approver1_read_flag'])
 						$readStyle = "<b/>";
-                      echo '<td>'.$readStyle.anchor('home/view_adminsechead/'.$list['pr_id'], $list['pr_id'], array("class"=>"anchorStrip", "target"=>"_blank")).'</td>';
+                      echo '<td>'.$readStyle.anchor('home/view_adminsechead/'.$list['pr_id'], $list['pr_id'], array("class"=>"anchorStrip")).'</td>';
 					  
                       echo '<td>'.$list['pr_paymentForm'].'</td>';
                       echo '<td>'.$list['payee'].'</td>';
@@ -122,7 +122,7 @@
 					  $readStyle = "";
 					  if(!$list['approver1_read_flag'])
 						$readStyle = "<b/>";
-                      echo '<td>'.$readStyle.anchor('home/view_adminsechead/'.$list['pr_id'], $list['pr_id'], array("class"=>"anchorStrip", "target"=>"_blank")).'</td>';
+                      echo '<td>'.$readStyle.anchor('home/view_adminsechead/'.$list['pr_id'], $list['pr_id'], array("class"=>"anchorStrip")).'</td>';
 					  
                       echo '<td>'.$list['payee'].'</td>';
                       echo '<td>'.$list['amount'].'</td>';

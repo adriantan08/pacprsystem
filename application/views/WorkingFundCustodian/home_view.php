@@ -8,10 +8,10 @@
 
 <div style="width: 75%; margin: 0 auto; padding: 20px 0 40px;">
     <ul class="tabs" data-persist="true">
-		    <li><a href="#view0">Drafted PRs</a></li>
-        <li><a href="#view1">Submitted PRs</a></li>
-        <li><a href="#view2" style="color:#009900;">Approved PRs</a></li>
-        <li><a href="#view3">Returned PRs</a></li>
+		 <li><a id="tabHeader" href="#view0">Drafts</a></li>
+        <li><a id="tabHeader" href="#view1">Submitted</a></li>
+        <li><a id="tabHeader" href="#view2" style="color:#009900;">Approved</a></li>
+        <li><a id="tabHeader" href="#view3">Returned</a></li>
     </ul>
     <div class="tabcontents">
 		 <div id="view0">
@@ -39,7 +39,7 @@
 					  $readStyle = "";
 					  if(!$list['request_read_flag'])
 						$readStyle = "<b/>";
-                      echo '<td>'.$readStyle.anchor('home/view/'.$list['pr_id'], $list['pr_id'], array("class"=>"anchorStrip", "target"=>"_blank")).'</td>';
+                      echo '<td>'.$readStyle.anchor('home/view/'.$list['pr_id'], $list['pr_id'], array("class"=>"anchorStrip")).'</td>';
 					  
 					  
                       echo '<td>'.$list['pr_paymentForm'].'</td>';
@@ -80,7 +80,7 @@
 					  $readStyle = "";
 					  if(!$list['request_read_flag'])
 						$readStyle = "<b/>";
-                      echo '<td>'.$readStyle.anchor('home/view/'.$list['pr_id'], $list['pr_id'], array("class"=>"anchorStrip", "target"=>"_blank")).'</td>';
+                      echo '<td>'.$readStyle.anchor('home/view/'.$list['pr_id'], $list['pr_id'], array("class"=>"anchorStrip")).'</td>';
 					  
                       echo '<td>'.$list['pr_status'].'</td>';
                       echo '<td>'.$list['pr_paymentForm'].'</td>';
@@ -129,7 +129,7 @@
 					  $readStyle = "";
 					  if(!$list['request_read_flag'])
 						$readStyle = "<b/>";
-                      echo '<td>'.$readStyle.anchor('home/view/'.$list['pr_id'], $list['pr_id'], array("class"=>"anchorStrip", "target"=>"_blank")).'</td>';
+                      echo '<td>'.$readStyle.anchor('home/view/'.$list['pr_id'], $list['pr_id'], array("class"=>"anchorStrip")).'</td>';
 					  
                       echo '<td>'.$list['pr_paymentForm'].'</td>';
                       echo '<td>'.$list['payee'].'</td>';
@@ -170,7 +170,7 @@
 					  $readStyle = "";
 					  if(!$list['request_read_flag'])
 						$readStyle = "<b/>";
-                      echo '<td>'.$readStyle.anchor('home/view/'.$list['pr_id'], $list['pr_id'], array("class"=>"anchorStrip", "target"=>"_blank")).'</td>';
+                      echo '<td>'.$readStyle.anchor('home/view/'.$list['pr_id'], $list['pr_id'], array("class"=>"anchorStrip")).'</td>';
 					  
                       echo '<td>'.$list['payee'].'</td>';
                       echo '<td>'.$list['amount'].'</td>';
@@ -198,9 +198,9 @@
 
 <script>
     $(document).ready(function() {
-		 $('#mytable0').DataTable();
-        $('#mytable1').DataTable();
-        $('#mytable2').DataTable();
-        $('#mytable3').DataTable();
+		 $('#mytable0').DataTable({"pageLength":50});
+        $('#mytable1').DataTable({"pageLength":50});
+        $('#mytable2').DataTable({"pageLength":50});
+        $('#mytable3').DataTable({"pageLength":50});
     } );
 </script>

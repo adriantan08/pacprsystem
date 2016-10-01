@@ -212,7 +212,10 @@ foreach($prList as $prDetails){
 				<?=$prDetails['details']?>
 			</td>
 		</tr>
-		
+		<tr>
+			<!--Put signature URL elsewhere; in constants.php-->
+			<td colspan=2><img src="<?=base_url()?>/img/sig.jpg" style="width:200px;"/></td>
+		</tr>
 
 	</table>
 	</td>

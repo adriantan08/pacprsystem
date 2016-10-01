@@ -17,7 +17,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<!--Sweet Alert Import-->
 
 	<link rel="stylesheet" type="text/css" href="<?= base_url()?>lib/sweetalert/lib/sweet-alert.css">
-	<link rel="stylesheet" type="text/css" href="<?= base_url()?>lib/tab-content/template1/tabcontent.css">
+	<link rel="stylesheet" type="text/css" href="<?= base_url()?>lib/tab-content/template3/tabcontent.css">
 	<link rel="stylesheet" type="text/css" href="<?= base_url()?>lib/DataTables/media/css/jquery.dataTables.min.css">
 	<script src="<?= base_url()?>lib/sweetalert/lib/sweet-alert.min.js"></script>
 
@@ -53,7 +53,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <br/><br/><br/>
 <div>
 <h3 id="myH3" style="position:relative; left:20px;">Welcome <?=$this->session->userdata('empFirstName').' '.$this->session->userdata('empLastName').'('.strtoupper($this->session->userdata('userRole')).')'?></h3><hr class="carved"/>
-		<?= $content?>
+		<div style="position:relative; top:-70px;"><?= $content?></div>
 </div>
 </body>
 </html>

@@ -7,19 +7,19 @@
 
 <script>
     $(document).ready(function() {
-        $('#mytable1').DataTable();
-        $('#mytable2').DataTable();
-        $('#mytable3').DataTable();
-        $('#mytable4').DataTable();
+        $('#mytable1').DataTable({"pageLength":50});
+        $('#mytable2').DataTable({"pageLength":50});
+        $('#mytable3').DataTable({"pageLength":50});
+        $('#mytable4').DataTable({"pageLength":50});
     } );
 </script>
 
 <div style="width: 75%; margin: 0 auto; padding: 120px 0 40px;">
     <ul class="tabs" data-persist="true">
-        <li><a href="#view1">Posted PRs (<u><</u>1k PhP)</a></li>
-        <li><a href="#view2">Posted PRs (1k+ PhP)</a></li>
-        <li><a href="#view3">Verified PRs</a></li>
-        <li><a href="#view4">Returned PRs</a></li>
+        <li><a id="tabHeader" href="#view1">Posted (<u><</u>1k PhP)</a></li>
+        <li><a id="tabHeader" href="#view2">Posted (1k+ PhP)</a></li>
+        <li><a id="tabHeader" href="#view3">Verified</a></li>
+        <li><a id="tabHeader" href="#view4">Returned</a></li>
     </ul>
     <div class="tabcontents">
         <div id="view1">
@@ -47,7 +47,7 @@
 					  $readStyle = "";
 					  if(!$list['approver2_read_flag'])
 						$readStyle = "<b/>";
-                      echo '<td>'.$readStyle.anchor('home/view_verifier/'.$list['pr_id'], $list['pr_id'], array("class"=>"anchorStrip", "target"=>"_blank")).'</td>';
+                      echo '<td>'.$readStyle.anchor('home/view_verifier/'.$list['pr_id'], $list['pr_id'], array("class"=>"anchorStrip")).'</td>';
 					  
                       echo '<td>'.$list['payee'].'</td>';
                       echo '<td>'.$list['amount'].'</td>';
@@ -86,7 +86,7 @@
 					  $readStyle = "";
 					  if(!$list['approver2_read_flag'])
 						$readStyle = "<b/>";
-                      echo '<td>'.$readStyle.anchor('home/view_verifier/'.$list['pr_id'], $list['pr_id'], array("class"=>"anchorStrip", "target"=>"_blank")).'</td>';
+                      echo '<td>'.$readStyle.anchor('home/view_verifier/'.$list['pr_id'], $list['pr_id'], array("class"=>"anchorStrip")).'</td>';
 					
                       echo '<td>'.$list['payee'].'</td>';
                       echo '<td>'.$list['amount'].'</td>';
@@ -125,7 +125,7 @@
 					  $readStyle = "";
 					  if(!$list['approver2_read_flag'])
 						$readStyle = "<b/>";
-                      echo '<td>'.$readStyle.anchor('home/view_verifier/'.$list['pr_id'], $list['pr_id'], array("class"=>"anchorStrip", "target"=>"_blank")).'</td>';
+                      echo '<td>'.$readStyle.anchor('home/view_verifier/'.$list['pr_id'], $list['pr_id'], array("class"=>"anchorStrip")).'</td>';
 					  
                       echo '<td>'.$list['payee'].'</td>';
                       echo '<td>'.$list['amount'].'</td>';
@@ -163,7 +163,7 @@
 					  $readStyle = "";
 					  if(!$list['approver2_read_flag'])
 						$readStyle = "<b/>";
-                      echo '<td>'.$readStyle.anchor('home/view_verifier/'.$list['pr_id'], $list['pr_id'], array("class"=>"anchorStrip", "target"=>"_blank")).'</td>';
+                      echo '<td>'.$readStyle.anchor('home/view_verifier/'.$list['pr_id'], $list['pr_id'], array("class"=>"anchorStrip")).'</td>';
 					  
                       echo '<td>'.$list['payee'].'</td>';
                       echo '<td>'.$list['amount'].'</td>';
