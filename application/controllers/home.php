@@ -250,12 +250,12 @@ class Home extends CI_Controller {
 			$objPHPExcel->setActiveSheetIndex(0);
 			
 			$objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
-			
+			ob_end_clean();
 			// We'll be outputting an excel file
 			header('Content-type: application/vnd.ms-excel');
 
 			// It will be called file.xls
-			header('Content-Disposition: attachment; filename="PAC PR Report - "'.date("Y-m-d").".xls");
+			header('Content-Disposition: attachment; filename="PAC PR Report - "'.date("Y-m-d").".xlsx");
 
 			// Write file to the browser
 			$objWriter->save('php://output');

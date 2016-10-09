@@ -58,18 +58,20 @@
 </table>
 
 <script>
-	$("button[name='download']").click(function(){
-		var type = this.id;
+	$("button[name='download']").on("click",function(){
 		
+		var type = this.id;
+		var url = "<?=base_url()?>home/downloadreport";
 		$.ajax({
-			url:"<?=base_url()?>home/downloadreport",
+			url:url,
 			method:"POST",
-			async: true,
+			async: false,
 			data:{
 				type: type
 			},
 			success: function(data){
-				window.open(url,'_blank' );
+				
+				window.open(url,'_blank' );		
 			}
 		})
 		.done(function(data){
