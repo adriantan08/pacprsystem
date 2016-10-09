@@ -14,6 +14,7 @@
 </script>
 
 <div style="width: 75%; margin: 0 auto; padding: 120px 0 40px;">
+
     <ul class="tabs" data-persist="true">
       <li><a href="#view1" id="tabHeader">Verified</a></li>
       
@@ -46,7 +47,7 @@
 					  $readStyle = "";
 					  if(!$list['approver3_read_flag'])
 						$readStyle = "<b/>";
-                      echo '<td>'.$readStyle.anchor('home/view_approver/'.$list['pr_id'], $list['pr_id'], array("class"=>"anchorStrip", "target"=>"_blank")).'</td>';
+                      echo '<td>'.$readStyle.anchor('home/view_approver/'.$list['pr_id'], $list['pr_id'], array("class"=>"anchorStrip")).'</td>';
 					  
 					 
                       echo '<td>'.$list['payee'].'</td>';
@@ -80,6 +81,7 @@
               </thead>
               <tbody>
                 <?php
+				
                   $prList = $this->Crud_model->getPrListForAa('40', '> 0');
                   if($prList != null){
                     foreach($prList as $list){
@@ -90,7 +92,7 @@
 					  $readStyle = "";
 					  if(!$list['approver3_read_flag'])
 						$readStyle = "<b/>";
-                      echo '<td>'.$readStyle.anchor('home/view_approver/'.$list['pr_id'], $list['pr_id'], array("class"=>"anchorStrip", "target"=>"_blank")).'</td>';
+                      echo '<td>'.$readStyle.anchor('home/view_approver/'.$list['pr_id'], $list['pr_id'], array("class"=>"anchorStrip")).'</td>';
 					  
                       echo '<td>'.$list['payee'].'</td>';
                       echo '<td>'.$list['amount'].'</td>';

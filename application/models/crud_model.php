@@ -217,7 +217,7 @@ class Crud_model extends CI_Model {
 			$roleQuery = " AND a.requestor_id = ".$empId;
 		}
 		if($empRole=='ASH') {
-			$roleQuery = " AND (a.approver1_id = ".$empId." or a.approver1_id = 999) ";
+			$roleQuery = " AND (a.approver1_id = ".$empId." or a.approver1_id = 999) AND g.post_step = ".$this->session->userdata('expCodeId');
 		}
 		if($empRole=='VERIFIER') {
 			$roleQuery = " AND (a.approver2_id = ".$empId." or a.approver2_id = 999) ";
@@ -239,12 +239,13 @@ class Crud_model extends CI_Model {
 				b.payment_form AS `pr_paymentForm`,
 				b.payee AS `payee`,
 				b.amount AS `amount`
-			FROM pac_pr_header a, pac_pr_details b, pac_employees c, pac_pr_status d
+			FROM pac_pr_header a, pac_pr_details b, pac_employees c, pac_pr_status d, pac_exp_codes g
 			WHERE a.pr_id = b.pr_id
 			AND a.pr_status in ".$status.
 			$roleQuery."
 			AND a.requestor_id = c.id
 			AND a.pr_status = d.status
+			AND b.exp_code = g.exp_code_id
 			ORDER BY a.changed_on DESC;
 		";
 		$q = $this->getdb()->query($sql);
@@ -314,10 +315,12 @@ class Crud_model extends CI_Model {
 				a.approver1_id AS `approver1_id`,
 				a.approver2_id AS `approver2_id`,
 				a.approver3_id AS `approver3_id`
-			FROM pac_pr_header a, pac_pr_details b, pac_employees c
+			FROM pac_pr_header a, pac_pr_details b, pac_employees c, pac_exp_codes g
 			WHERE a.pr_id = b.pr_id
 			AND a.pr_status = ?
 			AND a.requestor_id = c.id
+			AND b.exp_code = g.exp_code_id
+			AND g.post_step = ".$this->session->userdata('expCodeId')."
 			ORDER BY a.changed_on DESC;
 		";
 		$q = $this->getdb()->query($sql, array($status));
@@ -359,7 +362,7 @@ class Crud_model extends CI_Model {
 	}
 
 	function getPrListForAa($status, $amount){
-
+		
 		$sql = "
 		SELECT
 		a.pr_id AS `pr_id`,
@@ -381,13 +384,17 @@ class Crud_model extends CI_Model {
 		a.approver1_id AS `approver1_id`,
 		a.approver2_id AS `approver2_id`,
 		a.approver3_id AS `approver3_id`
-		FROM pac_pr_header a left outer join pac_employees f on a.approver3_id = f.id, pac_pr_details b, pac_employees c, pac_employees d, pac_employees e
+		FROM pac_pr_header a left outer join pac_employees f on a.approver3_id = f.id, pac_pr_details b, pac_employees c, pac_employees d, pac_employees e,
+		pac_exp_codes g
 		WHERE a.pr_id = b.pr_id
 		AND a.pr_status = ?
 		AND b.amount ".$amount."
 		AND a.requestor_id = c.id
 		AND a.approver1_id = d.id
 		AND a.approver2_id = e.id
+		AND b.exp_code = g.exp_code_id
+		AND g.approve_step = ".$this->session->userdata('expCodeId')."
+		
 		ORDER BY a.changed_on DESC;
 		";
 		$q = $this->getdb()->query($sql, array($status));
@@ -428,13 +435,16 @@ class Crud_model extends CI_Model {
 				pac_employees e on a.approver2_id = e.id, 
 			pac_pr_details b, 
 			pac_employees c, 
-			pac_employees d
+			pac_employees d,
+			pac_exp_codes g
 		WHERE a.pr_id = b.pr_id
 		AND a.pr_status = ?
 		AND b.amount ".$amount.
 		$query."
 		AND a.requestor_id = c.id
 		AND a.approver1_id = d.id
+		AND b.exp_code = g.exp_code_id
+		AND g.verify_step = ".$this->session->userdata('expCodeId')."
 		ORDER BY a.changed_on DESC;
 	";
 
@@ -573,12 +583,80 @@ class Crud_model extends CI_Model {
 		}
 	}	
 
+	function isAuthorizedExpCode($prId, $column){
+		$sql="
+			SELECT *
+			FROM pac_pr_details a, pac_employees b, pac_exp_codes c
+			WHERE a.exp_code = c.exp_code_id
+			AND c.$column = ".$this->session->userdata("expCodeId")."
+			AND a.pr_id = $prId;
+		";
+		$q = $this->getdb()->query($sql);
+		if($q->num_rows()>0){
+			return true;
+		}
+		return false;
+	}
 
 /*******************************************************************
 *
 *	SELECT
 *
 ********************************************************************/
+
+
+/*******************************************************************
+*
+*	REPORTS
+*
+********************************************************************/
+
+	function getReport1(){
+		//filter date as necessary
+		$sql ='
+			
+			SELECT 
+				a.created_on,
+				a.pr_date,
+				a.pr_id,
+				
+				b.payee,
+				b.amount,
+				b.purpose,
+				b.po_jo_no,
+				b.rr_no,
+				b.inv_no,
+				b.others,
+				b.exp_code,
+				c.exp_desc,
+				b.details,
+				CONCAT(d.emp_firstname," ",d.emp_lastname) AS `prepared_by` ,
+				CONCAT(e.emp_firstname," ",e.emp_lastname) AS `verified_by` ,
+				a.verified_date AS `verified_date`,
+				CONCAT(f.emp_firstname," ",f.emp_lastname) AS `approved_by` ,
+				a.approved_date AS `approved_date`
+			FROM 
+				pac_pr_header a, 
+				pac_pr_details b, 
+				pac_exp_codes c,
+				
+				pac_employees d,
+				pac_employees e,
+				pac_employees f
+				
+			WHERE a.pr_id  = b.pr_id
+			AND b.exp_code = c.exp_code_id
+			AND a.requestor_id = d.id
+			AND a.approver2_id = e.id
+			AND a.approver3_id = f.id;
+
+		';
+		$q = $this->getdb()->query($sql);
+		if($q->num_rows()>0){
+			return $q->result_array();
+		}
+		return null;
+	}
 
 
 /*******************************************************************
@@ -679,10 +757,26 @@ class Crud_model extends CI_Model {
 		else
 			exit(); //problem with getting current user role. If role doesn't match anything, do nothing.
 
+		
+		//column2 dictates what type of approval it is based on status code, so we can properly track
+		date_default_timezone_set(DEFAULT_TIMEZONE);
+		$serverDate = date('Y-m-d H:i:s');
+		
+		$column2 = '';
+		if($prStatus == 20)
+			$column2 = "posted_date = '".$serverDate."',"; 
+		else if($prStatus == 30)
+			$column2 = "verified_date = '".$serverDate."',"; 
+		else if($prStatus == 40)
+			$column2 = "approved_date = '".$serverDate."',"; 
+		
+		//else, user sent back the PR;
+		
 		$sql = "
 			UPDATE pac_pr_header
 			SET
 				pr_status = ?,
+				".$column2."
 				".$column." = ?
 			WHERE
 				pr_id = ?;

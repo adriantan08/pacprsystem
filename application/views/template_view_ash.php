@@ -31,6 +31,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<div id = "navigation" style="background: #33b5e5; position:absolute; top:0px; width:95%; left:0px;">
 		<ul id="trans-nav">
 			<li><?php echo anchor('/home', 'Home');?></li>
+			<li><?php echo anchor('/home/report', 'Reports');?></li>
 		</ul>
 
 
@@ -52,7 +53,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 <div style="align=center;">
 		<h3 id="myH3">Welcome <?=$this->session->userdata('empFirstName').' '.$this->session->userdata('empLastName').'('.strtoupper($this->session->userdata('userRole')).')'?></h3>
-		<div style="position:relative; top:-70px;"><?= $content?></div>
+		<div><?= $content?></div>
 </div>
 </body>
 </html>

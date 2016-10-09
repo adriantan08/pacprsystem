@@ -649,5 +649,5 @@ $(function () {
 		},
 		
 	});
-	
+	var expCodes = JSON.parse('<?=$expCodesList?>');
 </script>

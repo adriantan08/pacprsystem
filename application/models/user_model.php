@@ -31,7 +31,8 @@ class User_model extends CI_Model {
 				pac_emp_roles b
 			WHERE
 				a.emp_role_id = b.id AND
-				a.emp_username = ?;
+				a.emp_username = ? AND
+				a.emp_status = 'ACTIVE';
 		";
 		
 		$q = $this->getdb()->query($sql, array($username));

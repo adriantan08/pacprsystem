@@ -271,12 +271,28 @@
 	$("button[name='submitButton']").click(function(){
 		var status = null;
 		var prNum = document.getElementById('prNum').value;
-		if($(this).attr('id') == 'return')
-			status = <?=UNVERIFIED_STATUS?>;
-		else if($(this).attr('id') == 'verify')
+		if($(this).attr('id') == 'return'){
+			status = <?=FORREVIEW_STATUS?>;
+			$.ajax({
+				url:"<?=base_url()?>api/addcomment",
+				method:"POST",
+				async: true,
+				data:{
+					prId : <?=$prDetails['pr_id']?>,
+					comment: "The ticket was sent back by an Verifier (auto-generated)."
+					
+				},
+				success: function(data){}
+			})
+			.done(function(data){
+				approvePr("<?=base_url()?>", 'VERIFIER', status, prNum);
+			});
+		}
+			
+		else if($(this).attr('id') == 'verify'){
 			status = <?=VERIFIED_STATUS?>;
-		
-		approvePr("<?=base_url()?>", 'VERIFIER', status, prNum);
+			approvePr("<?=base_url()?>", 'VERIFIER', status, prNum);
+		}
 		
 	});
 	

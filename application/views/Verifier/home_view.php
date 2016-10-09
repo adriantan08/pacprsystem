@@ -15,6 +15,7 @@
 </script>
 
 <div style="width: 75%; margin: 0 auto; padding: 120px 0 40px;">
+
     <ul class="tabs" data-persist="true">
         <li><a id="tabHeader" href="#view1">Posted (<u><</u>1k PhP)</a></li>
         <li><a id="tabHeader" href="#view2">Posted (1k+ PhP)</a></li>

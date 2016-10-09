@@ -294,7 +294,7 @@ select{
 			<input type=text id="prInvoiceNo"/>
 		</li>
 		<li>
-			<label>Others (min. 25 chars): </label>
+			<label>Others <span class="required">*</span></label>
 			<input type=text id="prOthers"/>
 		</li>
 		<li>
@@ -581,5 +581,7 @@ $(function () {
 		},
 		
 	});
+	
+	var expCodes = JSON.parse('<?=$expCodesList?>');
 	
 </script>

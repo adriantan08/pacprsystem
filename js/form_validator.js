@@ -46,7 +46,8 @@ function runValidation(){
 	
 	bool = validateIsElementEmpty("prDetails");
 	
-	bool = validateMinCharTextfield(25, "prOthers");
+	bool = validateExpCode('prExpCode');
+	
 	
 	if(!bool){
 		hit = true;
@@ -82,6 +83,25 @@ function validateIsElementEmpty(id){
 	}
 	
 	return true;
+}
+
+function validateExpCode(id){
+	
+	var val = document.getElementById(id).value;
+	for(var key in expCodes){
+		if(expCodes.hasOwnProperty(key)){
+			if(expCodes[key]['label'] == val){
+				document.getElementById(id).style.borderBottom=revertStyleInput;
+				return true;
+			}
+				
+		}
+		
+	}
+	document.getElementById(id).style.borderBottom=errStyleInput;
+	hit = true;
+	return false;
+	
 }
 
 function validateMinCharTextfield(charCount, id){
