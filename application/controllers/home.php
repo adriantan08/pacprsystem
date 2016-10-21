@@ -177,16 +177,15 @@ class Home extends CI_Controller {
 		4. All PRs issued for particule payee for a period of time
 	*/
 
-	function downloadreport(){
+	function downloadreport1($from, $to){
 		include 'lib/phpexcel/Classes/PHPExcel.php';
 		include 'lib/phpexcel/Classes/PHPExcel/Writer/Excel2007.php';
-		
-		if(!isset($_POST['type'])){
-			echo 'NO POST DATA';
-		}
+		$from  = str_replace('-','/', urldecode($from));
+		$to  = str_replace('-','/', urldecode($to));
 
-		$arr =  array();
-		if($arr != null || true){
+		$arr =  $this->Crud_model->paymentReqIssApp($from, $to);
+		
+		if($arr != null){
 			
 			$objPHPExcel = new PHPExcel();
 			
@@ -221,25 +220,270 @@ class Home extends CI_Controller {
 			);
 			$objPHPExcel->getActiveSheet()->fromArray($dataArray, NULL, 'A'.$rowCtr++);
 			foreach($arr as $row){
+				
 				$dataArray = array(
-					'DATE ENCODED',
-						'PR DATE',
-						'PR. NO.',
-						'PAYEE',
-						'AMOUNT',
-						'PURPOSE',
-						'P.O. / J.O. NO.',
-						'RECEIVING REPORT NO.',
-						'INV. NO.',
-						'OTHERS',
-						'Expenditure Code',
-						'Expenditure Description',
-						'DETAILS',
-						'PREPARED BY',
-						'VERIFIED BY',
-						'DATE VERIFIED',
-						'APPROVED BY',
-						'DATE APPROVED'
+						$row['created_on'],
+						$row['pr_date'],
+						$row['pr_id'],
+						$row['payee'],
+						$row['amount'],
+						$row['purpose'],
+						$row['po_jo_no'],
+						$row['rr_no'],
+						$row['inv_no'],
+						$row['others'],
+						$row['exp_code'],
+						$row['exp_desc'],
+						$row['details'],
+						$row['prepared_by'],
+						$row['verified_by'],
+						$row['verified_date'],
+						$row['approved_by'],
+						$row['approved_date'],
+				);
+				$objPHPExcel->getActiveSheet()->fromArray($dataArray, NULL, 'A'.$rowCtr++);
+			}
+			$objPHPExcel->getActiveSheet()->setTitle('PAC PR Report');
+			
+			
+			//Get the Focused/Active sheet back to In Scope.
+			$objPHPExcel->setActiveSheetIndex(0);
+			
+			$objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
+			ob_end_clean();
+			// We'll be outputting an excel file
+			header('Content-type: application/vnd.ms-excel');
+
+			// It will be called file.xls
+			header('Content-Disposition: attachment; filename="PAC PR Report - "'.date("Y-m-d").".xlsx");
+
+			// Write file to the browser
+			$objWriter->save('php://output');
+			
+		}
+	}
+	
+	function downloadreport2(){
+		include 'lib/phpexcel/Classes/PHPExcel.php';
+		include 'lib/phpexcel/Classes/PHPExcel/Writer/Excel2007.php';
+		
+		$arr =  $this->Crud_model->paymentReqForApp();
+		
+		if($arr != null){
+			
+			$objPHPExcel = new PHPExcel();
+			
+			date_default_timezone_set("Asia/Singapore");
+			
+			$objPHPExcel->getProperties()->setCreator("PAC PR SYSTEM");
+			$objPHPExcel->getProperties()->setLastModifiedBy("");
+			
+			
+			$objPHPExcel->setActiveSheetIndex(0);
+			$rowCtr = 1;
+			
+			$dataArray = array(
+				'DATE ENCODED',
+				'PR DATE',
+				'PR. NO.',
+				'PAYEE',
+				'AMOUNT',
+				'PURPOSE',
+				'P.O. / J.O. NO.',
+				'RECEIVING REPORT NO.',
+				'INV. NO.',
+				'OTHERS',
+				'Expenditure Code',
+				'Expenditure Description',
+				'DETAILS',
+				'PREPARED BY',
+				'VERIFIED BY',
+				'DATE VERIFIED'
+			);
+			$objPHPExcel->getActiveSheet()->fromArray($dataArray, NULL, 'A'.$rowCtr++);
+			foreach($arr as $row){
+				
+				$dataArray = array(
+						$row['created_on'],
+						$row['pr_date'],
+						$row['pr_id'],
+						$row['payee'],
+						$row['amount'],
+						$row['purpose'],
+						$row['po_jo_no'],
+						$row['rr_no'],
+						$row['inv_no'],
+						$row['others'],
+						$row['exp_code'],
+						$row['exp_desc'],
+						$row['details'],
+						$row['prepared_by'],
+						$row['verified_by'],
+						$row['verified_date']
+				);
+				$objPHPExcel->getActiveSheet()->fromArray($dataArray, NULL, 'A'.$rowCtr++);
+			}
+			$objPHPExcel->getActiveSheet()->setTitle('PAC PR Report');
+			
+			
+			//Get the Focused/Active sheet back to In Scope.
+			$objPHPExcel->setActiveSheetIndex(0);
+			
+			$objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
+			ob_end_clean();
+			// We'll be outputting an excel file
+			header('Content-type: application/vnd.ms-excel');
+
+			// It will be called file.xls
+			header('Content-Disposition: attachment; filename="PAC PR Report - "'.date("Y-m-d").".xlsx");
+
+			// Write file to the browser
+			$objWriter->save('php://output');
+			
+		}
+	}
+	
+	function downloadreport3(){
+		include 'lib/phpexcel/Classes/PHPExcel.php';
+		include 'lib/phpexcel/Classes/PHPExcel/Writer/Excel2007.php';
+		
+		$arr =  $this->Crud_model->paymentReqForVer();
+		
+		if($arr != null){
+			
+			$objPHPExcel = new PHPExcel();
+			
+			date_default_timezone_set("Asia/Singapore");
+			
+			$objPHPExcel->getProperties()->setCreator("PAC PR SYSTEM");
+			$objPHPExcel->getProperties()->setLastModifiedBy("");
+			
+			
+			$objPHPExcel->setActiveSheetIndex(0);
+			$rowCtr = 1;
+			
+			$dataArray = array(
+				'DATE ENCODED',
+				'PR DATE',
+				'PR. NO.',
+				'PAYEE',
+				'AMOUNT',
+				'PURPOSE',
+				'P.O. / J.O. NO.',
+				'RECEIVING REPORT NO.',
+				'INV. NO.',
+				'OTHERS',
+				'Expenditure Code',
+				'Expenditure Description',
+				'DETAILS',
+				'PREPARED BY'
+			);
+			$objPHPExcel->getActiveSheet()->fromArray($dataArray, NULL, 'A'.$rowCtr++);
+			foreach($arr as $row){
+				
+				$dataArray = array(
+						$row['created_on'],
+						$row['pr_date'],
+						$row['pr_id'],
+						$row['payee'],
+						$row['amount'],
+						$row['purpose'],
+						$row['po_jo_no'],
+						$row['rr_no'],
+						$row['inv_no'],
+						$row['others'],
+						$row['exp_code'],
+						$row['exp_desc'],
+						$row['details'],
+						$row['prepared_by']
+				);
+				$objPHPExcel->getActiveSheet()->fromArray($dataArray, NULL, 'A'.$rowCtr++);
+			}
+			$objPHPExcel->getActiveSheet()->setTitle('PAC PR Report');
+			
+			
+			//Get the Focused/Active sheet back to In Scope.
+			$objPHPExcel->setActiveSheetIndex(0);
+			
+			$objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
+			ob_end_clean();
+			// We'll be outputting an excel file
+			header('Content-type: application/vnd.ms-excel');
+
+			// It will be called file.xls
+			header('Content-Disposition: attachment; filename="PAC PR Report - "'.date("Y-m-d").".xlsx");
+
+			// Write file to the browser
+			$objWriter->save('php://output');
+			
+		}
+	}
+	
+	function downloadreport4($payee, $from, $to){
+		include 'lib/phpexcel/Classes/PHPExcel.php';
+		include 'lib/phpexcel/Classes/PHPExcel/Writer/Excel2007.php';
+		
+		$payee = urldecode($payee);
+		$from  = str_replace('-','/', urldecode($from));
+		$to  = str_replace('-','/', urldecode($to));
+		
+		$arr =  $this->Crud_model->paymentReqPerPayee($payee,$from,$to);
+		
+		if($arr != null){
+			
+			$objPHPExcel = new PHPExcel();
+			
+			date_default_timezone_set("Asia/Singapore");
+			
+			$objPHPExcel->getProperties()->setCreator("PAC PR SYSTEM");
+			$objPHPExcel->getProperties()->setLastModifiedBy("");
+			
+			
+			$objPHPExcel->setActiveSheetIndex(0);
+			$rowCtr = 1;
+			
+			$dataArray = array(
+				'DATE ENCODED',
+				'PR DATE',
+				'PR. NO.',
+				'PAYEE',
+				'AMOUNT',
+				'PURPOSE',
+				'P.O. / J.O. NO.',
+				'RECEIVING REPORT NO.',
+				'INV. NO.',
+				'OTHERS',
+				'Expenditure Code',
+				'Expenditure Description',
+				'DETAILS',
+				'PREPARED BY',
+				'VERIFIED BY',
+				'DATE VERIFIED',
+				'APPROVED BY',
+				'DATE APPROVED'
+			);
+			$objPHPExcel->getActiveSheet()->fromArray($dataArray, NULL, 'A'.$rowCtr++);
+			foreach($arr as $row){
+				
+				$dataArray = array(
+						$row['created_on'],
+						$row['pr_date'],
+						$row['pr_id'],
+						$row['payee'],
+						$row['amount'],
+						$row['purpose'],
+						$row['po_jo_no'],
+						$row['rr_no'],
+						$row['inv_no'],
+						$row['others'],
+						$row['exp_code'],
+						$row['exp_desc'],
+						$row['details'],
+						$row['prepared_by'],
+						$row['verified_by'],
+						$row['verified_date'],
+						$row['approved_by'],
+						$row['approved_date'],
 				);
 				$objPHPExcel->getActiveSheet()->fromArray($dataArray, NULL, 'A'.$rowCtr++);
 			}

@@ -193,7 +193,14 @@ foreach($prList as $prDetails){
 				<font class="mylabel">Others:</font>
 			</td>
 			<td>
-				<?=$prDetails['others']?>
+				<?php
+					//limiting others to display max of 25 chars
+					if(strlen($prDetails['others'])>25)
+						echo substr($prDetails['others'], 0, 25).'...';
+					else 
+						echo $prDetails['others'];
+				?>
+				
 			</td>
 		</tr>
 		<tr class="supportingDocumentSection">

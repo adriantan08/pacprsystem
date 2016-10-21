@@ -32,6 +32,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		<ul id="trans-nav">
 			<li><?php echo anchor('/home', 'Home');?></li>
 			<li><?php echo anchor('/home/report', 'Reports');?></li>
+			<li><?php echo anchor('/pac_exp_code', 'Admin - Exp Codes');?></li>
 		</ul>
 
 

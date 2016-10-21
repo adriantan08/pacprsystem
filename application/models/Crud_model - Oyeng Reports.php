@@ -68,19 +68,19 @@ class Crud_model extends CI_Model {
 		$this->logHistory($json,"CREATE");
 
 	}
-	
+
 	function addComment($prId, $comment){
 		$userId = $this->session->userdata('userId');
 		$sql = "
 			INSERT INTO pac_pr_comments(pr_id, comment_text, comment_by)
 			VALUES(?,?,?);
 		";
-		
+
 		$this->getdb()->query($sql, array(
 			$prId, $comment, $userId
 		));
-		
-		
+
+
 	}
 
 /*******************************************************************
@@ -118,23 +118,23 @@ class Crud_model extends CI_Model {
 		}
 		return null;
 	}
-	
+
 	//USED IN PRINT
 	function getBulkPr($ids){
 		$ids = explode(' ', $ids);
-		
+
 		//prepare the question marks for the prepared statement later where the $ids will be binded
 		$questionmarks = array();
 		if(count($ids)>0){
 			foreach($ids as $i){
-				//To be safe on our question, we check if we got all IDs are integer. 
+				//To be safe on our question, we check if we got all IDs are integer.
 				if(!is_numeric($i)) exit("Malfromed parameter");
 				$questionmarks[] = '?';
 			}
 		}
 		else
 			exit("Nothing to print.");
-		
+
 		$sql = "
 			SELECT
 				a.pr_id AS `pr_id`,
@@ -162,20 +162,20 @@ class Crud_model extends CI_Model {
 			WHERE a.pr_id = b.pr_id
 			AND b.exp_code = c.exp_code_id
 			AND a.pr_id IN (
-			
+
 		";
 		$sql .= implode(',', $questionmarks);
 		$sql .= ")
 				ORDER BY a.pr_id ASC;
 		;";
-		
+
 		$q = $this->getdb()->query($sql, $ids);
 		if($q->num_rows()>0){
 			return $q->result_array();
 		}
 		return null;
 	}
-	
+
 
 //WFC
 	function getDraftedPRs($status){
@@ -217,7 +217,7 @@ class Crud_model extends CI_Model {
 			$roleQuery = " AND a.requestor_id = ".$empId;
 		}
 		if($empRole=='ASH') {
-			$roleQuery = " AND (a.approver1_id = ".$empId." or a.approver1_id = 999) AND g.post_step = ".$this->session->userdata('expCodeId');
+			$roleQuery = " AND (a.approver1_id = ".$empId." or a.approver1_id = 999) ";
 		}
 		if($empRole=='VERIFIER') {
 			$roleQuery = " AND (a.approver2_id = ".$empId." or a.approver2_id = 999) ";
@@ -239,13 +239,12 @@ class Crud_model extends CI_Model {
 				b.payment_form AS `pr_paymentForm`,
 				b.payee AS `payee`,
 				b.amount AS `amount`
-			FROM pac_pr_header a, pac_pr_details b, pac_employees c, pac_pr_status d, pac_exp_codes g
+			FROM pac_pr_header a, pac_pr_details b, pac_employees c, pac_pr_status d
 			WHERE a.pr_id = b.pr_id
 			AND a.pr_status in ".$status.
 			$roleQuery."
 			AND a.requestor_id = c.id
 			AND a.pr_status = d.status
-			AND b.exp_code = g.exp_code_id
 			ORDER BY a.changed_on DESC;
 		";
 		$q = $this->getdb()->query($sql);
@@ -305,9 +304,9 @@ class Crud_model extends CI_Model {
 				a.pr_id AS `pr_id`,
 				a.pr_status AS `pr_status`,
 				a.pr_date AS `pr_date`,
-				
+
 				a.approver1_read_flag AS `approver1_read_flag`,
-				
+
 				c.emp_firstname AS `emp_firstname`,
 				c.emp_lastname AS `emp_lastname`,
 				b.payee AS `payee`,
@@ -315,12 +314,10 @@ class Crud_model extends CI_Model {
 				a.approver1_id AS `approver1_id`,
 				a.approver2_id AS `approver2_id`,
 				a.approver3_id AS `approver3_id`
-			FROM pac_pr_header a, pac_pr_details b, pac_employees c, pac_exp_codes g
+			FROM pac_pr_header a, pac_pr_details b, pac_employees c
 			WHERE a.pr_id = b.pr_id
 			AND a.pr_status = ?
 			AND a.requestor_id = c.id
-			AND b.exp_code = g.exp_code_id
-			AND g.post_step = ".$this->session->userdata('expCodeId')."
 			ORDER BY a.changed_on DESC;
 		";
 		$q = $this->getdb()->query($sql, array($status));
@@ -337,7 +334,7 @@ class Crud_model extends CI_Model {
 				a.pr_status AS `pr_status`,
 				a.pr_date AS `pr_date`,
 				a.request_read_flag AS `request_read_flag`,
-				
+
 				b.payment_form AS `pr_paymentForm`,
 				c.emp_firstname AS `emp_firstname`,
 				c.emp_lastname AS `emp_lastname`,
@@ -362,7 +359,7 @@ class Crud_model extends CI_Model {
 	}
 
 	function getPrListForAa($status, $amount){
-		
+
 		$sql = "
 		SELECT
 		a.pr_id AS `pr_id`,
@@ -370,7 +367,7 @@ class Crud_model extends CI_Model {
 		a.pr_date AS `pr_date`,
 
 		a.approver3_read_flag AS `approver3_read_flag`,
-				
+
 		c.emp_firstname AS `emp_firstname`,
 		c.emp_lastname AS `emp_lastname`,
 		d.emp_firstname AS `asc_firstname`,
@@ -384,17 +381,13 @@ class Crud_model extends CI_Model {
 		a.approver1_id AS `approver1_id`,
 		a.approver2_id AS `approver2_id`,
 		a.approver3_id AS `approver3_id`
-		FROM pac_pr_header a left outer join pac_employees f on a.approver3_id = f.id, pac_pr_details b, pac_employees c, pac_employees d, pac_employees e,
-		pac_exp_codes g
+		FROM pac_pr_header a left outer join pac_employees f on a.approver3_id = f.id, pac_pr_details b, pac_employees c, pac_employees d, pac_employees e
 		WHERE a.pr_id = b.pr_id
 		AND a.pr_status = ?
 		AND b.amount ".$amount."
 		AND a.requestor_id = c.id
 		AND a.approver1_id = d.id
 		AND a.approver2_id = e.id
-		AND b.exp_code = g.exp_code_id
-		AND g.approve_step = ".$this->session->userdata('expCodeId')."
-		
 		ORDER BY a.changed_on DESC;
 		";
 		$q = $this->getdb()->query($sql, array($status));
@@ -416,9 +409,9 @@ class Crud_model extends CI_Model {
 		a.pr_id AS `pr_id`,
 		a.pr_status AS `pr_status`,
 		a.pr_date AS `pr_date`,
-		
+
 		a.approver2_read_flag AS `approver2_read_flag`,
-		
+
 		c.emp_firstname AS `emp_firstname`,
 		c.emp_lastname AS `emp_lastname`,
 		d.emp_firstname AS `asc_firstname`,
@@ -430,21 +423,18 @@ class Crud_model extends CI_Model {
 		a.approver1_id AS `approver1_id`,
 		a.approver2_id AS `approver2_id`,
 		a.approver3_id AS `approver3_id`
-		FROM 
-			pac_pr_header a left outer join 
-				pac_employees e on a.approver2_id = e.id, 
-			pac_pr_details b, 
-			pac_employees c, 
-			pac_employees d,
-			pac_exp_codes g
+		FROM
+			pac_pr_header a left outer join
+				pac_employees e on a.approver2_id = e.id,
+			pac_pr_details b,
+			pac_employees c,
+			pac_employees d
 		WHERE a.pr_id = b.pr_id
 		AND a.pr_status = ?
 		AND b.amount ".$amount.
 		$query."
 		AND a.requestor_id = c.id
 		AND a.approver1_id = d.id
-		AND b.exp_code = g.exp_code_id
-		AND g.verify_step = ".$this->session->userdata('expCodeId')."
 		ORDER BY a.changed_on DESC;
 	";
 
@@ -519,10 +509,10 @@ class Crud_model extends CI_Model {
 		}
 		return null;
 	}
-	
+
 	function getComments($prId){
 		$sql = "
-			SELECT  
+			SELECT
 			a.comment_text,
 			a.date_added,
 			b.emp_firstname,
@@ -532,25 +522,25 @@ class Crud_model extends CI_Model {
 		WHERE a.comment_by = b.id
 		AND a.pr_id = ?
 		ORDER BY a.date_added DESC;";
-		
+
 		$q = $this->getdb()->query($sql, array($prId));
 		if($q->num_rows()>0){
 			return $q->result_array();
 		}
 		return null;
 	}
-	
+
 	function getExpCodes(){
 		$expCode = $this->session->userdata('expCodeId');
 		$sql="
-			SELECT 
+			SELECT
 				exp_code_id,
 				exp_desc,
 				exp_remarks,
 				`status`
-			FROM pac_exp_codes WHERE submit_step IN 
-				(SELECT exp_code_id 
-					FROM pac_employees 
+			FROM pac_exp_codes WHERE submit_step IN
+				(SELECT exp_code_id
+					FROM pac_employees
 					WHERE exp_code_id = $expCode)
 			AND `status` = 'A';
 
@@ -571,7 +561,7 @@ class Crud_model extends CI_Model {
 		}
 		return null;
 	}
-	
+
 	function determineNextStatus($expCode){
 		$sql = "
 			SELECT post_step, verify_step, approve_step FROM pac_exp_codes
@@ -581,22 +571,8 @@ class Crud_model extends CI_Model {
 		if($q->num_rows()>0){
 			return $q->first_row('array');
 		}
-	}	
-
-	function isAuthorizedExpCode($prId, $column){
-		$sql="
-			SELECT *
-			FROM pac_pr_details a, pac_employees b, pac_exp_codes c
-			WHERE a.exp_code = c.exp_code_id
-			AND c.$column = ".$this->session->userdata("expCodeId")."
-			AND a.pr_id = $prId;
-		";
-		$q = $this->getdb()->query($sql);
-		if($q->num_rows()>0){
-			return true;
-		}
-		return false;
 	}
+
 
 /*******************************************************************
 *
@@ -604,60 +580,7 @@ class Crud_model extends CI_Model {
 *
 ********************************************************************/
 
-
-/*******************************************************************
-* 
-*	REPORTS - START
-*
-********************************************************************/
-
-	function getReport1(){
-		//filter date as necessary
-		$sql ='
-			
-			SELECT 
-				a.created_on,
-				a.pr_date,
-				a.pr_id,
-				
-				b.payee,
-				b.amount,
-				b.purpose,
-				b.po_jo_no,
-				b.rr_no,
-				b.inv_no,
-				b.others,
-				b.exp_code,
-				c.exp_desc,
-				b.details,
-				CONCAT(d.emp_firstname," ",d.emp_lastname) AS `prepared_by` ,
-				CONCAT(e.emp_firstname," ",e.emp_lastname) AS `verified_by` ,
-				a.verified_date AS `verified_date`,
-				CONCAT(f.emp_firstname," ",f.emp_lastname) AS `approved_by` ,
-				a.approved_date AS `approved_date`
-			FROM 
-				pac_pr_header a, 
-				pac_pr_details b, 
-				pac_exp_codes c,
-				
-				pac_employees d,
-				pac_employees e,
-				pac_employees f
-				
-			WHERE a.pr_id  = b.pr_id
-			AND b.exp_code = c.exp_code_id
-			AND a.requestor_id = d.id
-			AND a.approver2_id = e.id
-			AND a.approver3_id = f.id;
-
-		';
-		$q = $this->getdb()->query($sql);
-		if($q->num_rows()>0){
-			return $q->result_array();
-		}
-		return null;
-	}
-	/* SUMMARY OF PAYMENT REQUEST ISSUED AND APPROVED */
+/* SUMMARY OF PAYMENT REQUEST ISSUED AND APPROVED */
 function paymentReqIssApp($date1,$date2){
 	$sql = "
 		SELECT header.created_on,
@@ -673,28 +596,23 @@ function paymentReqIssApp($date1,$date2){
 					 det.exp_code,
 					 exp.exp_desc,
 					 det.details,
-					 CONCAT(app1.emp_firstname, ' ',app1.emp_lastname) as prepared_by,
-					 CONCAT(app2.emp_firstname, ' ',app2.emp_lastname) as verified_by,
-					 header.verified_date,
-					 CONCAT(app3.emp_firstname, ' ',app3.emp_lastname) as approved_by,
+					 app1.emp_firstname as app1_firstname, app1.emp_lastname as app1_lastname,
+					 app2.emp_firstname as app2_firstname, app2.emp_lastname as app2_lastname,
+					 header.verfied_date,
+					 app3.emp_firstname as app3_firstname, app3.emp_lastname as app3_lastname,
 					 header.approved_date
-		FROM 
-			pac_pr_header header, 
-			pac_pr_details det, 
-			pac_exp_codes exp,
-			pac_employees app1, 
-			pac_employees app2, 
-			pac_employees app3
+		FROM pac_pr_header header, pac_pr_details det, pac_exp_codes exp,
+		pac_employees app1, pac_employees app2, pac_employees app3
 		WHERE header.pr_id = det.pr_id
 		AND header.pr_date between '$date1' and '$date2'
 		AND det.exp_code = exp.exp_code_id
-		AND header.requestor_id = app1.id
+		AND header.approver1_id = app1.id
 		AND header.approver2_id = app2.id
 		AND header.approver3_id = app3.id
 	";
 	$q = $this->getdb()->query($sql);
 	if($q->num_rows()>0){
-		return $q->result_array();
+		return $q->first_row('array');
 	}
 }
 
@@ -714,20 +632,19 @@ function paymentReqForApp(){
 					 det.exp_code,
 					 exp.exp_desc,
 					 det.details,
-					 CONCAT(app1.emp_firstname, ' ',app1.emp_lastname) as prepared_by,
-					 CONCAT(app2.emp_firstname, ' ',app2.emp_lastname) as verified_by,
-					 header.verified_date
+					 app1.emp_firstname as app1_firstname, app1.emp_lastname as app1_lastname,
+					 app2.emp_firstname as app2_firstname, app2.emp_lastname as app2_lastname,
+					 header.verfied_date
 		FROM pac_pr_header header, pac_pr_details det, pac_exp_codes exp,
 		pac_employees app1, pac_employees app2
 		WHERE header.pr_id = det.pr_id
-		AND header.pr_status < ".APPROVED_STATUS."
 		AND det.exp_code = exp.exp_code_id
-		AND header.requestor_id = app1.id
+		AND header.approver1_id = app1.id
 		AND header.approver2_id = app2.id
 	";
 	$q = $this->getdb()->query($sql);
 	if($q->num_rows()>0){
-		return $q->result_array();
+		return $q->first_row('array');
 	}
 }
 
@@ -747,62 +664,55 @@ function paymentReqForVer(){
 					 det.exp_code,
 					 exp.exp_desc,
 					 det.details,
-					 CONCAT(app1.emp_firstname, ' ',app1.emp_lastname) as prepared_by
+					 app1.emp_firstname as app1_firstname, app1.emp_lastname as app1_lastname
 		FROM pac_pr_header header, pac_pr_details det, pac_exp_codes exp,
 		pac_employees app1
 		WHERE header.pr_id = det.pr_id
-		AND header.pr_status < ".VERIFIED_STATUS."
 		AND det.exp_code = exp.exp_code_id
-		AND header.requestor_id = app1.id
+		AND header.approver1_id = app1.id
 	";
 	$q = $this->getdb()->query($sql);
 	if($q->num_rows()>0){
-		return $q->result_array();
+		return $q->first_row('array');
 	}
 }
 
-	/* SUMMARY OF PR ISSUED FOR a PAYEE*/
-	function paymentReqPerPayee($payee,$date1,$date2){
-		$sql = "
-			SELECT header.created_on,
-						 header.pr_date,
-						 header.pr_id,
-						 det.payee,
-						 det.amount,
-						 det.purpose,
-						 det.po_jo_no,
-						 det.rr_no,
-						 det.inv_no,
-						 det.others,
-						 det.exp_code,
-						 exp.exp_desc,
-						 det.details,
-						 CONCAT(app1.emp_firstname, ' ',app1.emp_lastname) as prepared_by,
-						 CONCAT(app2.emp_firstname, ' ',app2.emp_lastname) as verified_by,
-						 header.verified_date,
-						 CONCAT(app3.emp_firstname, ' ',app3.emp_lastname) as approved_by,
-						 header.approved_date
-			FROM pac_pr_header header, pac_pr_details det, pac_exp_codes exp,
-			pac_employees app1, pac_employees app2, pac_employees app3
-			WHERE header.pr_id = det.pr_id
-			AND det.payee = '$payee'
-			AND header.pr_date between '$date1' and '$date2'
-			AND det.exp_code = exp.exp_code_id
-			AND header.requestor_id = app1.id
-			AND header.approver2_id = app2.id
-			AND header.approver3_id = app3.id
-		";
-		
-		$q = $this->getdb()->query($sql);
-		if($q->num_rows()>0){
-			return $q->result_array();
-		}
+/* SUMMARY OF PR ISSUED FOR a PAYEE*/
+function paymentReqPerPayee($payee,$date1,$date2){
+	$sql = "
+		SELECT header.created_on,
+					 header.pr_date,
+					 header.pr_id,
+					 det.payee,
+					 det.amount,
+					 det.purpose,
+					 det.po_jo_no,
+					 det.rr_no,
+					 det.inv_no,
+					 det.others,
+					 det.exp_code,
+					 exp.exp_desc,
+					 det.details,
+					 app1.emp_firstname as app1_firstname, app1.emp_lastname as app1_lastname,
+					 app2.emp_firstname as app2_firstname, app2.emp_lastname as app2_lastname,
+					 header.verfied_date,
+					 app3.emp_firstname as app3_firstname, app3.emp_lastname as app3_lastname,
+					 header.approved_date
+		FROM pac_pr_header header, pac_pr_details det, pac_exp_codes exp,
+		pac_employees app1, pac_employees app2, pac_employees app3
+		WHERE header.pr_id = det.pr_id
+		AND det.payee = '$payee'
+		AND header.pr_date between '$date1' and '$date2'
+		AND det.exp_code = exp.exp_code_id
+		AND header.approver1_id = app1.id
+		AND header.approver2_id = app2.id
+		AND header.approver3_id = app3.id
+	";
+	$q = $this->getdb()->query($sql);
+	if($q->num_rows()>0){
+		return $q->first_row('array');
 	}
-/*******************************************************************
-*
-*	REPORTS - END
-*
-********************************************************************/
+}
 
 /*******************************************************************
 *
@@ -876,7 +786,7 @@ function paymentReqForVer(){
 								$serverDate,
 								$arr['prReceiptImg'],
 								$arr['prExpCode'],
-								
+
 								$arr['prNum']
 							));
 
@@ -902,26 +812,10 @@ function paymentReqForVer(){
 		else
 			exit(); //problem with getting current user role. If role doesn't match anything, do nothing.
 
-		
-		//column2 dictates what type of approval it is based on status code, so we can properly track
-		date_default_timezone_set(DEFAULT_TIMEZONE);
-		$serverDate = date('Y-m-d H:i:s');
-		
-		$column2 = '';
-		if($prStatus == 20)
-			$column2 = "posted_date = '".$serverDate."',"; 
-		else if($prStatus == 30)
-			$column2 = "verified_date = '".$serverDate."',"; 
-		else if($prStatus == 40)
-			$column2 = "approved_date = '".$serverDate."',"; 
-		
-		//else, user sent back the PR;
-		
 		$sql = "
 			UPDATE pac_pr_header
 			SET
 				pr_status = ?,
-				".$column2."
 				".$column." = ?
 			WHERE
 				pr_id = ?;
@@ -934,7 +828,7 @@ function paymentReqForVer(){
 
 		$this->logHistoryApproval($prNum, $prStatus, $approvalType);
 	}
-	
+
 	function toggleRead($roleRead, $prId){
 		if($roleRead=='WFC'){
 			$column = "request_read_flag";
@@ -951,10 +845,10 @@ function paymentReqForVer(){
 		else{
 			exit('Unkown role');
 		}
-		
-		
+
+
 		$sql = "UPDATE pac_pr_header SET ".$column." = 1 WHERE pr_id = ?;";
-		
+
 		$this->getdb()->query($sql, array($prId));
 	}
 
