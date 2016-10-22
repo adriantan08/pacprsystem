@@ -198,6 +198,10 @@ class Home extends CI_Controller {
 			$objPHPExcel->setActiveSheetIndex(0);
 			$rowCtr = 1;
 			
+			$objPHPExcel->getActiveSheet()->fromArray(array("PALAWAN AQUACULTURE CORPORATION"), NULL, 'H'.$rowCtr++);
+			$objPHPExcel->getActiveSheet()->fromArray(array("SUMMARY OF PAYMENT REQUEST ISSUED AND APPROVED"), NULL, 'H'.$rowCtr++);
+			$objPHPExcel->getActiveSheet()->fromArray(array("For period of: ".$from.' to '.$to), NULL, 'I'.$rowCtr++);
+			$rowCtr++;
 			$dataArray = array(
 				'DATE ENCODED',
 				'PR DATE',
@@ -282,6 +286,12 @@ class Home extends CI_Controller {
 			$objPHPExcel->setActiveSheetIndex(0);
 			$rowCtr = 1;
 			
+			$objPHPExcel->getActiveSheet()->fromArray(array("PALAWAN AQUACULTURE CORPORATION"), NULL, 'H'.$rowCtr++);
+			$objPHPExcel->getActiveSheet()->fromArray(array("SUMMARY OF PAYMENT REQUEST FOR APPROVAL"), NULL, 'H'.$rowCtr++);
+			$objPHPExcel->getActiveSheet()->fromArray(array("As of ".date("Y-m-d")), NULL, 'I'.$rowCtr++);
+			
+			$rowCtr++;
+			
 			$dataArray = array(
 				'DATE ENCODED',
 				'PR DATE',
@@ -362,6 +372,12 @@ class Home extends CI_Controller {
 			$objPHPExcel->setActiveSheetIndex(0);
 			$rowCtr = 1;
 			
+			$objPHPExcel->getActiveSheet()->fromArray(array("PALAWAN AQUACULTURE CORPORATION"), NULL, 'H'.$rowCtr++);
+			$objPHPExcel->getActiveSheet()->fromArray(array("SUMMARY OF PAYMENT REQUEST FOR VERIFICATION"), NULL, 'H'.$rowCtr++);
+			$objPHPExcel->getActiveSheet()->fromArray(array("As of ".date("Y-m-d")), NULL, 'I'.$rowCtr++);
+			
+			$rowCtr++;
+			
 			$dataArray = array(
 				'DATE ENCODED',
 				'PR DATE',
@@ -441,6 +457,12 @@ class Home extends CI_Controller {
 			
 			$objPHPExcel->setActiveSheetIndex(0);
 			$rowCtr = 1;
+			
+			$objPHPExcel->getActiveSheet()->fromArray(array("PALAWAN AQUACULTURE CORPORATION"), NULL, 'H'.$rowCtr++);
+			$objPHPExcel->getActiveSheet()->fromArray(array("SUMMARY OF PR ISSUED FOR ".$payee), NULL, 'H'.$rowCtr++);
+			$objPHPExcel->getActiveSheet()->fromArray(array("For Period: ".$from." to ".$to), NULL, 'I'.$rowCtr++);
+			
+			$rowCtr++;
 			
 			$dataArray = array(
 				'DATE ENCODED',

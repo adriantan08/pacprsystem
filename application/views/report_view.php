@@ -1,5 +1,5 @@
 <style>
-	tbody.tablebody tr td{ border-bottom:1pt solid black;}
+	tbody.tablebody tr td{ border:1pt solid black;}
 </style>
 <br/><br/>
 <!--
@@ -9,11 +9,11 @@
 		4. All PRs issued for particule payee for a period of time
 
 -->
-<table border=0 cellpadding=20 cellspacing=30px  style="border-collapse: collapse;">
+<table border=0 align=center cellpadding=20 cellspacing=30px  style="border-collapse: collapse; font-size:15px;">
 	
 	<tbody class="tablebody">
 		<tr>
-			<td><b/>Type</td>
+			<td><b/>Report Type</td>
 			<td><b/>Filter</td>
 			<td><b/>Action</td>
 		</tr>
