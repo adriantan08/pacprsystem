@@ -11,15 +11,33 @@ class Pac_emp_exp_code extends CI_Controller
         parent::__construct();
         $this->load->model('Pac_emp_exp_code_model');
     }
+    function checkSession(){
+
+
+  		if($this->session->userdata('userId')== null && $this->session->userdata('userId')== ''){
+  			$this->logout();
+  		}
+
+  	}
+
+  	function logout(){
+  		$this->session->sess_destroy();
+  		redirect('/login/', 'refresh');
+  	}
+
 
     /*
      * Listing of pac_emp_exp_code
      */
     function index()
     {
+      if(!$this->User_model->isApprover())
+  			$this->logout();
         $data['pac_emp_exp_code'] = $this->Pac_emp_exp_code_model->get_all_pac_emp_exp_code();
+	$data['title'] = 'PAC PR System - Admin';
 
-        $this->load->view('pac_emp_exp_code/index',$data);
+        $data['content'] = $this->load->view('pac_emp_exp_code/index',$data,true);
+        $this->load->view('template_view_ash',$data);
     }
 
     /*
@@ -47,6 +65,8 @@ class Pac_emp_exp_code extends CI_Controller
      */
     function edit($id)
     {
+      if(!$this->User_model->isApprover())
+  			$this->logout();
         // check if the pac_emp_exp_code exists before trying to edit it
         $pac_emp_exp_code = $this->Pac_emp_exp_code_model->get_pac_emp_exp_code($id);
 
@@ -65,7 +85,10 @@ class Pac_emp_exp_code extends CI_Controller
             {
                 $data['pac_emp_exp_code'] = $this->Pac_emp_exp_code_model->get_pac_emp_exp_code($id);
 
-                $this->load->view('pac_emp_exp_code/edit',$data);
+                
+                $data['title'] = 'PAC PR System - Admin';
+        				$data['content'] = $this->load->view('pac_emp_exp_code/edit',$data,true);
+        				$this->load->view('template_view_ash',$data);
             }
         }
         else

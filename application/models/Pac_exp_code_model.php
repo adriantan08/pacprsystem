@@ -44,13 +44,25 @@ class Pac_exp_code_model extends CI_Model
     {
         $pac_exp_codes = $this->getdb()->query("
             SELECT
-                *
+                exp_code_id,
+                exp_desc,
+                exp_remarks,
+                status,
+                a.codename as submit_name,
+                b.codename as post_name,
+                c.codename as verify_name,
+                d.codename as approve_name
 
             FROM
-                `pac_exp_codes`
-
+                `pac_exp_codes`, `pac_emp_exp_code` a,
+                `pac_emp_exp_code` b,`pac_emp_exp_code` c,
+                `pac_emp_exp_code` d
             WHERE
                 1 = 1
+                and submit_step = a.id
+                and post_step = b.id
+                and verify_step = c.id
+                and approve_step = d.id
         ")->result_array();
 
         return $pac_exp_codes;
@@ -69,9 +81,9 @@ class Pac_exp_code_model extends CI_Model
      * function to update pac_exp_code
      */
     function update_pac_exp_code($id,$params)
-    {	
+    {
         $this->getdb()->where('exp_code_id',$id);
-        $response = $this->getdb()->update('pac_exp_codes',$params);
+        $response = $this->getdb()->update('pac_exp_codes',$params,"exp_code_id ='".$id."'");
         if($response)
         {
             return "pac_exp_code updated successfully";

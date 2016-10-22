@@ -32,7 +32,7 @@ echo form_open('pac_exp_code/edit/'.$pac_exp_code['exp_code_id']); ?>
 					{
 						$selected = ($pac_emp_exp_code['id'] == $pac_exp_code['submit_step']) ? ' selected="selected"' : null;
 
-						echo '<option value="'.$pac_emp_exp_code['id'].'" '.$selected.'>'.$pac_emp_exp_code['id'].'</option>';
+						echo '<option value="'.$pac_emp_exp_code['id'].'" '.$selected.'>'.$pac_emp_exp_code['codename'].'</option>';
 					}
 					?>
 				</select>
@@ -46,7 +46,7 @@ echo form_open('pac_exp_code/edit/'.$pac_exp_code['exp_code_id']); ?>
 					{
 						$selected = ($pac_emp_exp_code['id'] == $pac_exp_code['post_step']) ? ' selected="selected"' : null;
 
-						echo '<option value="'.$pac_emp_exp_code['id'].'" '.$selected.'>'.$pac_emp_exp_code['id'].'</option>';
+						echo '<option value="'.$pac_emp_exp_code['id'].'" '.$selected.'>'.$pac_emp_exp_code['codename'].'</option>';
 					}
 					?>
 				</select>
@@ -60,7 +60,7 @@ echo form_open('pac_exp_code/edit/'.$pac_exp_code['exp_code_id']); ?>
 					{
 						$selected = ($pac_emp_exp_code['id'] == $pac_exp_code['verify_step']) ? ' selected="selected"' : null;
 
-						echo '<option value="'.$pac_emp_exp_code['id'].'" '.$selected.'>'.$pac_emp_exp_code['id'].'</option>';
+						echo '<option value="'.$pac_emp_exp_code['id'].'" '.$selected.'>'.$pac_emp_exp_code['codename'].'</option>';
 					}
 					?>
 				</select>
@@ -74,7 +74,7 @@ echo form_open('pac_exp_code/edit/'.$pac_exp_code['exp_code_id']); ?>
 					{
 						$selected = ($pac_emp_exp_code['id'] == $pac_exp_code['approve_step']) ? ' selected="selected"' : null;
 
-						echo '<option value="'.$pac_emp_exp_code['id'].'" '.$selected.'>'.$pac_emp_exp_code['id'].'</option>';
+						echo '<option value="'.$pac_emp_exp_code['id'].'" '.$selected.'>'.$pac_emp_exp_code['codename'].'</option>';
 					}
 					?>
 				</select>

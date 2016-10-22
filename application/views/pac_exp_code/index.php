@@ -18,13 +18,12 @@
 		<td><?php echo $p['exp_desc']; ?></td>
 		<td><?php echo $p['exp_remarks']; ?></td>
 		<td><?php echo $p['status']; ?></td>
-		<td><?php echo $p['submit_step']; ?></td>
-		<td><?php echo $p['post_step']; ?></td>
-		<td><?php echo $p['verify_step']; ?></td>
-		<td><?php echo $p['approve_step']; ?></td>
+		<td><?php echo $p['submit_name']; ?></td>
+		<td><?php echo $p['post_name']; ?></td>
+		<td><?php echo $p['verify_name']; ?></td>
+		<td><?php echo $p['approve_name']; ?></td>
 		<td>
-            <a href="<?php echo site_url('pac_exp_code/edit/'.$p['exp_code_id']); ?>">Edit</a> |
-            <a href="<?php echo site_url('pac_exp_code/remove/'.$p['exp_code_id']); ?>">Delete</a>
+            <a href="<?php echo site_url('pac_exp_code/edit/'.$p['exp_code_id']); ?>">Edit</a>
         </td>
     </tr>
 	<?php } ?>
@@ -34,6 +33,6 @@
 <script>
 	$(document).ready(function() {
       $('#mytable1').DataTable({"pageLength":50});
-    
+
     } );
 </script>

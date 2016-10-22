@@ -32,7 +32,7 @@ class Pac_exp_code extends CI_Controller
     {
 		if(!$this->User_model->isApprover())
 			$this->logout();
-		
+
         $data['pac_exp_codes'] = $this->Pac_exp_code_model->get_all_pac_exp_codes();
 		$data['title'] = 'PAC PR System - Admin';
         $data['content'] = $this->load->view('pac_exp_code/index',$data,true);
@@ -46,7 +46,7 @@ class Pac_exp_code extends CI_Controller
     {
 		if(!$this->User_model->isApprover())
 			$this->logout();
-		
+
         $this->load->library('form_validation');
 
 		$this->form_validation->set_rules('exp_code_id','Exp Code Id','required');
@@ -63,25 +63,25 @@ class Pac_exp_code extends CI_Controller
 				'verify_step' => $this->input->post('verify_step'),
 				'approve_step' => $this->input->post('approve_step'),
             );
-			
+
             $pac_exp_code_id = $this->Pac_exp_code_model->add_pac_exp_code($params);
             redirect('pac_exp_code/index');
         }
         else
         {
 
-			$this->load->model('Pac_emp_exp_code_model');
+			$this->load->model('Pac_emp_exp_code_model') ;
 			$data['all_pac_emp_exp_code'] = $this->Pac_emp_exp_code_model->get_all_pac_emp_exp_code();
 			$data['all_pac_emp_exp_code'] = $this->Pac_emp_exp_code_model->get_all_pac_emp_exp_code();
 			$data['all_pac_emp_exp_code'] = $this->Pac_emp_exp_code_model->get_all_pac_emp_exp_code();
 			$data['all_pac_emp_exp_code'] = $this->Pac_emp_exp_code_model->get_all_pac_emp_exp_code();
-			
-			
+
+
 			$data['title'] = 'PAC PR System - Admin';
 			$data['content'] = $this->load->view('pac_exp_code/add',$data,true);
 			$this->load->view('template_view_ash',$data);
-			
-            
+
+
         }
     }
 
@@ -91,7 +91,7 @@ class Pac_exp_code extends CI_Controller
     function edit($id)
     {	if(!$this->User_model->isApprover())
 			$this->logout();
-		
+
         // check if the pac_exp_code exists before trying to edit it
         $pac_exp_code = $this->Pac_exp_code_model->get_pac_exp_code($id);
 
@@ -126,7 +126,7 @@ class Pac_exp_code extends CI_Controller
 				$data['all_pac_emp_exp_code'] = $this->Pac_emp_exp_code_model->get_all_pac_emp_exp_code();
 				$data['all_pac_emp_exp_code'] = $this->Pac_emp_exp_code_model->get_all_pac_emp_exp_code();
 				$data['all_pac_emp_exp_code'] = $this->Pac_emp_exp_code_model->get_all_pac_emp_exp_code();
-				
+
 				$data['title'] = 'PAC PR System - Admin';
 				$data['content'] = $this->load->view('pac_exp_code/edit',$data,true);
 				$this->load->view('template_view_ash',$data);

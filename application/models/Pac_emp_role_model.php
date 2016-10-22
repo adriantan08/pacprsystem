@@ -70,7 +70,7 @@ class Pac_emp_role_model extends CI_Model
     function update_pac_emp_role($id,$params)
     {
         $this->getdb()->where('id',$id);
-        $response = $this->getdb()->update('pac_emp_roles',$params);
+        $response = $this->getdb()->update('pac_emp_roles',$params,"id ='".$id."'");
         if($response)
         {
             return "pac_emp_role updated successfully";

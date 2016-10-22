@@ -32,7 +32,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		<ul id="trans-nav">
 			<li><?php echo anchor('/home', 'Home');?></li>
 			<li><?php echo anchor('/home/report', 'Reports');?></li>
-			<li><?php echo anchor('/pac_exp_code', 'Admin - Exp Codes');?></li>
+			<li><?php echo anchor('/pac_emp_exp_code', 'Employee Exp. Codes');?></li>
+			<li><?php echo anchor('/pac_exp_code', 'Expenditure Codes');?></li>
+			<li><?php echo anchor('/Pac_employee', 'Employee');?></li>
+			<li><?php echo anchor('/pac_emp_role', 'Employee Role');?></li>
 		</ul>
 
 
@@ -41,7 +44,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<div style="background: #33b5e5; width:5%; position:absolute; top:0; right:0px;">
 		<ul id="trans-nav">
 		<li><?php echo anchor('/home/logout', 'Logout');?></li>
-			<!-- Removing dropdown navigation since there's no Manage Account yet, only logout. 
+			<!-- Removing dropdown navigation since there's no Manage Account yet, only logout.
 			<li><a href="#">My Account
 				<ul>
 					<li><a href="#">Manage Account</a></li>
