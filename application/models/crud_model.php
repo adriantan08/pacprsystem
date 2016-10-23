@@ -508,14 +508,18 @@ class Crud_model extends CI_Model {
 			}
 			return json_encode($arr);
 		}
-		return null;
+		return json_encode(array());
 	}
 
 	function getCandidatePr(){
 		$sql = "SELECT MAX(pr_id) +1 AS `max` FROM pac_pr_header;";
 		$q = $this->getdb()->query($sql);
 		if($q->num_rows()>0){
-			return $q->first_row()->max;
+			$res = $q->first_row()->max;
+			if($res == null)
+				return 00001;
+			
+			return $res;
 		}
 		return null;
 	}
@@ -908,12 +912,18 @@ function paymentReqForVer(){
 		$serverDate = date('Y-m-d H:i:s');
 		
 		$column2 = '';
-		if($prStatus == 20)
+		if($prStatus == 20){
 			$column2 = "posted_date = '".$serverDate."',"; 
-		else if($prStatus == 30)
+			$this->addComment($prNum, "VERIFIED BY (auto-generated): ".$this->session->userdata('empFirstName')." ".$this->session->userdata('empLastName'));
+		}
+		else if($prStatus == 30){
 			$column2 = "verified_date = '".$serverDate."',"; 
-		else if($prStatus == 40)
+			$this->addComment($prNum, "VERIFIED BY (auto-generated): ".$this->session->userdata('empFirstName')." ".$this->session->userdata('empLastName'));
+		}
+		else if($prStatus == 40){
 			$column2 = "approved_date = '".$serverDate."',"; 
+			$this->addComment($prNum, "APPROVED BY (auto-generated): ".$this->session->userdata('empFirstName')." ".$this->session->userdata('empLastName'));
+		}
 		
 		//else, user sent back the PR;
 		

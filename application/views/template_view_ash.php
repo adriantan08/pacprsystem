@@ -35,7 +35,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			<li><?php echo anchor('/pac_emp_exp_code', 'Employee Exp. Codes');?></li>
 			<li><?php echo anchor('/pac_exp_code', 'Expenditure Codes');?></li>
 			<li><?php echo anchor('/Pac_employee', 'Employee');?></li>
-			<li><?php echo anchor('/pac_emp_role', 'Employee Role');?></li>
+			
 		</ul>
 
 

@@ -4,6 +4,9 @@
  * www.crudigniter.com
  */
 
+ /*
+	REMOVED THIS AS WE DON'T WANT USERS CHANGING THIS.
+ */
 class Pac_emp_role extends CI_Controller
 {
     function __construct()

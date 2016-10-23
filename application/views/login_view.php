@@ -52,7 +52,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		}
 		else{
 			$.ajax({
-				url: "<?=base_url()?>/login/processLogin",
+				url: "<?=base_url()?>login/processLogin",
 				type:"POST",
 				data:{
 					u: username,
