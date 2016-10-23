@@ -1,4 +1,5 @@
 <div style="width: 75%; margin: 0 auto; ">
+<a href="<?=base_url()?>pac_exp_code/add" class="flatbutton">Add </a><br/><br/><br/>
 <table class="display" id="mytable1">
     <thead>
 		<th>Exp Code Id</th>

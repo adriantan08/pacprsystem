@@ -93,3 +93,19 @@ function removeImage(imgId, buttonId){
 		
 		
 	}
+
+$(function(){
+  $('#prAmount').keypress(function(e){
+    if(e.which != 45 && e.which != 101){
+    } else {
+      return false;
+    }
+  });
+  
+  $('#prAmount').focusout(function(e){
+		
+		this.value = parseFloat(this.value).toFixed(2);
+	
+  });
+});
+	

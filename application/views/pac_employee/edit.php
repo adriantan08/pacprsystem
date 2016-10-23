@@ -1,28 +1,36 @@
-<?php echo validation_errors(); ?>
-
+<font color=red><?php echo validation_errors(); ?></font>
 <?php echo form_open('pac_employee/edit/'.$pac_employee['id']); ?>
 
-	<div>Emp Firstname : <input type="text" name="emp_firstname" value="<?php echo ($this->input->post('emp_firstname') ? $this->input->post('emp_firstname') : $pac_employee['emp_firstname']); ?>" /></div>
-	<div>Emp Lastname : <input type="text" name="emp_lastname" value="<?php echo ($this->input->post('emp_lastname') ? $this->input->post('emp_lastname') : $pac_employee['emp_lastname']); ?>" /></div>
-	<div>Emp Email : <input type="text" name="emp_email" value="<?php echo ($this->input->post('emp_email') ? $this->input->post('emp_email') : $pac_employee['emp_email']); ?>" /></div>
+	<div>Emp Firstname : <input type="text" name="emp_firstname" value="<?php echo ($this->input->post('emp_firstname') ? $this->input->post('emp_firstname') : $pac_employee['emp_firstname']); ?>" /></div><br/>
+	<div>Emp Lastname : <input type="text" name="emp_lastname" value="<?php echo ($this->input->post('emp_lastname') ? $this->input->post('emp_lastname') : $pac_employee['emp_lastname']); ?>" /></div><br/>
+	<div>Emp Email : <input type="text" name="emp_email" value="<?php echo ($this->input->post('emp_email') ? $this->input->post('emp_email') : $pac_employee['emp_email']); ?>" /></div><br/>
 	<div>
-				Emp Role Id :
+				Role:
 				<select name="emp_role_id">
-					<option value="">select pac_emp_role</option>
+					<option value="">Select</option>
 					<?php
 					foreach($all_pac_emp_roles as $pac_emp_role)
 					{
+						//override text values of roles
+						if($pac_emp_role['name'] == 'WFC')
+							$pac_emp_role['name'] = 'PREPARE';
+						else if($pac_emp_role['name'] == 'ASH')
+							$pac_emp_role['name'] = 'POST';
+						
+						
+						
+						
 						$selected = ($pac_emp_role['id'] == $pac_employee['emp_role_id']) ? ' selected="selected"' : null;
 
 						echo '<option value="'.$pac_emp_role['id'].'" '.$selected.'>'.$pac_emp_role['name'].'</option>';
 					}
 					?>
-				</select>
+				</select><br/><br/>
 		</div>
 	<div>
-				Exp Code Id :
+				Role (for Exp Code mapping):
 				<select name="exp_code_id">
-					<option value="">select pac_emp_role</option>
+					<option value="">Select</option>
 					<?php
 					foreach($all_pac_emp_exp_codes as $pac_emp_role)
 					{
@@ -31,7 +39,7 @@
 						echo '<option value="'.$pac_emp_role['id'].'" '.$selected.'>'.$pac_emp_role['codename'].'</option>';
 					}
 					?>
-				</select>
+				</select><br/><br/>
 		</div>
 	<div>
 				Emp Status :
@@ -50,11 +58,12 @@
 						echo '<option value="'.$value.'" '.$selected.'>'.$display_text.'</option>';
 					}
 					?>
-				</select>
+				</select><br/><br/>
 	</div>
-	<div>Emp Username : <input type="text" name="emp_username" value="<?php echo ($this->input->post('emp_username') ? $this->input->post('emp_username') : $pac_employee['emp_username']); ?>" /></div>
-	<div>Emp Password : <input type="password" name="emp_password" value="<?php echo ($this->input->post('emp_password') ? $this->input->post('emp_password') : $pac_employee['emp_password']); ?>" /></div>
+	<hr class='carved'/>
+	<div>Emp Username : <input type="text" name="emp_username" value="<?php echo ($this->input->post('emp_username') ? $this->input->post('emp_username') : $pac_employee['emp_username']); ?>" /></div><br/>
+	<div>Emp Password : <input type="password" name="emp_password" value="<?php echo ($this->input->post('emp_password') ? $this->input->post('emp_password') : $pac_employee['emp_password']); ?>" /></div><br/>
 
-	<button type="submit">Save</button>
+	<button type="submit" class="flatbutton">Save</button>
 
 <?php echo form_close(); ?>

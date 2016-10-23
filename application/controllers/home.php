@@ -43,6 +43,10 @@ class Home extends CI_Controller {
 			$data['content'] = $this->load->view('ApprovingAuth/home_view',null,true);
 			$this->load->view('template_view_ash', $data);
 		}
+		else if($this->session->userdata('userRole') == "SYSTEM ADMIN"){
+			$data['content'] = "";
+			$this->load->view('template_view_admin', $data);
+		}
 		else{
 			$data['content'] = $this->load->view('WorkingFundCustodian/home_view',null,true);
 			$this->load->view('template_view', $data);
@@ -219,6 +223,8 @@ class Home extends CI_Controller {
 				'PREPARED BY',
 				'VERIFIED BY',
 				'DATE VERIFIED',
+				'VERIFIED2 BY',
+				'DATE VERIFIED2',
 				'APPROVED BY',
 				'DATE APPROVED'
 			);
@@ -240,6 +246,8 @@ class Home extends CI_Controller {
 						$row['exp_desc'],
 						$row['details'],
 						$row['prepared_by'],
+						$row['posted_by'],
+						$row['posted_date'],
 						$row['verified_by'],
 						$row['verified_date'],
 						$row['approved_by'],
@@ -308,7 +316,9 @@ class Home extends CI_Controller {
 				'DETAILS',
 				'PREPARED BY',
 				'VERIFIED BY',
-				'DATE VERIFIED'
+				'DATE VERIFIED',
+				'VERIFIED2 BY',
+				'DATE VERIFIED2'
 			);
 			$objPHPExcel->getActiveSheet()->fromArray($dataArray, NULL, 'A'.$rowCtr++);
 			foreach($arr as $row){
@@ -328,6 +338,8 @@ class Home extends CI_Controller {
 						$row['exp_desc'],
 						$row['details'],
 						$row['prepared_by'],
+						$row['posted_by'],
+						$row['posted_date'],
 						$row['verified_by'],
 						$row['verified_date']
 				);
@@ -481,12 +493,22 @@ class Home extends CI_Controller {
 				'PREPARED BY',
 				'VERIFIED BY',
 				'DATE VERIFIED',
+				'VERIFIED2 BY',
+				'DATE VERIFIED2',
 				'APPROVED BY',
 				'DATE APPROVED'
 			);
 			$objPHPExcel->getActiveSheet()->fromArray($dataArray, NULL, 'A'.$rowCtr++);
 			foreach($arr as $row){
 				
+				//ensure we do not expose AUTO-APPROVE name if PR is not yet posted or verifier or approved
+				if($row['posted_date'] == '')
+					$row['posted_by'] = '';
+				if($row['verified_date'] == '')
+					$row['verified_by'] = '';
+				if($row['approved_date'] == '')
+					$row['approved_by'] = '';
+					
 				$dataArray = array(
 						$row['created_on'],
 						$row['pr_date'],
@@ -502,6 +524,8 @@ class Home extends CI_Controller {
 						$row['exp_desc'],
 						$row['details'],
 						$row['prepared_by'],
+						$row['posted_by'],
+						$row['posted_date'],
 						$row['verified_by'],
 						$row['verified_date'],
 						$row['approved_by'],

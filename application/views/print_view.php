@@ -61,7 +61,7 @@ foreach($prList as $prDetails){
 		<tr>
 		<td>
 			<font style="font-size:15px; font-family:Arial;"><b>PR# <?=$prDetails['pr_id']?></b></font>
-			<br><font style="font-size:13px; font-family:Arial;">Last Modified: <?=$prDetails['changed_on']?></font><br><br>
+			<br><font style="font-size:10px; font-family:Arial;">Created On: <?=$prDetails['created_on']?></font><br><br>
 		</td>
 
 		</tr>
@@ -69,7 +69,7 @@ foreach($prList as $prDetails){
 	<table class="myTable" >
 		<tr >
 			<td colspan=2 align=right>
-				<font class="mylabel">Date:</font>
+				<font class="mylabel">PR Date:</font>
 				<?=$prDetails['pr_date']?>
 			</td>
 		</tr>
@@ -105,14 +105,7 @@ foreach($prList as $prDetails){
 			</td>
 			<td>
 				<span>
-				<input type="radio" name="prForm" value="cash" disabled
-				<?php if($prDetails['payment_form']=='cash') echo 'checked';?>/> Cash
-				
-				<input type="radio" name="prForm" value="check" disabled
-				<?php if($prDetails['payment_form']=='check') echo 'checked';?>/> Check
-				
-				<input type="radio" name="prForm" value="none" disabled
-				<?php if($prDetails['payment_form']=='none') echo 'checked';?>/> None
+				<?=ucwords($prDetails['payment_form'])?>
 				</span>
 			</td>
 		</tr>
@@ -122,12 +115,8 @@ foreach($prList as $prDetails){
 			</td>
 			<td>
 				<span>
-				<input type="radio" name="prPurpose" value="disbursement" disabled
-				<?php if($prDetails['purpose']=='disbursement') echo 'checked';?>/> Disbursement
-				<input type="radio" name="prPurpose" value="liquidation" disabled
-				<?php if($prDetails['purpose']=='liquidation') echo 'checked';?>/> Liquidation
-				<input type="radio" name="prPurpose" value="recordonly" disabled
-				<?php if($prDetails['purpose']=='recordonly') echo 'checked';?>/> Record Only
+				<?=ucwords($prDetails['purpose'])?>
+				
 				</span>
 			</td>
 		</tr>
@@ -137,10 +126,8 @@ foreach($prList as $prDetails){
 			</td>
 			<td>
 				<span>
-				<input type="radio" name="prDisbClass" value="spent" disabled
-				<?php if($prDetails['dist_class']=='spent') echo 'checked';?>/> Spent
-				<input type="radio" name="prDisbClass" value="unspent" disabled
-				<?php if($prDetails['dist_class']=='unspent') echo 'checked';?>/> Unspent
+				<?=ucwords($prDetails['dist_class'])?>
+				
 				</span>
 			</td>
 		</tr>
@@ -150,10 +137,8 @@ foreach($prList as $prDetails){
 			</td>
 			<td>
 				<span>
-				<input type="radio" name="prDisbYield" value="consumable" disabled
-				<?php if($prDetails['dist_yield']=='consumable') echo 'checked';?>/> Consumable
-				<input type="radio" name="prDisbYield" value="asset" disabled
-				<?php if($prDetails['dist_yield']=='asset') echo 'checked';?>/> Asset
+				<?=ucwords($prDetails['dist_yield'])?>
+				
 				</span>
 			</td>
 		</tr>

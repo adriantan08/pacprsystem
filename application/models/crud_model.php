@@ -141,6 +141,7 @@ class Crud_model extends CI_Model {
 				a.pr_date AS `pr_date`,
 				a.pr_status AS `pr_status`,
 				a.pr_status AS `pr_status`,
+				a.created_on AS `created_on`,
 				a.changed_on AS `changed_on`,
 				a.approver1_id AS `approver1_id`,
 				a.approver2_id AS `approver2_id`,
@@ -678,6 +679,8 @@ function paymentReqIssApp($date1,$date2){
 					 exp.exp_desc,
 					 det.details,
 					 CONCAT(app1.emp_firstname, ' ',app1.emp_lastname) as prepared_by,
+					 CONCAT(app4.emp_firstname, ' ',app4.emp_lastname) as posted_by,
+					 header.posted_date,
 					 CONCAT(app2.emp_firstname, ' ',app2.emp_lastname) as verified_by,
 					 header.verified_date,
 					 CONCAT(app3.emp_firstname, ' ',app3.emp_lastname) as approved_by,
@@ -688,13 +691,15 @@ function paymentReqIssApp($date1,$date2){
 			pac_exp_codes exp,
 			pac_employees app1, 
 			pac_employees app2, 
-			pac_employees app3
+			pac_employees app3,
+			pac_employees app4
 		WHERE header.pr_id = det.pr_id
 		AND header.pr_date between '$date1' and '$date2'
 		AND det.exp_code = exp.exp_code_id
 		AND header.requestor_id = app1.id
 		AND header.approver2_id = app2.id
 		AND header.approver3_id = app3.id
+		AND header.approver1_id = app4.id
 	";
 	$q = $this->getdb()->query($sql);
 	if($q->num_rows()>0){
@@ -719,15 +724,18 @@ function paymentReqForApp(){
 					 exp.exp_desc,
 					 det.details,
 					 CONCAT(app1.emp_firstname, ' ',app1.emp_lastname) as prepared_by,
+					 CONCAT(app3.emp_firstname, ' ',app3.emp_lastname) as posted_by,
+					 header.posted_date,
 					 CONCAT(app2.emp_firstname, ' ',app2.emp_lastname) as verified_by,
 					 header.verified_date
 		FROM pac_pr_header header, pac_pr_details det, pac_exp_codes exp,
-		pac_employees app1, pac_employees app2
+		pac_employees app1, pac_employees app2, pac_employees app3
 		WHERE header.pr_id = det.pr_id
 		AND header.pr_status < ".APPROVED_STATUS."
 		AND det.exp_code = exp.exp_code_id
 		AND header.requestor_id = app1.id
 		AND header.approver2_id = app2.id
+		AND header.approver1_id = app3.id
 	";
 	$q = $this->getdb()->query($sql);
 	if($q->num_rows()>0){
@@ -782,12 +790,15 @@ function paymentReqForVer(){
 						 exp.exp_desc,
 						 det.details,
 						 CONCAT(app1.emp_firstname, ' ',app1.emp_lastname) as prepared_by,
+						 CONCAT(app4.emp_firstname, ' ',app4.emp_lastname) as 
+						 posted_by,
+						 header.posted_date,
 						 CONCAT(app2.emp_firstname, ' ',app2.emp_lastname) as verified_by,
 						 header.verified_date,
 						 CONCAT(app3.emp_firstname, ' ',app3.emp_lastname) as approved_by,
 						 header.approved_date
 			FROM pac_pr_header header, pac_pr_details det, pac_exp_codes exp,
-			pac_employees app1, pac_employees app2, pac_employees app3
+			pac_employees app1, pac_employees app2, pac_employees app3, pac_employees app4
 			WHERE header.pr_id = det.pr_id
 			AND det.payee = '$payee'
 			AND header.pr_date between '$date1' and '$date2'
@@ -795,6 +806,7 @@ function paymentReqForVer(){
 			AND header.requestor_id = app1.id
 			AND header.approver2_id = app2.id
 			AND header.approver3_id = app3.id
+			AND header.approver1_id = app4.id
 		";
 		
 		$q = $this->getdb()->query($sql);

@@ -30,13 +30,13 @@ class Pac_exp_code extends CI_Controller
      */
     function index()
     {
-		if(!$this->User_model->isApprover())
+		if(!$this->User_model->isSysAdmin())
 			$this->logout();
 
         $data['pac_exp_codes'] = $this->Pac_exp_code_model->get_all_pac_exp_codes();
 		$data['title'] = 'PAC PR System - Admin';
         $data['content'] = $this->load->view('pac_exp_code/index',$data,true);
-		$this->load->view('template_view_ash',$data);
+		$this->load->view('template_view_admin',$data);
     }
 
     /*
@@ -44,7 +44,7 @@ class Pac_exp_code extends CI_Controller
      */
     function add()
     {
-		if(!$this->User_model->isApprover())
+		if(!$this->User_model->isSysAdmin())
 			$this->logout();
 
         $this->load->library('form_validation');
@@ -79,7 +79,7 @@ class Pac_exp_code extends CI_Controller
 
 			$data['title'] = 'PAC PR System - Admin';
 			$data['content'] = $this->load->view('pac_exp_code/add',$data,true);
-			$this->load->view('template_view_ash',$data);
+			$this->load->view('template_view_admin',$data);
 
 
         }
@@ -89,7 +89,7 @@ class Pac_exp_code extends CI_Controller
      * Editing a pac_exp_code
      */
     function edit($id)
-    {	if(!$this->User_model->isApprover())
+    {	if(!$this->User_model->isSysAdmin())
 			$this->logout();
 
         // check if the pac_exp_code exists before trying to edit it
@@ -129,7 +129,7 @@ class Pac_exp_code extends CI_Controller
 
 				$data['title'] = 'PAC PR System - Admin';
 				$data['content'] = $this->load->view('pac_exp_code/edit',$data,true);
-				$this->load->view('template_view_ash',$data);
+				$this->load->view('template_view_admin',$data);
                 
             }
         }

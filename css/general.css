@@ -5,9 +5,9 @@ body{
 
 #myH3{
 	font-family:Arial;
-	font-size:2em;
+	font-size:20px;
 	font-weight:normal;
-	
+	margin-bottom:30px;
 }
 		
 #trans-nav {list-style-type: none; height: 52px; padding: 0; margin: 0; z-index:999;}

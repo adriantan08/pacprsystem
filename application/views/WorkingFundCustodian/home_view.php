@@ -12,6 +12,7 @@
         <li><a id="tabHeader" href="#view1">Submitted</a></li>
         <li><a id="tabHeader" href="#view2" style="color:#009900;">Approved</a></li>
         <li><a id="tabHeader" href="#view3">Returned</a></li>
+		<li><a id="tabHeader" href="#view4"><i>Archived</i></a></li>
     </ul>
     <div class="tabcontents">
 		 <div id="view0">
@@ -98,13 +99,20 @@
         <div id="view2">
           <div class="dataTables_wrapper">
 		  
-		  <button class="flatbutton" id="printButton"><img src="<?=base_url()?>img/print.png" width=20px />
-		  <b>Print</b></button><br/><br/><br/>
+		  <span>
+			<button class="flatbutton" id="printButton"><img src="<?=base_url()?>img/print.png" width=20px />
+				<b>Print</b></button>
+		  
+			<button class="flatbutton" id="printButton" style="position:relative; left:20px;background-color:grey;">
+				<b>Archive</b></button>
+		  </span>
+		  
+		  <br/><br/><br/>
 		  
           <table id="mytable2" class="display" cellspacing="0" width="100%">
-              <thead>
-                  <tr>
-					  <th></th>
+              <thead >
+                  
+					  <th><input type="checkbox" style="position:relative; left:-15px;" id="selectToggle"  value=""></th>
                       <th>PR Date</th>
                       <th>PR ID</th>
                       <th>Payment Form</th>
@@ -114,7 +122,7 @@
                       <th>Submitted</th>
                       <th>Verifier</th>
                       <th>Approver</th>
-                  </tr>
+                  
               </thead>
               <tbody>
                 <?php
@@ -183,6 +191,61 @@
           </table>
         </div>
         </div>
+		<div id="view4">
+          <div class="dataTables_wrapper">
+		  
+		  <span>
+			<button class="flatbutton" id="restoreButton" style="position:relative; left:20px;background-color:green;">
+				<b>Restore</b></button>
+		  </span>
+		  
+		  <br/><br/><br/>
+		  
+          <table id="mytable4" class="display" cellspacing="0" width="100%">
+              <thead >
+                  
+					  <th><input type="checkbox" style="position:relative; left:-15px;" id="selectToggle"  value=""></th>
+                      <th>PR Date</th>
+                      <th>PR ID</th>
+                      <th>Payment Form</th>
+                      <th>Payee</th>
+                      <th>Amount</th>
+                      <th>Requestor</th>
+                      <th>Submitted</th>
+                      <th>Verifier</th>
+                      <th>Approver</th>
+                  
+              </thead>
+              <tbody>
+                <?php
+                  $prList = $this->Crud_model->getApprovedPRs('40', '>0');
+                  if($prList != null){
+                    foreach($prList as $list){
+                      echo '<tr>';
+					  echo '<td><input type="checkbox" name="printselect" value="'.$list['pr_id'].'"></td>';
+                      echo '<td>'.$list['pr_date'].'</td>';
+                      
+					  //When displaying PR_ID, we BOLD them if unread, otherwise normal font weight
+					  $readStyle = "";
+					  if(!$list['request_read_flag'])
+						$readStyle = "<b/>";
+                      echo '<td>'.$readStyle.anchor('home/view/'.$list['pr_id'], $list['pr_id'], array("class"=>"anchorStrip")).'</td>';
+					  
+                      echo '<td>'.$list['pr_paymentForm'].'</td>';
+                      echo '<td>'.$list['payee'].'</td>';
+                      echo '<td>'.$list['amount'].'</td>';
+                      echo '<td>'.$list['emp_firstname'].' '.$list['emp_lastname'].'</td>';
+                      echo '<td>'.$list['asc_firstname'].' '.$list['asc_lastname'].'</td>';
+                      echo '<td>'.$list['ver_firstname'].' '.$list['ver_lastname'].'</td>';
+                      echo '<td>'.$list['app_firstname'].' '.$list['app_lastname'].'</td>';
+                      echo '</tr>';
+                    }
+                  }
+                ?>
+              </tbody>
+          </table>
+        </div>
+        </div>
     </div>
 </div>
 <script>
@@ -194,13 +257,23 @@
 		if(checkedArr.length>0)
 		window.open("<?=base_url()?>home/print_preview/"+encodeURI(checkedArr.join(" ")));
 	});
+	
+	$("#selectToggle").click(function(){
+		
+		if($('#selectToggle:checkbox:checked').is(":checked"))
+			$("input:checkbox[name=printselect]").prop('checked', true);
+		else
+			$("input:checkbox[name=printselect]").prop('checked', false);
+		
+	});
 </script>
 
 <script>
     $(document).ready(function() {
-		 $('#mytable0').DataTable({"pageLength":50});
+		$('#mytable0').DataTable({"pageLength":50});
         $('#mytable1').DataTable({"pageLength":50});
         $('#mytable2').DataTable({"pageLength":50});
         $('#mytable3').DataTable({"pageLength":50});
+		$('#mytable4').DataTable({"pageLength":50});
     } );
 </script>

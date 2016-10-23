@@ -17,9 +17,8 @@
 <div style="width: 75%; margin: 0 auto; padding: 120px 0 40px;">
 
     <ul class="tabs" data-persist="true">
-        <li><a id="tabHeader" href="#view1">Posted (<u><</u>1k PhP)</a></li>
-        <li><a id="tabHeader" href="#view2">Posted (1k+ PhP)</a></li>
-        <li><a id="tabHeader" href="#view3">Verified</a></li>
+        <li><a id="tabHeader" href="#view1">Posted</a></li>
+        <li><a id="tabHeader" href="#view3" style="color:#009900;">Verified</a></li>
         <li><a id="tabHeader" href="#view4">Returned</a></li>
     </ul>
     <div class="tabcontents">
@@ -38,7 +37,7 @@
               </thead>
               <tbody>
                 <?php
-                  $prList = $this->Crud_model->getPrListForV('20','< 1001');
+                  $prList = $this->Crud_model->getPrListForV('20','>=0');
                   if($prList != null){
                     foreach($prList as $list){
                       echo '<tr>';
@@ -62,45 +61,7 @@
           </table>
         </div>
         </div>
-        <div id="view2">
-          <div class="dataTables_wrapper">
-          <table id="mytable2" class="display" cellspacing="0" width="100%">
-              <thead>
-                  <tr>
-                      <th>PR Date</th>
-                      <th>PR ID</th>
-                      <th>Payee</th>
-                      <th>Amount</th>
-                      <th>Requestor</th>
-                      <th>Posted By</th>
-                  </tr>
-              </thead>
-              <tbody>
-                <?php
-                  $prList = $this->Crud_model->getPrListForV('20','> 1000');
-                  if($prList != null){
-                    foreach($prList as $list){
-                      echo '<tr>';
-                      echo '<td>'.$list['pr_date'].'</td>';
-                    
-					//When displaying PR_ID, we BOLD them if unread, otherwise normal font weight	
-					  $readStyle = "";
-					  if(!$list['approver2_read_flag'])
-						$readStyle = "<b/>";
-                      echo '<td>'.$readStyle.anchor('home/view_verifier/'.$list['pr_id'], $list['pr_id'], array("class"=>"anchorStrip")).'</td>';
-					
-                      echo '<td>'.$list['payee'].'</td>';
-                      echo '<td>'.$list['amount'].'</td>';
-                      echo '<td>'.$list['emp_firstname'].' '.$list['emp_lastname'].'</td>';
-                      echo '<td>'.$list['asc_firstname'].' '.$list['asc_lastname'].'</td>';
-                      echo '</tr>';
-                    }
-                  }
-                ?>
-              </tbody>
-          </table>
-        </div>
-        </div>
+        
         <div id="view3">
           <div class="dataTables_wrapper">
           <table id="mytable3" class="display" cellspacing="0" width="100%">

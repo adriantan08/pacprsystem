@@ -2,7 +2,7 @@
 echo form_open('pac_emp_exp_code/add'); ?>
 
 	<div>Codename : <input type="text" name="codename" value="<?php echo $this->input->post('codename'); ?>" /></div>
-
-	<button type="submit">Save</button>
+<br/>
+	<button type="submit" class="flatbutton">Save</button>
 
 <?php echo form_close(); ?>

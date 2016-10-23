@@ -21,7 +21,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<link rel="stylesheet" type="text/css" href="<?= base_url()?>lib/DataTables/media/css/jquery.dataTables.min.css">
 	<script src="<?= base_url()?>lib/sweetalert/lib/sweet-alert.min.js"></script>
 
-
 	<title><?= $title?></title>
 
 
@@ -32,7 +31,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<div id = "navigation" style="background: #33b5e5; position:absolute; top:0px; width:95%; left:0px;">
 		<ul id="trans-nav">
 			<li><?php echo anchor('/home', 'Home');?></li>
-			<li><?php echo anchor('/create', 'Create');?></li>
+			<li><?php echo anchor('/pac_emp_exp_code', 'Employee Exp. Codes');?></li>
+			<li><?php echo anchor('/pac_exp_code', 'Expenditure Codes');?></li>
+			<li><?php echo anchor('/Pac_employee', 'Employees');?></li>
+			
 		</ul>
 
 
@@ -41,7 +43,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<div style="background: #33b5e5; width:5%; position:absolute; top:0; right:0px;">
 		<ul id="trans-nav">
 		<li><?php echo anchor('/home/logout', 'Logout');?></li>
-			<!-- Removing dropdown navigation since there's no Manage Account yet, only logout. 
+			<!-- Removing dropdown navigation since there's no Manage Account yet, only logout.
 			<li><a href="#">My Account
 				<ul>
 					<li><a href="#">Manage Account</a></li>
@@ -51,9 +53,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		</ul>
 	</div>
 <br/><br/><br/>
-<div>
-<h3 id="myH3" style="position:relative; left:20px;">Welcome <?=$this->session->userdata('empFirstName').' '.$this->session->userdata('empLastName').'(Role: '.strtoupper($this->session->userdata('userRole')).')'?></h3>
-		<?= $content?>
+
+<div style="align=center;">
+		<h3 id="myH3">Welcome <?=$this->session->userdata('empFirstName').' '.$this->session->userdata('empLastName').'(Role: '.strtoupper($this->session->userdata('userRole')).')'?></h3>
+		<div><?= $content?></div>
 </div>
 </body>
 </html>

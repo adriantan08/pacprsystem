@@ -279,7 +279,7 @@
 				async: true,
 				data:{
 					prId : <?=$prDetails['pr_id']?>,
-					comment: "The ticket was sent back by an Verifier (auto-generated)."
+					comment: "The ticket was sent back by a Verifier (auto-generated)."
 					
 				},
 				success: function(data){}

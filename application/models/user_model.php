@@ -68,5 +68,11 @@ class User_model extends CI_Model {
 		return false;
 	}
 	
+	function isSysAdmin(){
+		if($this->session->userdata('userRole')=='SYSTEM ADMIN')
+			return true;
+		return false;
+	}
+	
 }
 ?>

@@ -31,13 +31,13 @@ class Pac_emp_exp_code extends CI_Controller
      */
     function index()
     {
-      if(!$this->User_model->isApprover())
+      if(!$this->User_model->isSysAdmin())
   			$this->logout();
         $data['pac_emp_exp_code'] = $this->Pac_emp_exp_code_model->get_all_pac_emp_exp_code();
 	$data['title'] = 'PAC PR System - Admin';
 
         $data['content'] = $this->load->view('pac_emp_exp_code/index',$data,true);
-        $this->load->view('template_view_ash',$data);
+        $this->load->view('template_view_admin',$data);
     }
 
     /*
@@ -45,6 +45,9 @@ class Pac_emp_exp_code extends CI_Controller
      */
     function add()
     {
+		if(!$this->User_model->isSysAdmin())
+			$this->logout();
+		
         if(isset($_POST) && count($_POST) > 0)
         {
             $params = array(
@@ -55,8 +58,10 @@ class Pac_emp_exp_code extends CI_Controller
             redirect('pac_emp_exp_code/index');
         }
         else
-        {
-            $this->load->view('pac_emp_exp_code/add');
+        {	$data['title'] = 'PAC PR System - Admin';
+			$data['content'] = $this->load->view('pac_emp_exp_code/add',$data, true);
+			$this->load->view('template_view_admin',$data);
+			
         }
     }
 
@@ -65,7 +70,7 @@ class Pac_emp_exp_code extends CI_Controller
      */
     function edit($id)
     {
-      if(!$this->User_model->isApprover())
+      if(!$this->User_model->isSysAdmin())
   			$this->logout();
         // check if the pac_emp_exp_code exists before trying to edit it
         $pac_emp_exp_code = $this->Pac_emp_exp_code_model->get_pac_emp_exp_code($id);
@@ -88,7 +93,7 @@ class Pac_emp_exp_code extends CI_Controller
                 
                 $data['title'] = 'PAC PR System - Admin';
         				$data['content'] = $this->load->view('pac_emp_exp_code/edit',$data,true);
-        				$this->load->view('template_view_ash',$data);
+        				$this->load->view('template_view_admin',$data);
             }
         }
         else

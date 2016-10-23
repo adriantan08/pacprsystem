@@ -30,20 +30,23 @@ class Pac_employee extends CI_Controller
      */
     function index()
     {
-      if(!$this->User_model->isApprover())
+      if(!$this->User_model->isSysAdmin())
   			$this->logout();
 
         $data['pac_employees'] = $this->Pac_employee_model->get_all_pac_employees();
         $data['title'] = 'PAC PR System - Admin';
         $data['content'] = $this->load->view('pac_employee/index',$data,true);
-        $this->load->view('template_view_ash',$data);
+        $this->load->view('template_view_admin',$data);
     }
 
     /*
      * Adding a new pac_employee
      */
     function add()
-    {
+    {	
+		if(!$this->User_model->isSysAdmin())
+  			$this->logout();
+		
         $this->load->library('form_validation');
 
 		$this->form_validation->set_rules('emp_firstname','Emp Firstname','required|max_length[50]');
@@ -65,7 +68,7 @@ class Pac_employee extends CI_Controller
 				'exp_code_id' => $this->input->post('exp_code_id'),
 				'emp_status' => $this->input->post('emp_status'),
 				'emp_username' => $this->input->post('emp_username'),
-				'emp_password' => $this->input->post('emp_password'),
+				'emp_password' => $this->encrypt->encode($this->input->post('emp_password')),
             );
 
             $pac_employee_id = $this->Pac_employee_model->add_pac_employee($params);
@@ -75,10 +78,15 @@ class Pac_employee extends CI_Controller
         {
 
 			$this->load->model('Pac_emp_role_model');
+			$this->load->model('Pac_emp_exp_code_model');
+			
 			$data['all_pac_emp_roles'] = $this->Pac_emp_role_model->get_all_pac_emp_roles();
-			$data['all_pac_emp_roles'] = $this->Pac_emp_role_model->get_all_pac_emp_roles();
+			$data['all_pac_emp_exp_codes'] = $this->Pac_emp_exp_code_model->get_all_pac_emp_exp_code();
 
-            $this->load->view('pac_employee/add',$data);
+			$data['title'] = 'PAC PR System - Admin';
+			$data['content'] = $this->load->view('pac_employee/add',$data,true);
+			$this->load->view('template_view_admin',$data);
+            
         }
     }
 
@@ -87,7 +95,7 @@ class Pac_employee extends CI_Controller
      */
     function edit($id)
     {
-      if(!$this->User_model->isApprover())
+      if(!$this->User_model->isSysAdmin())
   			$this->logout();
         // check if the pac_employee exists before trying to edit it
         $pac_employee = $this->Pac_employee_model->get_pac_employee($id);
@@ -126,14 +134,14 @@ class Pac_employee extends CI_Controller
                 $data['pac_employee'] = $this->Pac_employee_model->get_pac_employee($id);
 
 				$this->load->model('Pac_emp_role_model');
-        $this->load->model('Pac_emp_exp_code_model');
+				$this->load->model('Pac_emp_exp_code_model');
 				$data['all_pac_emp_roles'] = $this->Pac_emp_role_model->get_all_pac_emp_roles();
 				$data['all_pac_emp_exp_codes'] = $this->Pac_emp_exp_code_model->get_all_pac_emp_exp_code();
 
 
                 $data['title'] = 'PAC PR System - Admin';
         				$data['content'] = $this->load->view('pac_employee/edit',$data,true);
-        				$this->load->view('template_view_ash',$data);
+        				$this->load->view('template_view_admin',$data);
             }
         }
         else

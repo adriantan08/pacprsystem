@@ -32,9 +32,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		<ul id="trans-nav">
 			<li><?php echo anchor('/home', 'Home');?></li>
 			<li><?php echo anchor('/home/report', 'Reports');?></li>
-			<li><?php echo anchor('/pac_emp_exp_code', 'Employee Exp. Codes');?></li>
-			<li><?php echo anchor('/pac_exp_code', 'Expenditure Codes');?></li>
-			<li><?php echo anchor('/Pac_employee', 'Employee');?></li>
+			
 			
 		</ul>
 
@@ -56,7 +54,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <br/><br/><br/>
 
 <div style="align=center;">
-		<h3 id="myH3">Welcome <?=$this->session->userdata('empFirstName').' '.$this->session->userdata('empLastName').'('.strtoupper($this->session->userdata('userRole')).')'?></h3>
+		<h3 id="myH3">Welcome <?=$this->session->userdata('empFirstName').' '.$this->session->userdata('empLastName').'(Role: '.strtoupper($this->session->userdata('userRole')).')'?></h3>
 		<div><?= $content?></div>
 </div>
 </body>

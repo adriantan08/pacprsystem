@@ -1,7 +1,8 @@
 <div style="width: 75%; margin: 0 auto; ">
+<a href="<?=base_url()?>pac_employee/add" class="flatbutton">Add </a><br/><br/><br/>
   <table class="display" id="mytable1" width="100%">
     <thead>
-		<th>ID</th>
+		
 		<th>Emp Firstname</th>
 		<th>Emp Lastname</th>
 		<th>Emp Email</th>
@@ -14,7 +15,7 @@
     <tbody>
 	<?php foreach($pac_employees as $p){ ?>
     <tr>
-		<td><?php echo $p['id']; ?></td>
+		
 		<td><?php echo $p['emp_firstname']; ?></td>
 		<td><?php echo $p['emp_lastname']; ?></td>
 		<td><?php echo $p['emp_email']; ?></td>

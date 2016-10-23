@@ -246,7 +246,7 @@ select{
 		</li>
 		<li>
 			<label>Amount (Php) <span class="required">*</span></label>
-			<input type="number" id="prAmount" name="field4" class="field-long" />
+			<input type="number" min="0" id="prAmount" name="field4" class="field-long" />
 		</li>
 		<li>
 			<label>Form: <span class="required">*</span></label>
