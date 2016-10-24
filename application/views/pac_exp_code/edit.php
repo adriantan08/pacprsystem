@@ -2,9 +2,9 @@
 <?php $this->load->helper('form');
 echo form_open('pac_exp_code/edit/'.$pac_exp_code['exp_code_id']); ?>
 
-	<div>Exp Code Id : <input disabled type="text" name="exp_code_id" value="<?php echo ($this->input->post('exp_code_id') ? $this->input->post('exp_code_id') : $pac_exp_code['exp_code_id']); ?>" /></div><br/>
-	<div>Exp Desc : <input type="text" name="exp_desc" value="<?php echo ($this->input->post('exp_desc') ? $this->input->post('exp_desc') : $pac_exp_code['exp_desc']); ?>" /></div><br/>
-	<div>Exp Remarks : <input type="text" name="exp_remarks" value="<?php echo ($this->input->post('exp_remarks') ? $this->input->post('exp_remarks') : $pac_exp_code['exp_remarks']); ?>" /></div><br/>
+	<div>Exp Code Id : <input type="text" name="exp_code_id" value="<?php echo ($this->input->post('exp_code_id') ? $this->input->post('exp_code_id') : $pac_exp_code['exp_code_id']); ?>" /></div><br/>
+	<div>Exp Desc : <input type="text" size="75" name="exp_desc" value="<?php echo ($this->input->post('exp_desc') ? $this->input->post('exp_desc') : $pac_exp_code['exp_desc']); ?>" /></div><br/>
+	<div>Exp Remarks : <input type="text" size="75" name="exp_remarks" value="<?php echo ($this->input->post('exp_remarks') ? $this->input->post('exp_remarks') : $pac_exp_code['exp_remarks']); ?>" /></div><br/>
 	<div>
 				Status :
 				<select name="status">

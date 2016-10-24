@@ -16,10 +16,10 @@
 							$pac_emp_role['name'] = 'PREPARE';
 						else if($pac_emp_role['name'] == 'ASH')
 							$pac_emp_role['name'] = 'POST';
-						
-						
-						
-						
+
+
+
+
 						$selected = ($pac_emp_role['id'] == $pac_employee['emp_role_id']) ? ' selected="selected"' : null;
 
 						echo '<option value="'.$pac_emp_role['id'].'" '.$selected.'>'.$pac_emp_role['name'].'</option>';
@@ -43,7 +43,13 @@
 		</div>
 	<div>
 				Emp Status :
-				<select name="emp_status">
+				<?php
+				// if role is SYSADMIN (EXP_CODE_ID = 0) disable change of status
+				if( $pac_employee['exp_code_id'] == '0' )
+					echo '<select disabled name="emp_status">';
+				else
+					echo '<select name="emp_status">';
+				?>
 					<option value="">select</option>
 					<?php
 					$emp_status_values = array(
@@ -61,7 +67,7 @@
 				</select><br/><br/>
 	</div>
 	<hr class='carved'/>
-	<div>Emp Username : <input type="text" name="emp_username" value="<?php echo ($this->input->post('emp_username') ? $this->input->post('emp_username') : $pac_employee['emp_username']); ?>" /></div><br/>
+	<div>Emp Username : <input disabled type="text" name="emp_username" value="<?php echo ($this->input->post('emp_username') ? $this->input->post('emp_username') : $pac_employee['emp_username']); ?>" /></div><br/>
 	<div>Emp Password : <input type="password" name="emp_password" value="<?php echo ($this->input->post('emp_password') ? $this->input->post('emp_password') : $pac_employee['emp_password']); ?>" /></div><br/>
 
 	<button type="submit" class="flatbutton">Save</button>

@@ -49,7 +49,7 @@ class Pac_exp_code extends CI_Controller
 
         $this->load->library('form_validation');
 
-		$this->form_validation->set_rules('exp_code_id','Exp Code Id','required');
+		$this->form_validation->set_rules('exp_code_id','Exp Code Id','required|is_unique[pac_exp_code.exp_code_id]');
 
 		if($this->form_validation->run())
         {
@@ -98,13 +98,12 @@ class Pac_exp_code extends CI_Controller
         if(isset($pac_exp_code['exp_code_id']))
         {
             $this->load->library('form_validation');
-
-			$this->form_validation->set_rules('exp_code_id','Exp Code Id','required');
+			      $this->form_validation->set_rules('exp_code_id','Exp Code Id','required');
 
 			if($this->form_validation->run())
             {
                 $params = array(
-					'exp_code_id' => $this->input->post('exp_code_id'),
+					'exp_code_id' => $pac_exp_code['exp_code_id'],
 					'exp_desc' => $this->input->post('exp_desc'),
 					'exp_remarks' => $this->input->post('exp_remarks'),
 					'status' => $this->input->post('status'),
@@ -130,7 +129,7 @@ class Pac_exp_code extends CI_Controller
 				$data['title'] = 'PAC PR System - Admin';
 				$data['content'] = $this->load->view('pac_exp_code/edit',$data,true);
 				$this->load->view('template_view_admin',$data);
-                
+
             }
         }
         else
