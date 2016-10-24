@@ -13,7 +13,7 @@ class Login extends CI_Controller {
 	 
 	 
 	 function index(){
-		echo UPLOAD_DIR;
+		
 		$this->load->view('login_view');
 	 }
 	 

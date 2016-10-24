@@ -48,16 +48,18 @@ class Pac_employee extends CI_Controller
   			$this->logout();
 		
         $this->load->library('form_validation');
-
+		
 		$this->form_validation->set_rules('emp_firstname','Emp Firstname','required|max_length[50]');
 		$this->form_validation->set_rules('emp_lastname','Emp Lastname','required|max_length[50]');
 		$this->form_validation->set_rules('emp_email','Emp Email','required|max_length[50]|valid_email');
 		$this->form_validation->set_rules('emp_role_id','Emp Role Id','required|integer');
 		$this->form_validation->set_rules('exp_code_id','Exp Code Id','integer');
 		$this->form_validation->set_rules('emp_status','Emp Status','required|max_length[10]');
-		$this->form_validation->set_rules('emp_username','Emp Username','max_length[100]');
+		$this->form_validation->set_rules('emp_username','Emp Username','max_length[100]|callback_uniqueUsername');
+		
+		
 		$this->form_validation->set_rules('emp_password','Emp Password','max_length[255]');
-
+		
 		if($this->form_validation->run())
         {
             $params = array(
@@ -89,6 +91,16 @@ class Pac_employee extends CI_Controller
             
         }
     }
+	
+	function uniqueUsername($emp_username){
+		$doesExist = $this->User_model->getEmployeeByUsername($emp_username);
+		if($doesExist){
+			$this->form_validation->set_message('uniqueUsername', 'Username already exists.');
+			return false;
+		}
+		else
+			return true;
+	}
 
     /*
      * Editing a pac_employee

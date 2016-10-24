@@ -74,5 +74,16 @@ class User_model extends CI_Model {
 		return false;
 	}
 	
+	
+	function getEmployeeByUsername($username){
+		$sql = "
+			SELECT * FROM pac_employees
+			WHERE emp_username = ?;
+		";
+		$q = $this->getdb()->query($sql, array($username));
+		if($q->num_rows()>0)
+			return true;
+		return false;
+	}
 }
 ?>
