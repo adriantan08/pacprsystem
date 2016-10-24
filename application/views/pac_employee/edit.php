@@ -1,5 +1,5 @@
 <font color=red><?php echo validation_errors(); ?></font>
-<?php echo form_open('pac_employee/edit/'.$pac_employee['id']); ?>
+<?php $this->load->helper('form'); echo form_open('pac_employee/edit/'.$pac_employee['id']); ?>
 
 	<div>Emp Firstname : <input type="text" name="emp_firstname" value="<?php echo ($this->input->post('emp_firstname') ? $this->input->post('emp_firstname') : $pac_employee['emp_firstname']); ?>" /></div><br/>
 	<div>Emp Lastname : <input type="text" name="emp_lastname" value="<?php echo ($this->input->post('emp_lastname') ? $this->input->post('emp_lastname') : $pac_employee['emp_lastname']); ?>" /></div><br/>

@@ -39,6 +39,17 @@ class Pac_exp_code extends CI_Controller
 		$this->load->view('template_view_admin',$data);
     }
 
+    function uniqueExpCode($exp_code_id){
+    $doesExist = $this->User_model->getExpCode($exp_code_id);
+      if($doesExist){
+         $this->form_validation->set_message('uniqueExpCode', 'Expenditure Code ID already exists.');
+         return false;
+      }
+      else {
+        return true;
+      }
+    }
+
     /*
      * Adding a new pac_exp_code
      */
@@ -49,7 +60,12 @@ class Pac_exp_code extends CI_Controller
 
         $this->load->library('form_validation');
 
-		$this->form_validation->set_rules('exp_code_id','Exp Code Id','required|is_unique[pac_exp_code.exp_code_id]');
+		$this->form_validation->set_rules('exp_code_id','Exp Code Id','required|callback_uniqueExpCode');
+    $this->form_validation->set_rules('exp_desc','Exp Desc','required');
+    $this->form_validation->set_rules('submit_step','Prepare','required');
+    $this->form_validation->set_rules('post_step','Verify','required');
+    $this->form_validation->set_rules('verify_step','Verify2','required');
+    $this->form_validation->set_rules('approve_step','Approve','required');
 
 		if($this->form_validation->run())
         {
@@ -98,7 +114,12 @@ class Pac_exp_code extends CI_Controller
         if(isset($pac_exp_code['exp_code_id']))
         {
             $this->load->library('form_validation');
-			      $this->form_validation->set_rules('exp_code_id','Exp Code Id','required');
+			      //$this->form_validation->set_rules('exp_code_id','Exp Code Id','required');
+            $this->form_validation->set_rules('exp_desc','Exp Desc','required');
+            $this->form_validation->set_rules('submit_step','Prepare','required');
+            $this->form_validation->set_rules('post_step','Verify','required');
+            $this->form_validation->set_rules('verify_step','Verify2','required');
+            $this->form_validation->set_rules('approve_step','Approve','required');
 
 			if($this->form_validation->run())
             {

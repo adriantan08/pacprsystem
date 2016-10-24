@@ -34,10 +34,21 @@ class Pac_emp_exp_code extends CI_Controller
       if(!$this->User_model->isSysAdmin())
   			$this->logout();
         $data['pac_emp_exp_code'] = $this->Pac_emp_exp_code_model->get_all_pac_emp_exp_code();
-	$data['title'] = 'PAC PR System - Admin';
+	       $data['title'] = 'PAC PR System - Admin';
 
         $data['content'] = $this->load->view('pac_emp_exp_code/index',$data,true);
         $this->load->view('template_view_admin',$data);
+    }
+
+    function uniqueCodename($codename){
+    $doesExist = $this->User_model->getCodename($codename);
+      if($doesExist){
+         $this->form_validation->set_message('uniqueCodename', 'Employee Expenditure Role Name already exists.');
+         return false;
+      }
+      else {
+        return true;
+      }
     }
 
     /*
@@ -47,22 +58,25 @@ class Pac_emp_exp_code extends CI_Controller
     {
 		if(!$this->User_model->isSysAdmin())
 			$this->logout();
-		
-        if(isset($_POST) && count($_POST) > 0)
-        {
-            $params = array(
-				'codename' => $this->input->post('codename'),
-            );
+      $this->load->library('form_validation');
 
-            $pac_emp_exp_code_id = $this->Pac_emp_exp_code_model->add_pac_emp_exp_code($params);
-            redirect('pac_emp_exp_code/index');
-        }
-        else
-        {	$data['title'] = 'PAC PR System - Admin';
-			$data['content'] = $this->load->view('pac_emp_exp_code/add',$data, true);
-			$this->load->view('template_view_admin',$data);
-			
-        }
+   $this->form_validation->set_rules('codename','Codename','max_length[255]|required|callback_uniqueCodename');
+
+   if($this->form_validation->run())
+       {
+           $params = array(
+       'codename' => $this->input->post('codename'),
+           );
+
+           $pac_emp_exp_code_id = $this->Pac_emp_exp_code_model->add_pac_emp_exp_code($params);
+           redirect('pac_emp_exp_code/index');
+       }
+       else
+       {
+         $data['title'] = 'PAC PR System - Admin';
+         $data['content'] = $this->load->view('pac_emp_exp_code/add',$data,true);
+         $this->load->view('template_view_admin',$data);
+       }
     }
 
     /*
@@ -77,7 +91,18 @@ class Pac_emp_exp_code extends CI_Controller
 
         if(isset($pac_emp_exp_code['id']))
         {
-            if(isset($_POST) && count($_POST) > 0)
+            $this->load->library('form_validation');
+
+            if($this->input->post('codename') != $pac_emp_exp_code['codename']) {
+              $this->form_validation->set_rules('codename','Codename','max_length[255]|required|callback_uniqueCodename');
+            }
+            else {
+              $this->form_validation->set_rules('codename','Codename','max_length[255]|required');
+            }
+
+
+
+			if($this->form_validation->run())
             {
                 $params = array(
 					'codename' => $this->input->post('codename'),
@@ -90,10 +115,9 @@ class Pac_emp_exp_code extends CI_Controller
             {
                 $data['pac_emp_exp_code'] = $this->Pac_emp_exp_code_model->get_pac_emp_exp_code($id);
 
-                
                 $data['title'] = 'PAC PR System - Admin';
-        				$data['content'] = $this->load->view('pac_emp_exp_code/edit',$data,true);
-        				$this->load->view('template_view_admin',$data);
+                $data['content'] = $this->load->view('pac_emp_exp_code/edit',$data,true);
+                $this->load->view('template_view_admin',$data);
             }
         }
         else

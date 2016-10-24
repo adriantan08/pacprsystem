@@ -32,6 +32,7 @@ class Pac_emp_exp_code_model extends CI_Model
 
             WHERE
                 `id` = ?
+                AND ID <> 0
         ",array($id))->row_array();
 
         return $pac_emp_exp_code;
@@ -57,6 +58,23 @@ class Pac_emp_exp_code_model extends CI_Model
         return $pac_emp_exp_code;
     }
 
+    
+    function get_unique_codename()
+    {
+        $pac_emp_exp_code = $this->getdb()->query("
+            SELECT
+                distinct codename
+
+            FROM
+                `pac_emp_exp_code`
+
+            WHERE
+                1 = 1
+                AND ID <> 0
+        ")->result_array();
+
+        return $pac_emp_exp_code;
+    }
     /*
      * function to add new pac_emp_exp_code
      */
