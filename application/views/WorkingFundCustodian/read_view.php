@@ -184,7 +184,7 @@
 	</tr>
 	<tr><td colspan=2><b>Supporting Documents</b></td></tr>
 	
-	<tr>
+	<tr class="supportingDocumentSection">
 		<td>
 			<font class="mylabel">P.O./J.O. No.: </font>
 		</td>
@@ -193,7 +193,7 @@
 			
 		</td>
 	</tr>
-	<tr>
+	<tr class="supportingDocumentSection">
 		<td>
 			<font class="mylabel">Receiving Report No.: </font>
 		</td>

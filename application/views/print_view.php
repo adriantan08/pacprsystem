@@ -53,34 +53,27 @@ foreach($prList as $prDetails){
 ?>
 
 <td style="padding-left:5%; width:600px;">
-
+	<div><font style="font-size:10px; font-family:Arial;">PAC Form No. C-32</font></div>
+	<br/>
+	<div style="position:relative; left:10%;"><img src="<?=base_url().'img/pac_logo.png'?>" width=30 /><font style="font-family:'Mistral'; font-size:22px; position:relative; top:-5px;"><?=COMPANY_NAME?></font></div>
+	<div style="position:relative; left:25%;"><font style="font-size:12px; font-family:Arial;">Coron, Palawan</font></div>
+	
+	<div style="position:relative; left:10%;"><font style="font-size:12px; font-family:Arial;">Mailing Address: 925 M. Naval St., Navotas City</font></div>
+	<br/>
+	<div style="position:relative; left:20%;"><font style="font-size:15px; font-family:Arial;"><b>PAYMENT REQUEST</b></font></div>
 	<table>
 	<tr>
 	<td valign=top>
-		<table>
-		<tr>
-		<td>
-			<font style="font-size:15px; font-family:Arial;"><b>PR# <?=$prDetails['pr_id']?></b></font>
-			<br><font style="font-size:10px; font-family:Arial;">Created On: <?=$prDetails['created_on']?></font><br><br>
-		</td>
-
-		</tr>
-		</table>
+		
 	<table class="myTable" >
 		<tr >
 			<td colspan=2 align=right>
-				<font class="mylabel">PR Date:</font>
+				<font style="font-size:15px; font-family:Arial;"><b>No. <?=$prDetails['pr_id']?></b></font><br/><br/>
+				<font class="mylabel">Date:</font>
 				<?=$prDetails['pr_date']?>
 			</td>
 		</tr>
-		<tr>
-			<td>
-				<font class="mylabel">PR#: </font>
-			</td>
-			<td>
-				<?=$prDetails['pr_id']?>
-			</td>
-		</tr>
+		
 		<tr>
 			<td>
 				<font class="mylabel">Payee: </font>
@@ -95,7 +88,7 @@ foreach($prList as $prDetails){
 				<font class="mylabel">Amount: </font>
 			</td>
 			<td>
-				<div id="amountPlaceholderRead">P <?=number_format($prDetails['amount'])?></div>
+				<div id="amountPlaceholderRead">P <?=number_format($prDetails['amount'], 2)?></div>
 				
 			</td>
 		</tr>
@@ -144,7 +137,7 @@ foreach($prList as $prDetails){
 		</tr>
 		<tr><td colspan=2><b>Supporting Documents</b></td></tr>
 		
-		<tr>
+		<tr class="supportingDocumentSection">
 			<td>
 				<font class="mylabel">P.O./J.O. No.: </font>
 			</td>
@@ -153,7 +146,7 @@ foreach($prList as $prDetails){
 				
 			</td>
 		</tr>
-		<tr>
+		<tr class="supportingDocumentSection">
 			<td>
 				<font class="mylabel">Receiving Report No.: </font>
 			</td>
@@ -188,25 +181,52 @@ foreach($prList as $prDetails){
 				
 			</td>
 		</tr>
-		<tr class="supportingDocumentSection">
-			<td>
-				<font class="mylabel">Expenditure Code:</font>
-			</td>
-			<td>
-				<?=str_replace('|','<br>',$prDetails['exp_code'])?>
-			</td>
-		</tr>
 		<tr>
 			<td valign=top>
 				<font class="mylabel">Details:</font>
 			</td>
 			<td>
-				<?=$prDetails['details']?>
+				<?php
+					if(strlen($prDetails['details'])>0){
+						echo $prDetails['details'].'<br/><br/>';
+					}
+					
+					echo str_replace('|','<br>',$prDetails['exp_code'])
+				?>
+				
 			</td>
 		</tr>
 		<tr>
 			<!--Put signature URL elsewhere; in constants.php-->
-			<td colspan=2><img src="<?=base_url()?>/img/sig.jpg" style="width:200px;"/></td>
+			<td colspan=2>
+				<table>
+					<tr>
+						<td>
+							<font style="font-size:13px;"><u><?=$prDetails['prepare_name']?></u><br/>
+							Prepared by:</font>
+						</td>
+						<td>
+							<?php
+								if($prDetails['approver1_id'] != 999){
+									echo '<font style="font-size:13px;"><u>'.$prDetails['post_name'].'</u><br/>Verified by:</font>';
+								}
+							?>
+							
+						</td>
+						<td>
+							<?php
+								if($prDetails['approver2_id'] != 999){
+									echo '<font style="font-size:13px;"><u>'.$prDetails['verifier_name'].'</u><br/>Verified by:</font>';
+								}
+							?>
+						</td>
+						<td>
+							<font style="font-size:13px;"><u><?=$prDetails['approver_name']?></u><br/>
+							Approved by:</font>
+						</td>
+					</tr>
+				</table>
+			</td>
 		</tr>
 
 	</table>

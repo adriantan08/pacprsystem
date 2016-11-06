@@ -10,8 +10,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	
 </head>
 <body style="font-family:Arial;">
-	<div style="position:fixed; left:40%; top:30%">
-		<h3>PAC Payment Record</h3>
+	<div style="position:fixed; left:40%; top:20%">
+		<div style="position:relative; right:20%;"><img style="position:relative; background-color:pink;" src="<?=base_url().'img/pac_logo.png'?>" width=50 /><font style="font-family:'Mistral'; font-size:30px; position:relative; top:-20px;">Palawan Aquacultre Corporation</font></div>
+		<h2>Payment Record System</h2>
 		<table>
 			<tr>
 				<td align=center colspan=2><div id="form_msg" style="color:red;"></div><br></td>

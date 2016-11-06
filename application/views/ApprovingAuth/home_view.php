@@ -13,7 +13,7 @@
     } );
 </script>
 
-<div style="width: 75%; margin: 0 auto; padding: 120px 0 40px;">
+<div style="width: 75%; margin: 0 auto; padding: 20px 0 40px;">
 
     <ul class="tabs" data-persist="true">
       <li><a href="#view1" id="tabHeader">Verified</a></li>

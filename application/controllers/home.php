@@ -560,5 +560,17 @@ class Home extends CI_Controller {
 		$this->load->view('print_view', $data);
 	}
 	
+	function archive(){
+		if(isset($_POST['ids']) && isset($_POST['action'])){
+			if(is_array($_POST['ids'])){
+				$this->Crud_model->archivePrs($_POST['ids'], $_POST['action']);
+				echo 'SUCCESS';
+			}
+			
+		}
+		else{
+			echo "Incomplete POST data";
+		}
+	}
 
 }

@@ -143,9 +143,13 @@ class Crud_model extends CI_Model {
 				a.pr_status AS `pr_status`,
 				a.created_on AS `created_on`,
 				a.changed_on AS `changed_on`,
+				CONCAT(g.emp_firstname,' ',g.emp_lastname) AS `prepare_name`,
 				a.approver1_id AS `approver1_id`,
 				a.approver2_id AS `approver2_id`,
 				a.approver3_id AS `approver3_id`,
+				CONCAT(d.emp_firstname,' ',d.emp_lastname) AS `post_name`,
+				CONCAT(e.emp_firstname,' ',e.emp_lastname) AS `verifier_name`,
+				CONCAT(f.emp_firstname,' ',f.emp_lastname) AS `approver_name`,
 				b.payee AS `payee`,
 				b.amount AS `amount`,
 				b.details AS `details`,
@@ -157,11 +161,19 @@ class Crud_model extends CI_Model {
 				b.rr_no AS `rr_no`,
 				b.inv_no AS `inv_no`,
 				b.others AS `others`,
-				b.receipt_img as `receipt_img`,
-				CONCAT(c.exp_code_id,'|',c.exp_desc) as `exp_code`
-			FROM pac_pr_header a, pac_pr_details b, pac_exp_codes c
+				b.receipt_img AS `receipt_img`,
+				CONCAT(c.exp_code_id,'|',c.exp_desc) AS `exp_code`
+			FROM pac_pr_header a, pac_pr_details b, pac_exp_codes c,
+				pac_employees d,
+				pac_employees e,
+				pac_employees f,
+				pac_employees g
 			WHERE a.pr_id = b.pr_id
 			AND b.exp_code = c.exp_code_id
+			AND a.approver1_id = d.id
+			AND a.approver2_id = e.id
+			AND a.approver3_id = f.id
+			AND a.requestor_id = g.id
 			AND a.pr_id IN (
 			
 		";
@@ -258,7 +270,7 @@ class Crud_model extends CI_Model {
 
 	//for ALL
 	function getApprovedPRs($status, $amount){
-
+		$empId = $this->session->userdata('userId');
 		$sql = "
 		SELECT
 		a.pr_id AS `pr_id`,
@@ -291,9 +303,10 @@ class Crud_model extends CI_Model {
 		AND a.approver1_id = d.id
 		AND a.approver2_id = e.id
 		AND a.approver3_id = f.id
+		AND a.requestor_id = ?
 		ORDER BY a.changed_on DESC
 		";
-		$q = $this->getdb()->query($sql, array($status));
+		$q = $this->getdb()->query($sql, array($status, $empId));
 		if($q->num_rows()>0){
 			return $q->result_array();
 		}
@@ -517,12 +530,32 @@ class Crud_model extends CI_Model {
 		$q = $this->getdb()->query($sql);
 		if($q->num_rows()>0){
 			$res = $q->first_row()->max;
-			if($res == null)
-				return 00001;
 			
-			return $res;
+			$controlNumber = $this->getPrControlNumber();
+			
+			//If there are no PRs yet, we get the current controlNumber +1 as initial number
+			if($res == null)
+				return $controlNumber+1;
+			
+			
+			
+			return $res+$controlNumber;
 		}
 		return null;
+	}
+	
+	function getPrControlNumber(){
+		$sql = "
+			SELECT control_number FROM pac_pr_control_number
+			WHERE SYSDATE() BETWEEN start_date AND end_date
+			ORDER BY control_number DESC LIMIT 1;
+		";
+		$q = $this->getdb()->query($sql);
+		if($q->num_rows()>0){
+			$res = $q->first_row()->control_number;
+			return $res;
+		}
+		return 0;
 	}
 	
 	function getComments($prId){
@@ -978,6 +1011,25 @@ function paymentReqForVer(){
 		$sql = "UPDATE pac_pr_header SET ".$column." = 1 WHERE pr_id = ?;";
 		
 		$this->getdb()->query($sql, array($prId));
+	}
+	
+	function archivePrs($ids, $action){
+		foreach($ids as $id){
+			if($action == 'archive')
+				$status = ARCHIVED_STATUS;
+			else
+				$status = APPROVED_STATUS;
+			if(is_numeric($id)){
+				
+				$sql =  "
+					UPDATE pac_pr_header SET pr_status = ".$status."
+					WHERE pr_id = ?;
+				";
+				$this->getdb()->query($sql, array($id));
+			
+				$this->logHistoryApproval($id, $status, strtoupper($action));
+			}
+		}
 	}
 
 /*******************************************************************

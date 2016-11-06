@@ -27,8 +27,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 </head>
 <body>
-
-
 	<div id = "navigation" style="background: #33b5e5; position:absolute; top:0px; width:95%; left:0px;">
 		<ul id="trans-nav">
 			<li><?php echo anchor('/home', 'Home');?></li>
@@ -52,6 +50,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	</div>
 <br/><br/><br/>
 <div>
+<br/><table><tr><td><img src="<?=base_url().'img/pac_logo.png'?>" width=50/>
+</td><td><font class="logo-font"><?=COMPANY_NAME?></font></td></tr></table><br/>
+
 <h3 id="myH3" style="position:relative; left:20px;">Welcome <?=$this->session->userdata('empFirstName').' '.$this->session->userdata('empLastName').'(Role: '.strtoupper($this->session->userdata('userRole')).')'?></h3>
 		<?= $content?>
 </div>

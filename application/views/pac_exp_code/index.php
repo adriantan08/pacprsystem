@@ -18,6 +18,13 @@
 		<td><?php echo $p['exp_code_id']; ?></td>
 		<td><?php echo $p['exp_desc']; ?></td>
 		<td><?php echo $p['exp_remarks']; ?></td>
+    <?php
+      //override text values of roles
+      if($p['status'] == 'I')
+        $p['status'] = 'Inactive';
+      else if($p['status'] == 'A')
+        $p['status'] = 'Active';
+    ?>
 		<td><?php echo $p['status']; ?></td>
 		<td><?php echo $p['submit_name']; ?></td>
 		<td><?php echo $p['post_name']; ?></td>

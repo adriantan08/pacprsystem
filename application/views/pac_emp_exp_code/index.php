@@ -12,7 +12,11 @@
 		
 		<td><?php echo $p['codename']; ?></td>
 		<td>
+			<?php
+				if(strtolower($p['codename']) != 'auto approve'){
+			?>
             <a href="<?php echo site_url('pac_emp_exp_code/edit/'.$p['id']); ?>">Edit</a>
+			<?php } ?>
         </td>
     </tr>
   </tbody>

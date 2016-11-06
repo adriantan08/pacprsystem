@@ -39,27 +39,37 @@ class Pac_employee extends CI_Controller
         $this->load->view('template_view_admin',$data);
     }
 
+    function uniqueUsername($emp_username){
+    $doesExist = $this->User_model->getEmployeeByUsername($emp_username);
+      if($doesExist){
+         $this->form_validation->set_message('uniqueUsername', 'Username already exists.');
+         return false;
+      }
+      else {
+        return true;
+      }
+    }
+
     /*
      * Adding a new pac_employee
      */
     function add()
-    {	
+    {
 		if(!$this->User_model->isSysAdmin())
   			$this->logout();
-		
+
         $this->load->library('form_validation');
-		
+
 		$this->form_validation->set_rules('emp_firstname','Emp Firstname','required|max_length[50]');
 		$this->form_validation->set_rules('emp_lastname','Emp Lastname','required|max_length[50]');
 		$this->form_validation->set_rules('emp_email','Emp Email','required|max_length[50]|valid_email');
 		$this->form_validation->set_rules('emp_role_id','Emp Role Id','required|integer');
 		$this->form_validation->set_rules('exp_code_id','Exp Code Id','integer');
 		$this->form_validation->set_rules('emp_status','Emp Status','required|max_length[10]');
-		$this->form_validation->set_rules('emp_username','Emp Username','max_length[100]|callback_uniqueUsername');
-		
-		
+		$this->form_validation->set_rules('emp_username', 'Emp Username', 'max_length[100]|callback_uniqueUsername');
 		$this->form_validation->set_rules('emp_password','Emp Password','max_length[255]');
-		
+
+
 		if($this->form_validation->run())
         {
             $params = array(
@@ -81,26 +91,16 @@ class Pac_employee extends CI_Controller
 
 			$this->load->model('Pac_emp_role_model');
 			$this->load->model('Pac_emp_exp_code_model');
-			
+
 			$data['all_pac_emp_roles'] = $this->Pac_emp_role_model->get_all_pac_emp_roles();
 			$data['all_pac_emp_exp_codes'] = $this->Pac_emp_exp_code_model->get_all_pac_emp_exp_code();
 
 			$data['title'] = 'PAC PR System - Admin';
 			$data['content'] = $this->load->view('pac_employee/add',$data,true);
 			$this->load->view('template_view_admin',$data);
-            
+
         }
     }
-	
-	function uniqueUsername($emp_username){
-		$doesExist = $this->User_model->getEmployeeByUsername($emp_username);
-		if($doesExist){
-			$this->form_validation->set_message('uniqueUsername', 'Username already exists.');
-			return false;
-		}
-		else
-			return true;
-	}
 
     /*
      * Editing a pac_employee
@@ -121,9 +121,13 @@ class Pac_employee extends CI_Controller
 			$this->form_validation->set_rules('emp_email','Emp Email','required|max_length[50]|valid_email');
 			$this->form_validation->set_rules('emp_role_id','Emp Role Id','required|integer');
 			$this->form_validation->set_rules('exp_code_id','Exp Code Id','integer');
-			$this->form_validation->set_rules('emp_status','Emp Status','required|max_length[10]');
-			$this->form_validation->set_rules('emp_username','Emp Username','max_length[100]');
-			$this->form_validation->set_rules('emp_password','Emp Password','max_length[255]');
+      if($pac_employee['exp_code_id'] != '0'){
+          $this->form_validation->set_rules('emp_status','Emp Status','required|max_length[10]');
+          $pac_employee['emp_status'] = $this->input->post('emp_status');
+      }
+      //editing username is not allowed
+      //$this->form_validation->set_rules('emp_username','Emp Username','required|max_length[100]');
+			$this->form_validation->set_rules('emp_password','Emp Password','required|max_length[255]');
 
 			if($this->form_validation->run())
             {
@@ -133,8 +137,8 @@ class Pac_employee extends CI_Controller
 					'emp_email' => $this->input->post('emp_email'),
 					'emp_role_id' => $this->input->post('emp_role_id'),
 					'exp_code_id' => $this->input->post('exp_code_id'),
-					'emp_status' => $this->input->post('emp_status'),
-					'emp_username' => $this->input->post('emp_username'),
+          'emp_status' => $pac_employee['emp_status'],
+					'emp_username' => $pac_employee['emp_username'],
 					'emp_password' => $this->input->post('emp_password'),
                 );
 
@@ -176,5 +180,6 @@ class Pac_employee extends CI_Controller
         else
             show_error('The pac_employee you are trying to delete does not exist.');
     }
+
 
 }

@@ -1,3 +1,4 @@
+<font color=red><?php echo validation_errors(); ?></font>
 <?php $this->load->helper('form');
 echo form_open('pac_emp_exp_code/add'); ?>
 

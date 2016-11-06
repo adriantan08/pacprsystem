@@ -52,7 +52,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		</ul>
 	</div>
 <br/><br/><br/>
-
+<br/><table><tr><td><img src="<?=base_url().'img/pac_logo.png'?>" width=50/>
+</td><td><font class="logo-font"><?=COMPANY_NAME?></font></td></tr></table><br/>
 <div style="align=center;">
 		<h3 id="myH3">Welcome <?=$this->session->userdata('empFirstName').' '.$this->session->userdata('empLastName').'(Role: '.strtoupper($this->session->userdata('userRole')).')'?></h3>
 		<div><?= $content?></div>

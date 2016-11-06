@@ -103,7 +103,7 @@
 			<button class="flatbutton" id="printButton"><img src="<?=base_url()?>img/print.png" width=20px />
 				<b>Print</b></button>
 		  
-			<button class="flatbutton" id="printButton" style="position:relative; left:20px;background-color:grey;">
+			<button class="flatbutton" name="archiveOrRestoreButton" id="archive" style="position:relative; left:20px;background-color:grey;">
 				<b>Archive</b></button>
 		  </span>
 		  
@@ -127,6 +127,7 @@
               <tbody>
                 <?php
                   $prList = $this->Crud_model->getApprovedPRs('40', '>0');
+				  
                   if($prList != null){
                     foreach($prList as $list){
                       echo '<tr>';
@@ -195,7 +196,7 @@
           <div class="dataTables_wrapper">
 		  
 		  <span>
-			<button class="flatbutton" id="restoreButton" style="position:relative; left:20px;background-color:green;">
+			<button class="flatbutton" name="archiveOrRestoreButton" id="restore" style="position:relative; left:20px;background-color:green;">
 				<b>Restore</b></button>
 		  </span>
 		  
@@ -204,7 +205,7 @@
           <table id="mytable4" class="display" cellspacing="0" width="100%">
               <thead >
                   
-					  <th><input type="checkbox" style="position:relative; left:-15px;" id="selectToggle"  value=""></th>
+					  <th><input type="checkbox" style="position:relative; left:-15px;" id="selectToggleArchived"  value=""></th>
                       <th>PR Date</th>
                       <th>PR ID</th>
                       <th>Payment Form</th>
@@ -218,11 +219,11 @@
               </thead>
               <tbody>
                 <?php
-                  $prList = $this->Crud_model->getApprovedPRs('40', '>0');
+                  $prList = $this->Crud_model->getApprovedPRs('99', '>0');
                   if($prList != null){
                     foreach($prList as $list){
                       echo '<tr>';
-					  echo '<td><input type="checkbox" name="printselect" value="'.$list['pr_id'].'"></td>';
+					  echo '<td><input type="checkbox" name="archivedselect" value="'.$list['pr_id'].'"></td>';
                       echo '<td>'.$list['pr_date'].'</td>';
                       
 					  //When displaying PR_ID, we BOLD them if unread, otherwise normal font weight
@@ -258,12 +259,70 @@
 		window.open("<?=base_url()?>home/print_preview/"+encodeURI(checkedArr.join(" ")));
 	});
 	
+	$("button[name='archiveOrRestoreButton']").click(function(){
+		var buttonAction = this.id;
+		var checkedArr = [];
+		if(buttonAction == 'archive'){
+			$("input:checkbox[name=printselect]:checked").each(function () {
+			   checkedArr.push($(this).val());
+			});
+		}
+		else{ //means intent is to restore
+			$("input:checkbox[name=archivedselect]:checked").each(function () {
+			   checkedArr.push($(this).val());
+			});
+		}
+		if(checkedArr.length>0){ 
+			if(buttonAction == 'archive')
+				var textMsg = "Selected PRs will be archived and viewable in the ARCHIVE TAB.";
+			else
+				var textMsg = "Selected PRs will be restored and will be APPROVED by status.";
+			
+			swal({
+			  title: "Confirm Action",
+			  text: textMsg,
+			  type: "warning",
+			  showCancelButton: true,
+			  confirmButtonColor: "#DD6B55",
+			  confirmButtonText: "Continue",
+			  cancelButtonText: "Cancel",
+			  closeOnConfirm: true,
+			  closeOnCancel: true
+			},
+			function(isConfirm){
+			  if (isConfirm) {
+				  $.ajax({
+					  url: "<?=base_url()?>home/archive",
+					  method:"POST",
+					  async:true,
+					  data:{ids:checkedArr, action:buttonAction}
+					}).done(function(data) {
+					  location.reload();
+					});
+				  
+			  }
+			});
+
+			
+		}
+	});
+	
 	$("#selectToggle").click(function(){
 		
 		if($('#selectToggle:checkbox:checked').is(":checked"))
 			$("input:checkbox[name=printselect]").prop('checked', true);
 		else
 			$("input:checkbox[name=printselect]").prop('checked', false);
+		
+	});
+
+	
+	$("#selectToggleArchived").click(function(){
+		
+		if($('#selectToggleArchived:checkbox:checked').is(":checked"))
+			$("input:checkbox[name=archivedselect]").prop('checked', true);
+		else
+			$("input:checkbox[name=archivedselect]").prop('checked', false);
 		
 	});
 </script>
